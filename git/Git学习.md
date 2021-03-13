@@ -250,6 +250,56 @@ $ git checkout -- c.html
 
 **注意：从来没有被添加到版本库就被删除的文件，是无法恢复的**  
 
+## 添加远程库  
+> 在本地创建了一个 Git 仓库后，又想在 GitHub 创建一个Git仓库，并且让这两个仓库进行远程同步，这样，GitHub 上的仓库既可以作为备份，又可以让其他人通过该仓库来协作。
+
+先在 Github 上创建一个空的仓库，如 aa。
+
+**关联到远程库**  
+然后，在本地的 aa 仓库下运行命令使本地仓库与之关联：  
+```
+$ git remote add origin git@github.com:Github的账号名/aa.git
+```  
+添加后，远程库的名字就是 `origin`，这是 Git 默认的叫法，也可以改成别的，但是 origin 这个名字一看就知道是远程库。  
+
+**推送到远程库**  
+```
+$ git push -u origin master
+```  
+由于远程库是空的，我们第一次推送 master 分支时，加上了`-u` 参数，Git 不但会把本地的 master（当前）分支内容推送的远程新的 `master` 分支，还会把本地的 master 分支和远程的 `master` 分支关联起来，在以后的推送或者拉取时就可以简化命令。
+
+**推送修改**  
+从现在起，只要本地作了提交，就可以通过如下命令，把本地 master 分支的最新修改推送至 GitHub。  
+```
+$ git push origin master
+```  
+
+### SSH警告  
+当你第一次使用 Git 的 `clone` 或者 `push` 命令连接 GitHub 时，会得到一个警告：  
+```
+The authenticity of host 'github.com (xx.xx.xx.xx)' can't be established.
+RSA key fingerprint is xx.xx.xx.xx.xx.
+Are you sure you want to continue connecting (yes/no)?
+```  
+因为 Git 使用 SSH 连接，这会发生在 SSH 连接第一次验证 GitHub 服务器的 Key 时。  
+**输入 `yes`** ，以确认 GitHub 的 Key 的指纹信息是否真的来自 GitHub 的服务器。
+
+Git 会输出一个警告（后面的操作中不会出现），表示已经把 GitHub 的 Key 添加到本机的一个信任列表里。  
+如果实在担心冒充有人冒充 GitHub 服务器，输入 `yes` 前可以对照 [GitHub的 RSA Key 的指纹信息](https://docs.github.com/en/github/authenticating-to-github/githubs-ssh-key-fingerprints)是否与 SSH 连接给出的一致。
+
+### 删除远程库  
+如果添加的时候地址写错了，或者就是想删除远程库，可以用 `git remote rm <name>` 命令。使用前，建议先用 `git remote -v` 查看远程库信息：  
+```
+$ git remote -v
+origin  git@github.com:Github用户名/仓库名.git (fetch)
+origin  git@github.com:Github用户名/仓库名.git (push)
+```    
+然后，根据名字删除，比如删除 *origin*：  
+```
+$ git remote rm origin
+```  
+此处的“ 删除 ”其实是**解除了本地和远程的绑定关系**，并不是物理上删除了远程库。远程库本身并没有任何改动。
+
 To be continue...
 
 
