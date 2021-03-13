@@ -114,6 +114,75 @@ e475afc HEAD@{3}: commit: change1
 eaadf4e HEAD@{4}: commit (initial): create
 ```
 
+## 工作区和暂存区  
+> 暂存区是 Git 非常重要的概念，弄明白了暂存区，就弄明白了 Git 的很多操作到底干了什么。  
+
+### 工作区 （Working Directory）
+就是在电脑里能看到的目录，如之前创建版本库前所创建的空**目录文件夹**，或拷贝下来的文件夹。  
+![工作区](工作区.jpg)
+
+### 版本库（Repository）  
+工作区有一个隐藏目录 `.git`，这个不算工作区，而是 Git 的版本库。
+
+Git 的版本库里存了很多东西，其中最重要的就是称为 stage（或者叫 index ）的**暂存区**，还有 Git 为我们**自动创建**的第一个分支 master，以及指向 master 的一个指针叫 HEAD。  
+![版本库1](版本库1.jpg)  
+把文件往 Git 版本库里添加的时候，是分两步执行的：  
+第一步是用 `git add` 把文件添加进去，实际上就是**把文件修改添加到暂存区**；  
+第二步是用 `git commit` 提交更改，实际上就是把暂存区的**所有内容提交到当前分支**。  
+因为我们创建 Git 版本库时，Git 自动为我们创建了唯一一个 `master` 分支，所以，现在，`git commit` 就是往 `master` 分支上提交更改。
+
+可以简单理解为，需要提交的文件修改通通放到暂存区，然后，一次性提交暂存区的所有修改。  
+
+进行这样的操作：修改文件 *a.html*，并新建文件 *b.html*  
+此时用 `git status` 查看的状态：  
+```
+$ git status
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   readme.txt
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	LICENSE
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+Git 告诉我们，*a.html* 被修改了，而 *b.html* 还从来没有被添加过，所以它的状态是 **Untracked**。  
+
+然后，用两次命令 `git add` ，把两个文件添加后，用 `git status` 查看的状态：  
+```
+$ git status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	new file:   LICENSE
+	modified:   readme.txt
+ ```  
+ 此时暂存区的状态：   
+ （直接用的别人的图，故那两个文件名会有所不同）  
+![版本库2](版本库2.jpg)   
+ 然后，执行 `git commit` 后，用 `git status` 查看的状态：  
+ ```
+ $ git status
+On branch master
+nothing to commit, working tree clean
+ ```  
+ 即提交后，如果又没有对工作区做任何修改，那么工作区就是“干净”的。  
+ 
+ 版本库的暂存区中也没有内容了。    
+![版本库3](版本库3.jpg)   
+ 
+ 
+ 
+ 
+
+
+
 
 
 
