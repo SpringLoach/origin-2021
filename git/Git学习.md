@@ -218,12 +218,37 @@ $ cat 文件名
 **情景一：  想要撤销 某文件 在版本库的修改**   
 可以回退到上一个版本。但是，一旦推送到远程版本库，那就莫得办法了。
 
+### 注意事项  
 原来的 `git checkout -- 文件名` 可以使用 `git restore -- 文件名` 代替  
 原来的 `git reset HEAD 文件名` 可以使用 `git restore --staged 文件名` 代替
 
+## 删除文件  
+> 这里的删除文件指的是工作区的文件，有两种情况，一是确实要从版本库中删除该文件，二是误删。  
 
+一般情况下，通常直接在文件管理器中把没用的文件删了，或者用 `rm` 命令删了：  
+```
+$ rm 文件名
+```
 
+### 删除该文件  
+从版本库中删除该文件，那就用命令 `git rm` 删掉，并且 `git commit`：
+```
+$ git rm c.html
+rm 'test.txt'
 
+$ git commit -m "remove c.html"
+[master d46f35e] remove test.txt
+ 1 file changed, 1 deletion(-)
+ delete mode 100644 test.txt
+```  
+
+### 恢复该文件  
+`git checkout` 可以用版本库里的**最新版本**替换工作区的版本：  
+```
+$ git checkout -- c.html
+```  
+
+**注意：从来没有被添加到版本库就被删除的文件，是无法恢复的**  
 
 To be continue...
 
