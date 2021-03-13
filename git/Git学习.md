@@ -300,6 +300,23 @@ $ git remote rm origin
 ```  
 此处的“ 删除 ”其实是**解除了本地和远程的绑定关系**，并不是物理上删除了远程库。远程库本身并没有任何改动。
 
+
+## 从远程库克隆  
+
+先准备好远程库，然后用命令 `git clone` 克隆到本地库：    
+```
+$ git clone git@github.com:GitHub账号名/仓库名.git
+```  
+也可以是  
+```
+$ git clone https://github.com/GitHub账号名/仓库名.git
+```   
+
+**实际上，后面的地址可以从 GitHub 上直接复制**
+
+其中，`git://` 使用 `ssh` 协议，也可以使用 `https` 等其他协议  
+使用 `https` 除了速度慢以外，还有个最大的麻烦是每次推送都必须输入口令，但是在某些只开放 http 端口的公司内部就无法使用 ssh 协议而只能用 https。
+
 To be continue...
 
 
