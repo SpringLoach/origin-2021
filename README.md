@@ -1,4 +1,12 @@
- ![markdown](markdown.jpg)
+### 醉里挑灯看剑，梦回吹角连营。  
+
+[git-笔记](#git-笔记)  
+[markdown用法](#markdown-使用方法)
+
+----
+## markdown-使用方法
+
+![markdown](markdown.jpg)
    
    **markdown 是一种轻量级的标记语言，它允许人们使用易读易写的纯文本格式编写文档．**
  
@@ -7,6 +15,10 @@
 ### 转义
 
 　　显示特殊字符如 \# \*，需要在前面加上反斜杠 `\` 进行转义
+  
+### 引用
+
+　　`>` text
 
 ### 标题
 
@@ -20,6 +32,8 @@
 　　\###### 六级标题   （ 较浅的字体颜色 ）
 
 ### 链接
+
+> 「Ctrl+K」
 
 　　`[title](URL)`
 　　其中 title 为链接标题，URL 为链接
@@ -35,9 +49,13 @@
 
 #### 斜体
 
+> 「Ctrl+I」
+
 　　`*` 斜体文字 `*` 或 `_` 斜体文字 `_`
   
 #### 加粗
+
+> 「Ctrl+B」
 
 　　`**` bold `**` 或 `__` bold `__`
   
@@ -167,5 +185,13 @@
 #### 其他
 
 参考站点：[基于Markdown的中文文档排版规范](https://blog.csdn.net/weixin_39787089/article/details/110478337)
+
+----
+## git-笔记
+
+- [第一节](https://github.com/SpringLoach/origin-2021/blob/happy-day/git/Git%E5%AD%A6%E4%B9%A0.md)
+- [第二节](https://github.com/SpringLoach/origin-2021/blob/happy-day/git/git%E5%AD%A6%E4%B9%A02.md)
+- [第三节](https://github.com/SpringLoach/origin-2021/blob/happy-day/git/Git%E5%AD%A6%E4%B9%A03.md)
+- [参考表单](https://liaoxuefeng.gitee.io/resource.liaoxuefeng.com/git/git-cheat-sheet.pdf)
 
   
