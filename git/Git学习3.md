@@ -70,6 +70,80 @@ git push origin <tagname>
 $ git push origin --tags
 ```
 
+## 自定义 Git  
+> 实际上，Git 有很多可配置项。 
+
+**让 Git 显示颜色**  
+```
+$ git config --global color.ui true
+```
+
+## 忽略特殊文件  
+> 有些时候，必须把某些文件放到 Gi t工作目录中，但又不能提交它们。每次 `git status` 都会显示 Untracked files ...，让人难以接受。
+
+在 Git 工作区的根目录下创建一个特殊的`.gitignore`文件，然后把要忽略的文件名填进去，Git 就会自动忽略这些文件。也可以组合[官方准备的配置文件](https://github.com/github/gitignore)。
+
+### 忽略文件的原则
+1. 忽略操作系统自动生成的文件，比如缩略图等；
+2. 忽略编译生成的中间文件、可执行文件等，也就是如果一个文件是通过另一个文件自动生成的，那自动生成的文件就没必要放进版本库，比如 Java 编译产生的 `.class` 文件；
+3. 忽略你自己的带有敏感信息的配置文件，比如存放口令的配置文件。
+
+**注意：在文本编辑器里“保存”或者“另存为”就可以把文件保存为 `.gitignore`，而办不到在资源管理器里新建一个 `.gitignore` 文件。**
+
+栗子：忽略一些 Windows，Python和自己定义的文件，最终得到一个完整的.gitignore文件：  
+> 把指定文件排除在.gitignore规则外的写法就是 `!+文件名`
+> 所有空行或者以 \# 开头的行都会被 Git 忽略。
+```
+# Windows:       // 指示win环境下忽略
+Thumbs.db     
+ehthumbs.db
+Desktop.ini
+
+# Python:       // 指示java环境下
+*.py[cod]
+*.so           // 忽略所有后缀为.so 的文件
+*.egg
+*.egg-info
+dist
+build
+
+# My configurations:
+db.ini
+deploy_key_rsa
+
+# 不排除.gitignore和App.class:
+!.gitignore
+!App.class
+```
+
+检验 `.gitignore` 的标准是 `git status` 命令是不是说 working directory clean.
+
+**提交文件**  
+
+最后记得把 `.gitignore` 也提交到Git，可以方便多人协作。
+
+**添加被忽略的文件：**  
+```
+$ git add -f 文件名
+```
+
+**检查冲突规则**  
+```
+$ git check-ignore -v 文件名
+```  
+### 其他用法
+如果觉得要忽略的内容太多懒得管理, 可以采取全部忽略逐一排除的策略:
+先\*忽略全部, 之后再\!设定不被忽略的内容。
+```
+*          # 忽略全部
+
+！/ch01/   # 不忽略的文件
+
+！*.c      # 不忽略的文件
+```
+如果不慎在创建.gitignore文件之前就push了某文件，那么即使在.gitignore文件中写入新的过滤规则，这些规则也不会起作用。
+
+更详细的[设置方法](https://zhuanlan.zhihu.com/p/52885189)
 
 
 
