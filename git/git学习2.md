@@ -180,5 +180,25 @@ $ git cherry-pick 4c805e2
 - 也可以先将工作现场的任务完成 **提交后**，再“ 重放 ”修复。
 - 如果修复 bug 与工作现场的修改在同个文件的相同处，“ 重放 ”修复可能会导致报错。
 
+## Feature分支  
+> 添加一个新功能时，肯定不希望因为一些实验性质的代码，把主分支搞乱了，所以，每添加一个新功能，最好新建一个 *feature* 分支，在上面开发，完成后，合并，最后，删除该 *feature* 分支。这个过程类似于 *处理 bug*。
+
+**强行删除**  
+> 准备合并分支前，突然被告知：新功能取消，这个包含新功能的 *feature* 分支 **必须销毁**。 
+> 
+> 其中的 *feature-121* 为分支名称  
+```
+$ git branch -D feature-121               
+```  
+> tip：没有合并过的分支，如果删除，将 **丢失修改**，普通的方法去删除分支会被报错：  
+> ```
+> $ git branch -d feature-121
+> error: The branch 'feature-121' is not fully merged.
+> If you are sure you want to delete it, run 'git branch -D feature-121'.
+> ```  
+> （ 正常工作中，为了防止需求变动，不会直接这么操作吧？）
+
+
+
 
 
