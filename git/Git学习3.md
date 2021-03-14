@@ -145,6 +145,58 @@ $ git check-ignore -v 文件名
 
 更详细的[设置方法](https://zhuanlan.zhihu.com/p/52885189)
 
+## 配置别名  
+> 给Git配置好别名，就可以输入命令时偷个懒。
 
+**告诉 Git，以后 输入`st` 就表示 `status` ：**   
+> 那么以后，敲 `git st` 就表示 `git status`  
+> 
+> （非取代）  
+```
+$ git config --global alias.st status
+```
+
+**常用命令**  
+> 很多人都用co表示checkout，ci表示commit，br表示branch：  
+```
+$ git config --global alias.co checkout
+$ git config --global alias.ci commit
+$ git config --global alias.br branch
+```
+
+**git unstage file**  
+把暂存区的修改撤销掉，重新放回工作区  
+```
+$ git config --global alias.unstage 'reset HEAD'
+```
+
+**git last**  
+显示最后一次提交信息  
+```
+$ git config --global alias.last 'log -1'
+```
+
+**git lg**  
+更好的颜色显示  
+```
+$ git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+```
+
+### 配置文件  
+> 配置 Git 的时候，加上 `--global` 是针对当前用户起作用的，如果不加，那只针对当前的仓库起作用。  
+
+- 每个仓库的 Git 配置文件都放在 `.git/config` 文件中。  
+（别名就在 **[alias]** 后面，要删除别名，直接把对应的行删掉即可。）　　
+
+- 而当前用户的 Git　配置文件放在用户主目录下的一个隐藏文件 `.gitconfig` 中。
+
+## 使用 SourceTree  
+> 当我们对 Git 的提交、分支已经非常熟悉，可以熟练使用命令操作 Git 后，再使用 *GUI 工具*，就可以更高效。  
+> 
+> 这里推荐 SourceTree，一款免费 Git 图形界面工具，可以操作任何 Git 库，[进入下载](https://www.sourcetreeapp.com/)。
+
+[教程很简单](https://www.liaoxuefeng.com/wiki/896043488029600/1317161920364578)
+
+最后，附上廖大神友情准备的 [Git Cheat Sheet](https://liaoxuefeng.gitee.io/resource.liaoxuefeng.com/git/git-cheat-sheet.pdf)
 
 
