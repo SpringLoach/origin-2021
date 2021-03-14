@@ -198,6 +198,65 @@ $ git branch -D feature-121
 > ```  
 > （ 正常工作中，为了防止需求变动，不会直接这么操作吧？）
 
+## 多人协作  
+
+### 查看远程库的信息  
+> 当从远程仓库克隆时，实际上 Git 自动把本地的 *master* 分支和远程的 *master* 分支 **对应起来** 了，并且，远程仓库的默认名称是 origin。
+```
+$ git remote
+origin
+```  
+> 或者，用 `git remote -v` 显示更详细的信息：  
+> 可以显示抓取和推送的 origin 的地址。如果没有 **推送权限**，就看不到 push 的地址。
+> ```
+> $ git remote -v
+> origin  git@github.com:zhanghaoming/cangkuming.git (fetch)
+> origin  git@github.com:zhanghaoming/cangkuming.git (push)
+> ```  
+
+### 抓取分支：  
+模拟同伴，可以在另一台电脑（ 注意要把 **SSH Key** 添加到 GitHub ）或者同一台电脑的另一个目录下克隆：  
+```
+$ git clone git@github.com:zhanghaoming/cangkuming.git
+```  
+> 此时同伴只能看到本地的 *master* 分支。
+> ```
+> $ git branch
+> * master  
+
+要在 *dev* 分支上开发，就必须创建远程 origin 的 *dev* 分支到本地。  
+```
+$ git checkout -b dev origin/dev
+```
+### 多人协作的工作模式
+
+1. 首先，可以试图用 `git push origin <branch-name>` 推送自己的修改；  
+> 推送时，要**指定本地分支**，这样，Git 就会把该分支推送到远程库 **对应的** 远程分支上。 
+> **<branch-name>** 可以替换为 master div 等。
+
+2. 如果推送失败，是因为远程分支比你的本地更新( 同伴提交了 )，需要先用 `git pull` 试图 **合并**；  
+> 如果 `git pull` 提示 **no tracking information**，则说明本地分支和远程分支的链接关系没有创建。
+>   
+> 创建链接：  
+>  ```
+>  git branch --set-upstream-to=origin/<branch-name> <branch-name>
+>  ```
+> 再 pull：  
+> ```
+> $ git pull
+> ```
+
+3. 如果合并有冲突，则手动 **解决冲突**，并在本地提交；
+
+4. 没有冲突或者解决掉冲突后，再用 `git push origin <branch-name>` 推送就能成功。
+
+### 判断分支是否需要推送  
+- *master* 分支是主分支，因此要时刻与远程同步；
+- *dev* 分支是开发分支，团队所有成员都需要在上面工作，所以也需要与远程同步；
+- *bug* 分支只用于在本地修复 bug，就没必要推到远程了，除非老板要看看你每周到底修复了几个 bug；
+> 本地新建的分支如果不推送到远程，对其他人就是 **不可见的**。
+- *feature* 分支是否推到远程，取决于你是否和你的小伙伴合作在上面开发。
+
 
 
 
