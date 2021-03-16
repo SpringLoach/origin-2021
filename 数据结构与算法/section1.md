@@ -246,3 +246,118 @@ x.reduce(((a,b) => a * b),2);   // 结果为 48，将调用函数 3 次，有初
 ```  
 有篇写的很好的文章，可以学习[更高级的技巧](https://www.jianshu.com/p/e375ba1cfc47)。  
 
+## ES6数组新功能  
+**使用 `for...of` 循环迭代数组**  
+```
+for(const n of x){
+	console.log(n % 2 === 0 ? 'even' : 'odd');
+}
+```
+
+**使用 `@@iterator` 对象**  
+> 返回一个包含数组键值对的**迭代器**对象，可以通过同步调用得到数组元素的键值对。
+> 
+> 需要通过 Symbol.iterator 来访问。
+> 然后，不断调用迭代器的 next 方法，就能依次得到数组中的值。  
+```
+let x = [3,5,9,2];
+let y = x[Symbol.iterator]();
+
+console.log(y.next().value);     // 3	
+console.log(y.next().value);     // 5
+console.log(y.next().value);     // 9
+console.log(y.next().value);     // 2
+console.log(y.next().value);     // undefined
+```
+也可以  
+```
+let y = x[Symbol.iterator]();
+for (const n of x){
+	console.log(n);         // 3 5 9 2
+}
+```  
+**数组的 entries() 方法**  
+> 返回包含数组所有键值对的 `@@iterator`
+> 
+> `key` 是数组中的位置，`value` 是保存在数组索引的值。  
+```
+let y = x.entries();		 // 得到键值对的迭代器
+console.log(y.next().value);     // [0,3]
+console.log(y.next().value);     // [1,5]
+console.log(y.next().value);     // [2,9]
+```  
+也可以  
+```
+let y = x.entries();
+for (const n of y){
+		  console.log(n);
+}
+```  
+**数组的 keys() 方法**  
+> 返回包含数组所有**索引**的 `@iterator`。
+> 
+> 一旦没有可迭代的值      // {value: 0, done: false }  
+```  
+const y = x.keys();     // 得到数组索引的迭代器
+console.log(y.next());  // {value: 0, done: false }
+console.log(y.next());  // {value: 1, done: false }
+console.log(y.next());  // {value: 2, done: false }
+```  
+**数组的 values() 方法**  
+> 返回包含数组所有**值**的 `@iterator`。  
+```  
+const y = x.values(); 
+console.log(y.next());  // {value: 3, done: false }
+console.log(y.next());  // {value: 5, done: false }
+console.log(y.next());  // {value: 9, done: false }
+```  
+**使用 Array.from 方法**  
+> 根据已有数组创建一个新的数组。  
+复制一个数组  
+```
+let y = Array.from(x);
+```  
+也可以传入一个过滤值的函数
+```
+let z = Array.from(x, a => (a % 2 == 0));  // [false,false,false,true]
+```
+**使用 Array.of 方法**  
+> 根据传入的参数创建一个新数组。  
+等价的代码  
+```
+let y = Array.of(1,2);
+let y = [1,2];
+```  
+复制已有的数组
+```
+let y = Array.of(...x);    // 展开运算符把数组里的值展开成参数
+```  
+**使用 fill 方法**  
+> 用静态值填充数值。  
+> 
+> 参数1：填充值   可选参数2：起始索引\[  可选参数3：结束索引）   
+```
+let v = [1,2,3,4,5,6];
+v.fill(0);     // 此时 v 为 [0,0,0,0,0,0]
+```  
+创建数组并初始化  
+```
+let v = Array(3).fill(6);     // [6,6,6]
+```   
+**使用 copyWithin 方法**   
+> 复制数组中一系列元素到**同一数组**指定的起始位置。  
+> 
+> 参数1：起始索引-放置  参数2：起始索引-拉取\[  可选参数3：结束索引-拉取）    
+```
+let v = [1,2,3,4,5,6];
+v.copyWithin(0,4);     // 此时 v 为 [5,6,3,4,5,6]
+```  
+
+
+
+
+
+
+
+
+
