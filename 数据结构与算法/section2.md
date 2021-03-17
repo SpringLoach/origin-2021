@@ -211,9 +211,9 @@ document.write(x.a);    // undefined
 代码实现
 > 注意 JavaScript 的数值类型不会区分整数和浮点数。
 ```
-function decimalToBinary(a) {
+function decimalToBinary(decNumber) {
     const remStack = new Stack();
-    let x = a;
+    let x = decNumber;
     let rem;
     let binaryString = '';
     
@@ -230,6 +230,35 @@ function decimalToBinary(a) {
     }
     
     return binaryString;
+}
+```
+
+**十进制转化为基数为 2~36 的任意进制**  
+> 一个关键点是将大于 9 的余数转换成对应的ABCD等。  
+```
+function baseConverter(decNumber,base) {
+    const remStack = new Stack();
+    const digits = '0123456789ABCDEFGHIGKLMNOPQRSTUVWXYZ'  // ①
+    let x = decNumber;
+    let rem;
+    let baseString = '';
+    
+    // 参数 2 不匹配时：
+    if (!(base >= 2 && base <= 36)) {
+        return '';
+    }
+    
+    while(x > 0) {
+        rem = Math.floor(x % base);
+        remStack.push(rem);
+        x = Math.floor(x / base);
+    }
+    
+    while(!remStack.isEmpty()) {
+        baseString += digits[remStack.pop()];  // 配合①，可以将大于 9 的数字也转化成对应字符串。
+    }
+    
+    return baseString;
 }
 ```
 
