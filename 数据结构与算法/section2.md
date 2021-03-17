@@ -129,3 +129,76 @@ toString() {
 }
 ```
 
+### 保护数据结构内部元素  
+> 对于别的开发者也可以使用的数据结构和对象，我们希望保护内部的元素，只有我们暴露出的方法才能修改内部结构。  
+> 
+> 遗憾的是，我们在 Stack 类中声明的 items 和 count 属性并没有得到保护（不是私有的），因为 JavaScript 的类就是这样工作的。
+
+**下划线命名约定**  
+> 有些开发者喜欢在 JavaScript 中使用下划线命名约定来标记私有属性。  
+```
+class Stack {
+     constructor() {
+         this._count = 0;   // 仅为约定，并不能保护数据。
+         this._items = {};
+     }
+}
+```
+**用限定作用域 Symbol 实现类**  
+> Symbol 是在 ES2015 新增的一种基本类型，它是不可变的。  
+>
+> 但它创建的依旧是假的私有属性。
+```
+const items = Symbol('xxx');
+const items2 = Symbol('zzz');
+const items3 = Symbol('ccc');
+
+class Stack {
+    constructor() {
+        this[items] = [];          
+        this[items2] = [1,2,3];
+    }
+    push(element){
+        this[items].push(element);     // 为了访问 items，需把所有的 this.items 都换成 this[items]
+    }
+}
+
+const x = new Stack();    
+x.push('a');
+x.push('b');
+x.push('c');
+x.push('d');
+
+// 但是通过这个方法能够取到类里面声明的所有 Symbols 属性。
+let y = Object.getOwnPropertySymbols(x);    
+console.log(y.length);             // 2
+console.log(y);                    // 输出 Symbols 列表
+console.log(x[y[0]][2] = 'e');     // 将 items[2] 替换为 e
+```  
+**用 WeakMap 实现类**  
+> 这种数据结构可以确保属性是**私有的**，只是代码可读性不强。  
+```  
+const a = new WeakMap();
+
+class y {
+    constructor (){
+        a.set(this,[]);         // 以 this 为键，把代表栈的数组存入 a
+    }
+    push(element){
+        const s = a.get(this);  // 以 this 为键，从 a 中取值
+        s.push(element);
+    }
+}
+
+const x = new y();
+x.push(2);
+
+console.log(x);         // 属性隐藏
+document.write(x.a);    // undefined
+```    
+
+
+
+
+
+
