@@ -417,5 +417,38 @@ console.log(v.sort(x));    // [A,a,F,f]
 console.log(v.sort((a,b) => a.localeCompare(b)));    // [a,A,f,F]
 ```
 
+### 搜索  
+**使用 indexOf() 方法**  
+> 返回第一个与给定参数相等的数组元素的**索引**，没有找到则返回 -1  
+```
+let x = [4,87,24,3]
+console.log(x.indexOf(24));    // 返回 2
+```  
+**使用 lastIndexOf() 方法**  
+> 返回最后一个与给定参数相等的数组元素的**索引**，没有找到则返回 -1  
+
+**使用 find 和 findIndex 方法——ECMAScript 2015**  
+> 根据**回调函数**给定的条件从数组中查找元素，如果找到则返回第一个满足条件的元素 / 索引，找不到则返回 undefined / -1 。    
+```
+document.write(x.find(a => a > 22));    // 输出 87
+```  
+**使用 includes() 方法——ECMAScript 2017**  
+> 如果数组中存在**某个元素**则返回 true，否则返回 false。  
+```
+console.log(x.includes(87));	// true
+console.log(x.includes(87,2));	// false 第二个参数为起始索引[
+```  
+
+### 输出数组为字符串  
+**使用 includes() 方法**  
+> 将数组作为一个字符串返回。  
+```
+console.log(x.toString());
+```  
+**使用 join() 方法**  
+> 将所有的数组元素连接成一个字符串。
+```
+console.log(x.join('-'));    // 4-87-24-3
+```   
 
 
