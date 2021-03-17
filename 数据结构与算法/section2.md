@@ -129,7 +129,7 @@ toString() {
 }
 ```
 
-### 保护数据结构内部元素  
+## 保护数据结构内部元素  
 > 对于别的开发者也可以使用的数据结构和对象，我们希望保护内部的元素，只有我们暴露出的方法才能修改内部结构。  
 > 
 > 遗憾的是，我们在 Stack 类中声明的 items 和 count 属性并没有得到保护（不是私有的），因为 JavaScript 的类就是这样工作的。
@@ -196,8 +196,42 @@ x.push(2);
 console.log(x);         // 属性隐藏
 document.write(x.a);    // undefined
 ```    
+## 栈实战  
+**十进制转化为二进制**  
+> 把该十进制数除以 `2` 并对商取整，直到结果是 0 为止。  
 
+把十进制的 10 转化为 二进制：
+/2|操作|商|余数
+:-:|:-:|:-:|:-:
+10|↙|5|0
+5|↙|2|1
+2|↙|1|0
+1|-|0|1  
 
+代码实现
+> 注意 JavaScript 的数值类型不会区分整数和浮点数。
+```
+function decimalToBinary(a) {
+    const remStack = new Stack();
+    let x = a;
+    let rem;
+    let binaryString = '';
+    
+    // 当输入值/商不为 0 时： 
+    while(x > 0) {
+        rem = Math.floor(x % 2);    // 返回除数运算结果的整数部分
+        remStack.push(rem);
+        x = Math.floor(x / 2);
+    }
+    
+    // 逐个返回并连接成字符串
+    while(!remStack.isEmpty()) {
+        binaryString += remStack.pop().toString();
+    }
+    
+    return binaryString;
+}
+```
 
 
 
