@@ -353,11 +353,69 @@ let v = [1,2,3,4,5,6];
 v.copyWithin(0,4);     // 此时 v 为 [5,6,3,4,5,6]
 ```  
 
+### 排序元素  
 
+**使用 reverse() 方法**  
+> 在原数组中颠倒元素的顺序。  
+```
+v.reverse();
+```  
 
+**使用 sort() 方法**  
+> 按照字母顺序（ ASCII值 ）对数组排序，支持传入指定排序方法的**函数作为参数**。
+> 
+> 
+**按数值从小到大排序**  
+```
+v.sort((a,b) => a - b);    // 自带 return； 前提元素均为数值
+```
+> 也可以更清晰的表示：
+> ```
+> function x(a,b){
+> 	if (a < b){
+> 	  return -1;
+> 	}
+> 	if (a > b){
+> 	  return 1;
+> 	}
+> 	return 0;
+> }
+> v.sort(x);
+> ```  
+**自定义排序**  
+> 根据年龄排序。
+```
+let v = [
+	{ name:'coco', age:17 },
+        { name:'baba', age:50 },
+        { name:'wang', age:1  }
+	]
+console.log(v.sort((a,b) => a.age-b.age));		
+```  
+**字符串排序**  
+> 按照 ASCII 值比较，a 将排在任意大写字母的后面。  
+> 
+> 可以给 sort 传入一个忽略大小写的比较函数来解决这个问题。  
+```  
+let v = ['F','a','f','A'];
 
+function x(a,b){
+	if (a.toLowerCase() < b.toLowerCase()){
+    return -1;
+ 	}
+ 	if (a.toLowerCase() > b.toLowerCase()){
+ 	return 1;
+ 	}
+ 	return a.charCodeAt() - b.charCodeAt();    // 教程是 return 0； 但测试不行，故改为了 ASCII值 相减
+}
 
-
+console.log(v.sort(x));    // [A,a,F,f]
+```  
+将小写字母排在前面：
+> 这个方法同样可以对带重音符号的字符排序。
+```
+console.log(v.sort((a,b) => a.localeCompare(b)));    // [a,A,f,F]
+```
 
 
 
