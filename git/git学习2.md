@@ -230,16 +230,21 @@ $ git checkout -b dev origin/dev
 ```
 ### 多人协作的工作模式
 
-1. 首先，可以试图用 `git push origin <branch-name>` 推送自己的修改；  
-> 推送时，要**指定本地分支**，这样，Git 就会把该分支推送到远程库 **对应的** 远程分支上。 
-> **<branch-name>** 可以替换为 master div 等。
+1. 首先，可以试图用 `git push origin <本地分支名>` 推送自己的修改；  
+> 推送时，要**指定本地分支**，这样，Git 就会把该分支推送到远程库 **被追踪（ 通常同名的 ）** 远程分支上。  
+> 
+> 基本用法为 `git push <远程主机名> <本地分支名>:<远程分支名>`，可以查看它[更详细的用法](https://www.cnblogs.com/qianqiannian/p/6008140.html)。 
 
 2. 如果推送失败，是因为远程分支比你的本地更新( 同伴提交了 )，需要先用 `git pull` 试图 **合并**；  
 > 如果 `git pull` 提示 **no tracking information**，则说明本地分支和远程分支的链接关系没有创建。
 >   
-> 创建链接：  
+> 查看追踪关系：  
+> ```
+> git branch -vv
+> ```  
+> 创建链接( 追踪关系 )：    
 >  ```
->  git branch --set-upstream-to=origin/<branch-name> <branch-name>
+>  git branch --set-upstream-to=origin/<远程分支名> <本地分支>
 >  ```
 > 再 pull：  
 > ```
@@ -256,6 +261,21 @@ $ git checkout -b dev origin/dev
 - *bug* 分支只用于在本地修复 bug，就没必要推到远程了，除非老板要看看你每周到底修复了几个 bug；
 > 本地新建的分支如果不推送到远程，对其他人就是 **不可见的**。
 - *feature* 分支是否推到远程，取决于你是否和你的小伙伴合作在上面开发。
+
+### git pull 命令的用法  
+基本用法
+> git pull <远程主机名> <远程分支名>:<本地分支名>  
+> 
+> 例子表示将远程主机 origin 的 master 分支拉取过来，与本地的 brantest 分支合并。
+```
+git pull origin master:brantest     
+```
+省略冒号：
+> 表示将远程主机 origin 的 master 分支拉取过来，与本地的**当前分支**进行合并。  
+> ```  
+> git pull origin master          
+> ```
+
 
 ## Rebase  
 > 要想让 Git 的提交历史成为一条干净的直线，可以执行 **rebase** 的操作，有人把它翻译成“ 变基 ”。  
