@@ -8,8 +8,8 @@
 ```
 class Queue {
     constructor() {
-        this.count = 0;         // 这个变量用于。
-        this.lowestCount = 0;   // 这个变量。
+        this.count = 0;         
+        this.lowestCount = 0;   
         this.items = {};
     }
 }  
@@ -28,8 +28,9 @@ enqueue(element) {
 }
 ```  
 **从队列移除元素**  
->  比起数组，对象在获取元素时能更高效。（ delete ）  
+>  比起数组，对象在获取元素时能更高效。 
 >  
+> pop 删除最后的数组元素； delete 可用于删除指定对象元素。
 > 有元素时，才进行移除操作。
 ```
 dequeue() {
@@ -40,7 +41,7 @@ dequeue() {
     delete this.items[this.lowestCount];
     this.lowestCount++;
     return result;
-    }
+}
 ```  
 **查看队列头部元素**  
 ```
@@ -82,6 +83,45 @@ toString() {
 }
 ```  
 
+## 双端队列数据结构  
+> 双端队列是一种允许我们同时从前端和后端添加和移除元素的特殊队列。
+> 
+> 同时遵循 **先进先出** 和 **后进先出** 原则，可以说是一种把队列和栈相结合的数据结构。  
+
+**创建 Deque 类**  
+> 它有队列的所有方法，还能像栈一样移除（ 或返回 ）后端的第一个元素，实现方法相同。
+```
+class Deque {
+    constructor() {
+        this.count = 0;         
+        this.lowestCount = 0;   
+        this.items = {};
+    }
+}  
+```  
+**向前端添加元素**  
+> 之前未实现过的方法。 
+>  
+> 第一种情况主要为了处理未曾操作过的空队列。  
+> 第三种情况表示未曾在开头弹出过元素，或 lowestCount 索引不够用。
+```
+addFront(element) {
+    if (this.count - this.lowestCount === 0) {
+        this.items[this.count] = element;
+        this.count++;
+    } else if (this.lowestCount > 0) {
+        this.lowestCount--;
+        this.items[this.lowestCount] = element;
+    } else {
+        for (let i = this.count; i > 0; i--) {
+            this.items[i] = this.items[i-1];
+        }
+            this.count++;
+            this.lowestCount = 0;
+            this.items[0] = element;
+    }
+}
+```
 
 
  
