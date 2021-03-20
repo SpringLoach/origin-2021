@@ -123,6 +123,45 @@ addFront(element) {
 }
 ```
 
+## 解决问题  
+
+### 循环队列————击鼓传花游戏  
+> 孩子们围成一圈，把花递给旁边的人，传递一定次数后，手拿花的人退出游戏，剩下的人继续游戏，直至剩下一人。  
+> 
+> 队列最前端的元素模拟拿花的人，当他把花传给旁人后，他又回到了队列的尾端。反复操作，直至传递一定次数。  
+
+代码实现
+> 
+```
+function chuanHua(elementList,num) {           // 第一个参数接受待转化为队列的数组。
+    const queue = new Queue();
+    const eliminatedList = [];
+    
+    for (let i = 0; i < elementList.length; i++) {
+        queue.enqueue(elementList[i]);
+    }
+    
+    while (queue.size() > 1) {
+        for (let i = 0; i < num; i++) {
+            queue.enqueue(queue.dequeue());    // 将移除的前端项添加到后端。
+        }
+        eliminatedList.push(queue.dequeue());  // 将前端从队列移除，并将其推入数组末尾。
+    }
+        
+    return {
+        eliminated: eliminatedList,
+        winner: queue.dequeue()                // 移除并返回最后一人； 注意没有;结尾。
+    };
+}
+// 传入参数；将返回值/返回数组输出
+const names = ['a','b','c','d','e','f','g'];
+const result = chuanHua(names,5);
+result.eliminated.forEach(name => {
+    document.write(`${name}在击鼓传花游戏中被淘汰。`);
+});
+document.write(`胜利者： ${result.winner}`);
+```  
+
 
  
 
