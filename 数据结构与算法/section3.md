@@ -130,8 +130,7 @@ addFront(element) {
 > 
 > 队列最前端的元素模拟拿花的人，当他把花传给旁人后，他又回到了队列的尾端。反复操作，直至传递一定次数。  
 
-代码实现
-> 
+代码实现  
 ```
 function chuanHua(elementList,num) {           // 第一个参数接受待转化为队列的数组。
     const queue = new Queue();
@@ -162,6 +161,41 @@ result.eliminated.forEach(name => {
 document.write(`胜利者： ${result.winner}`);
 ```  
 
+### 双端队列————回文检查器  
+> 回文是正反都能读通的单词、词组、数或一系列字符的序列。
+
+代码实现  
+> 1. 判断传入参数是否合法。  
+> 2. 转小写，移除所有空格，将字符串添加到双端队列。  
+> 3. 依次对比前后端删除的字符串。  
+```
+function palindromeChecker(aString) {
+    if (aString === undefined || aString === null || (aString !== null && aString.length === 0)) {
+        return false;
+    }
+    const deque = new Deque();
+    const lowerString = aString.toLocaleLowerCase().split(' ').join('');  
+    let isEqual = true;
+    let firstChar,lastChar;
+    
+    for (let i = 0; i < lowerString.length; i++) {
+        deque.addBack(lowerString.charAt(i));
+    }
+    
+    while (deque.size() > 1 && isEqual) {
+        firstChar = deque.removeFront();
+        lastChar = deque.removeBack();
+        if (firstChar !== lastChar) {
+            isEqual = false;
+        }
+        
+    }
+    
+    return isEqual;
+}
+```  
+> `split(' ')` 以空格作为分隔符，将字符串分割为数组。  
+> `join('')` 把数组所有元素转化字符串，不分割。
 
  
 
