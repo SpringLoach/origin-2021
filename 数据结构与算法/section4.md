@@ -254,5 +254,79 @@ removeAt(index) {
 ```  
 其他方法，如 push()，也需改动。
 
+## 循环链表  
+> 循环链表的最后一个 node 指向第一个元素，而非引用 undefined。  
+
+图解：  
+![循环链表](循环链表.jpg)    
+
+**创建循环链表**  
+```
+class CircularLinkedList extends LinkedList {
+    constructor(equalsFn = defaultEquals) {
+        super(equalsFn);
+    } // 添加方法
+}
+```  
+**在任意位置插入新元素**  
+> 在循环链表的首个位置（空/非空）、中间位置插入新元素。
+>
+> 注意到 current 值仅用于指代或记录某个节点。
+```
+insert(element,index) {
+     if (index >= 0 && index <= this.count) {
+        const node = new Node(element);
+        let current = this.head;
+        if (index === 0) {
+            if (this.head == null) {
+                this.head = node;
+                node.next = this.head;
+            } else {
+                node.next = current;
+                current = this.getElementAt(this.size()-1);  // 链接到首个元素
+                this.head = node;
+                current.next = this.head;
+            }
+        } else {
+            const previous = this.getElementAt(index - 1);
+            node.next = previous.next;
+            previous.next = node;
+        }
+        this.count++;
+        return true;
+    }
+    return false;
+}
+```  
+**从任意位置移除元素**  
+> 在循环链表的首个位置（仅有一个元素/非）、中间位置删除元素。
+```
+removeAt(index) {
+    if (index >= 0 && index < this.count) {
+        let current = this.head;
+        if (index === 0) {
+            if (this.size() === 1) {
+                this.head = undefined;
+            } else {
+                const removed = this.head;
+                current = this.getElementAt(this.size()-1);
+                this.head = this.head.next;
+                current.next = this.head;
+                current = removed;
+            }
+        } else {
+            const previous = this.getElementAt(index - 1);
+            current = previous.next;
+            previous.next = current.next;
+        }
+        this.count--;
+        return current.element;
+    }
+    return false;
+}
+```  
+
+
+
 
 
