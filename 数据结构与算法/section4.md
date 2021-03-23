@@ -51,6 +51,7 @@ push(element) {
 ```  
 > this.head == null 和（this.head ===undefined || head === null）等价。  
 > current.next != null 和 (current.next !== undefined && current.next !== null) 等价。  
+
 **从链表中移除元素**  
 ```
 removeAt(index) {
@@ -73,5 +74,99 @@ removeAt(index) {
     }
     return undefined; // 当值越界时
 }
+```  
+**循环迭代链表直到目标位置**  
+> `node != null` ：为了确保不会发生运行时的错误。
 ```
+getElementAt(index) {
+    if (index >= 0 && index < this.count) {
+        let node = this.head;
+        for(let i = 0; i < index && node != null; i++) {
+            node = node.next;
+        }
+        return node;
+    }
+    return undefined;
+}
+```  
+**在任意位置插入元素**  
+```
+insert(element,index) {
+    if (index >= 0 && index <= this.count) {
+        const node = new Node(element);
+        if (index === 0) {    // 添加到首位
+            const current = this.head;
+            node.next = current;
+            this.head = node;
+        } else {
+            const previous = this.getElementAt(index - 1);  // 需要添加新节点的前一个位置
+            const current = previous.next;
+            node.next = current;
+            previous.next = node;
+        }
+        this.count++;
+        return true;
+    }
+    return false;
+}
+```  
+**返回一个元素的位置**  
+```
+indexOf(element) {
+    let current = this.head;
+    for (let i = 0; i < this.count && current != null; i++) {
+        if (this.equalsFn(element,current.element)) {
+            return i;    // 直至满足条件
+        }
+        current = current.next;
+    }
+    return -1;
+}
+```  
+**利用查找元素位置的方法移除指定元素**  
+```
+remove(element) {
+    const index = this.indexOf(element);
+    return this.removeAt(index);
+}
+```  
+**查看链表大小**  
+```
+size() {
+    return this.count;
+}
+```
+**查看链表是否为空**  
+```
+isEmpty() {
+    return this.count === 0;  // return this.size() === 0;
+}
+```  
+**获取链表的首位元素(Node)**  
+```
+getHead() {
+    return this.head;
+}
+```  
+**toString 方法**  
+> 改变了默认方法，此时输出链表变量，将输出字符串而非\[object]。  
+```
+toString() {
+    if (this.head == null) {
+        return '';
+    }
+    let objString = `${this.head.element}`;
+    let current = this.head.next;
+    for(let i = 1; i < this.size() && current != null; i++) {
+        objString = `${objString},${current.element}`;
+        current = current.next;
+    }
+    return objString;
+}
+```
+
+
+
+
+
 
