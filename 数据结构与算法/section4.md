@@ -326,7 +326,48 @@ removeAt(index) {
 }
 ```  
 
+## 有序链表  
+> 有序链表是指保持元素有序的链表结构。  
 
+```
+function defaultCompare(a,b) {
+    if (a === b) {
+        return 0;
+    }
+    return a < b ? -1 : 1;
+}
+
+class SortedLinkedList extends LinkedList {
+    constructor (equalsFn = defaultEquals, compareFn = defaultCompare){
+        super(equalsFn);
+        this.compareFn = compareFn;
+    }   // 添加方法
+}
+```  
+**有序插入元素**  
+> 除了使用排序算法之外，我们还可以将元素插入到正确的位置来保证链表的有序性。  
+```
+insert(element, index = 0) {
+    if (this.isEmpty()) {
+        return super.insert(element,0);
+    }
+    const pos = this.getIndexNextSortedElement(element);
+    return super.insert(element,pos);
+}
+// 找到匹配的索引值。    
+getIndexNextSortedElement(element) {
+    let current = this.head;
+    let i = 0;
+    for (;i < this.size() && current; i++) {
+        const comp = this.compareFn(element, current.element);
+        if (comp === -1) {
+        return i;
+        }
+        current = current.next;
+    }
+    return i;
+}
+```  
 
 
 
