@@ -139,3 +139,29 @@ isSubsetOf (otherSet) {
 }
 ```
 
+## ES 2015————Set 类  
+> ECMAScript2015 新增了 Set 类作为 JavaScript API 的一部分。
+> 
+> 和之前构造的 Set 不同：values 方法将返回 Iterator。  
+> 而 size 变成了一个属性。  
+
+
+### 使用扩展运算符   
+- 将集合转化为数组；  
+- 执行运算；  
+- 将结果转化回集合。  
+
+**并集**  
+> 其中x，z为需要合并的集合。
+```
+console.log(new Set([...x,...z]));  
+```  
+**交集**  
+> filter方法将数组的每一个元素放入到函数中执行，将返回 true 的项 **组成为新数组**。
+```
+console.log(new Set([...x].filter(a => z.has(a)))); 
+```  
+**差集**  
+```
+console.log(new Set([...x].filter(a => !z.has(a))));
+```
