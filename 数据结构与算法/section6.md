@@ -1,15 +1,16 @@
-# 字典  
+## 字典  
 > 在字典中，用\[键，值]对的形式来存储数据。
 > 
 > 字典也称作**映射**、**符号表**、或**关联数组**。  
 
-## 创建字典类  
+### 创建字典类  
 骨架
 ```
 class Dictionary {
     constructor(toStrFn = defaultToString) {
         this.toStrFn = toStrFn;
         this.table = {};
+    }
 }
 ```  
 defaultToString 函数  
@@ -142,6 +143,79 @@ toString() {
     }
     return objString;
 }
+```  
+
+## 散列表  
+> 散列算法的作用是尽可能**快**地在数据结构中找到一个值。  
+
+### 创建散列表  
+
+骨架  
 ```
+class HashTable {
+    constructor(toStrFn = defaultToString) {
+        this.toStrFn = toStrFn;
+        this.table = {};
+    }
+}
+```
+创建散列方法  
+> lose lose散列函数：简单地将每个键值中的每个字母的 ASCII 值相加。
+```
+loseloseHashCode(key) {
+    if (typeof ley === 'number') {
+        return key;
+    }
+    const tableKey = this.toStrFn(key);  // 转化为字符串
+    let hash =0;
+    for (let i = 0; i < tableKey.length; i++) {
+        hash += tableKey.charCodeAt(i);
+    }
+    return hash % 37;  
+}
+```  
+调用散列方法  
+```
+hashCode(key) {
+    return this.loseloseHashCode(key);
+}
+```
+
+**向散列表增加（更新）一个的项**  
+> 创建了一个 ValuePair 实例。  
+```
+put(key,value) {
+    if (key != null && value != null) {
+        const position = this.hashCode(key);  // 用处理后的键作键
+        this.table[position] = new ValuePair(key, value);
+        return true;
+    }
+    return false;
+}
+```  
+**从散列表中获取一个值**  
+> 与字典不同的是，散列表中的键使用 hash 转化而非字符串化。  
+```
+get(key) {
+    const valuePair = this.table[this.hashCode(key)];
+    return valuePair == null? undefined : valuePair.value;
+}
+```
+**从散列表中移除某项**  
+```
+remove(key) {
+    const valuePair = this.table[this.hashCode(key)];
+    if (valuePair != null) {
+        delete this.table[this.hashCode(key)];
+        return true;
+    }
+    return false;
+}
+```  
+
+
+
+
+
 
 
