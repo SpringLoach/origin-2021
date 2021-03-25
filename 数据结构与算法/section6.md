@@ -234,9 +234,169 @@ toString() {
 > ```  
 
 ## 分离链接  
-> 分离链接法包括为散列表的**每一个位置创建一个链表**并将元素存储在里面。它是解决冲突最简单的方法，但会在 HashTable 实例之外占用额外的储存空间。  
+> 分离链接法将会为散列表的有元素的位置 **创建一个链表** 并将元素存储在里面。它是解决冲突最简单的方法，但会在 HashTable 实例之外占用额外的储存空间。  
 
+骨架  
+```
+class HashTableSeparateChaining {
+    constructor(toStrFn = defaultToString) {
+        this.toStrFn = toStrFn;
+        this.table = {};
+    }
+}
+```  
+**添加项**  
+> 如果相应位置为空，先初始化链表，在将元素添加到链表末尾。  
+```
+put(key, value) {
+    if (key != null && value != null) {
+        const position = this.hashCode(key);
+        if (this.table[position] == null) {
+            this.table[position] = new LinkedList();
+        }   
+        this.table[position].push(new ValuePair(key, value)); 
+        return true;
+    }
+    return false;
+}
+```
 
+**获取项**  
+> 每一个 Node 的 element 都是一个 ValuePair 实例，都包含有 value 和原键。
+```
+get(key) {
+    const position = this.hashCode(key);
+    const linkedList = this.table[position];  // 对应链表
+    if (linkedList != null && !linkedList.isEmpty()) {
+        let current = linkedList.getHead();
+        while (current != null) {
+            if (current.element.key === key ) { 
+                return current.element.value;
+            }
+            current = current.next;
+        }
+    }
+    return undefined;
+}
+```
+**移除项**  
+```
+remove(key) {
+    const position = this.hashCode(key);
+    const linkedList = this.table[position];
+    if (linkedList != null && !linkedList.isEmpty()) {
+        let current = linkedList.getHead();
+        while (current != null) {
+            if (current.element.key === key ) {
+                linkedList.remove(current.element);
+                if (linkedList.isEmpty()) {  // 删除空链表
+                    delete this.table[position];
+                }
+                return true;
+            }
+            current = current.next;
+        }
+    }
+    return false;
+}
+```
+
+## 线性探查  
+> 处理冲突的方法是直接将元素存储到表中，分为软删除（效率会逐渐减低）和移动一个或多个元素到之前的位置的方式。接下来实现第二种方式。  
+
+**添加项**  
+```
+put(key, value) {
+    if (key != null && value != null) {
+        const position = this.hashCode(key);
+        if (this.table[position] == null) {
+            this.table[position] = new ValuePair(key, value);
+        } else {
+            let index = position + 1;
+            while (this.table[index] != null) {  // 找到空的索引
+                index++;
+            }
+            this.table[index] = new ValuePair(key, value);  // 添加项 
+        }
+        return true;
+    }
+    return false;
+}
+```
+**获取项**  
+```
+get(key) {
+    const position = this.hashCode(key);
+    if (this.table[position] != null) {
+        if (this.table[position].key === key) {
+            return this.table[position].value;
+        }
+        let index = position + 1;
+        // 如果不为空位置，也不为对应项
+        while (this.table[index] != null && this.table[index].key !== key) {
+            index++;
+        }
+        // 如果不为空位置，且为对应项
+        if (this.table[index] != null && this.table[index].key === key) {
+            return this.table[index].value;
+        }
+    }
+    return undefined;
+}
+```
+**移除项**  
+```
+remove(key) {
+    const position = this.hashCode(key);
+    if (this.table[position] != null) {
+        if (this.table[position].key === key) {
+            delete this.table[position];
+            this.verifyRemoveSideEffect(key, position);  // 优化
+            return true;
+        }
+        let index = position + 1;
+        while (this.table[index] != null && this.table[index].key !== key) {
+            index++;
+        }
+        if (this.table[index] != null && this.table[index].key === key) {
+            delete this.table[index];
+            this.verifyRemoveSideEffect(key, index);  // 优化
+            return true;
+        }
+    }
+    return false;
+}
+ // 填补空位置   
+verifyRemoveSideEffect(key, removedPosition) {
+    const hash = this.hashCode(key);
+    let index = removedPosition + 1;
+    while (this.table[index] != null) {
+        const posHash = this.hashCode(this.table[index].key);
+        // 三个参数分别为 被检查项的hash键、最初删除项的hash键、当前被删项的索引值
+        if (posHash <= hash || posHash <= removedPosition) {
+            this.table[removedPosition] = this.table[index];
+            delete this.table[index];
+            removedPosition = index;
+        }
+        index++;
+    }
+}
+```
+
+## 创建更好的散列表  
+
+**djb2散列函数**  
+> 比起 lose lose 散列函数创建的散列表，它的数量可以大很多，从而有效减少很多冲突。  
+```
+djb2HashCode(key) {
+    const tableKey = this.toStrFn(key);
+    let hash = 5381;
+    for (let i = 0; i < tableKey.length; i++) {
+        hash = (hash * 33) + tableKey.charCodeAt(i);
+    }
+    return hash % 1013;  // 这里认为散列表的大小为 1000
+}
+```
 
 
 
