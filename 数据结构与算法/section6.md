@@ -398,7 +398,17 @@ djb2HashCode(key) {
 }
 ```
 
+## ES2015 Map 类  
+> 原生的 Map 类会与之前开发的 Dictionary 类有一点不同。
 
+- values 方法和 keys 方法都返回 `Iterator`，而非数组。
+- 自带 size 属性，而非方法。
+
+**ES2015 WeakMap 类和 WeakSet 类**  
+> 基本上，Map 和 Set 与其弱化版本之间仅有的区别是：  
+
+- 弱化版本没有 entries、keys 和 values 等方法。
+- 只能用对象作为键。
 
 
 
