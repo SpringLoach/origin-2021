@@ -212,6 +212,30 @@ remove(key) {
     return false;
 }
 ```  
+**实现 toString 方法**  
+```
+toString() {
+    if (this.table == null) {
+        return '';
+    }
+    const keys = Object.keys(this.table);   // 取所有 hash 键为数组
+    let objString = `{${keys[0]} => ${this.table[keys[0]].toString()}}`;
+    for (let i = 1; i < keys.length; i++) {
+        objString = `${objString},<br/>{${keys[i]} => ${this.table[keys[i]].toString()}}`;
+    }
+    return objString;
+}
+```  
+> 此时，可能会发现有些 hash 键相同的项，只保留了最后设置的一项，即发生了冲突。
+> 
+> 获取原键对应的 hash 键：
+> ```
+> console.log(散列表实例名.hashCode('原键') + ' - 原键');
+> ```  
+
+## 分离链接  
+> 分离链接法包括为散列表的**每一个位置创建一个链表**并将元素存储在里面。它是解决冲突最简单的方法，但会在 HashTable 实例之外占用额外的储存空间。  
+
 
 
 
