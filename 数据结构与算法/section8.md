@@ -396,6 +396,187 @@ removeNode(node, key) {
 }
 ```  
 
+## 红黑树  
+> 和 AVL 树一样，**红黑树**也是一个自平衡二叉搜索树。  
+
+选择自平衡树：  
+- 红黑树：需要多次插入和删除。
+- AVL 树：插入和删除频率较低（更需要多次进行搜索操作）。
+
+**红黑树的节点规则**  
+1. 节点要么是黑，要么是红；
+2. 树的**根节点**是**黑**的；
+3. 所有叶节点都是黑的 （用 NULL 引用表示的节点）；
+4. 如果一个节点是红的，那么它的两个子节点只能是黑的；
+5. 不能有两个相邻的红节点，一个红节点不能有红的父节点或子节点；
+6. 从给定的节点到它的后代节点（NULL 叶节点）的所有路径包含**相同数量的黑色节点**。  
+
+**骨架**  
+```
+class RedBlackTree extends BinarySearchTree {
+    constructor(compareFn = defaultCompare) {
+        super(compareFn);
+        this.compareFn = compareFn;
+        this.root = null;
+    }
+}
+```  
+
+### 向红黑树中插入节点  
+> 插入节点并应用后，还要验证树的颜色是否符合规则，及是否自平衡。  
+```
+insert(key) {
+    if (this.root == null) {
+        this.root = new RedBlackNode(key);
+        this.root.color = Colors.BLACK;
+    } else {
+        const newNode = this.insertNode(this.root, key);
+        this.fixTreeProperties(newNode);
+    }
+}
+    
+// 会返回被添加节点的引用，以方便后面的验证。
+insertNode(node, key) {
+    if (this.compareFn(key, node.key) == '1') {
+        if (node.left == null) {
+            node.left = new RedBlackNode(key);
+            node.left.parent = node;
+            return node.left;
+        } else {
+            return this.insertNode(node.left, key);
+        }
+    } else if (node.right == null) {
+        node.right = new RedBlackNode(key);
+        node.right.parent = node;
+        return node.right;
+    } else { 
+        return this.insertNode(node.right, key);
+    }
+}
+```  
+**拓展属性后的 Node**  
+> 插入的节点将会是红色，这样避免了与规则 6 冲突，使后续的操作简单化。
+```
+class RedBlackNode extends Node {
+    constructor(key) {
+        super(key);
+        this.key = key;
+        this.color = Colors.RED;
+        this.parent = null;
+    }
+}
+```
+
+**在插入节点后验证红黑树的属性**  
+> 从“底层”开始解决，再一层层检查树看有无冲突。  
+```
+fixTreeProperties(node) {
+    while (node && node.parent && node.parent.color === Colors.RED && node.color !== Colors.BLACK) {
+        let parent = node.parent;
+        const grandParent = parent.parent;
+        // 情景A：父节点是左侧子节点
+        if (grandParent && grandParent.left === parent) {
+            const uncle = grandParent.right;
+            // 情景A1：叔节点也是红色——只需要重新填色
+            if (uncle && uncle.color === Colors.RED) {
+                grandParent.color = Colors.RED;
+                parent.color = Colors.BLACK;
+                uncle.color = Colors.BLACK;
+                node = grandParent;
+            } else {
+                // 情形A2：节点是右侧子节点——左旋转
+                if (node === parent.right) {
+                    this.rotationRR(parent);
+                    node = parent;  // 指向 parent
+                    parent = node.parent; // 指向 node
+                }
+                // 情形A3：节点是左侧子节点——右旋转
+                this.rotationLL(grandParent);
+                parent.color = Colors.Black;
+                grandParent.color = Colors.RED;
+                node = parent;
+            }
+        } else { // 情形B：父节点是右侧子节点
+            const uncle = grandParent.left;
+            // 情形B1：叔节点也是红色——只需要重新填色
+            if (uncle && uncle.color === Colors.RED) {
+                grandParent.color = Colors.RED;
+                parent.color = Colors.BLACK;
+                uncle.color = Colors.BLACK;
+                node = grandParent;
+            } else {
+                // 情形B2：节点是左侧子节点——右旋转
+                if (node === parent.left) {
+                    this.rotationLL(parent);
+                    node = parent;
+                    parent = node.parent;
+                } 
+                // 情形B3：节点是右侧子节点——左旋转
+                this.rotationRR(grandParent);
+                parent.color = Colors.BLACK;
+                grandParent.color = Colors.RED;
+                node = parent;
+            }
+        }
+    }
+    this.root.color = Colors.BLACK;
+}
+```
+
+**红黑树旋转**  
+> 旋转的逻辑与 AVL 树一样，但由于保存了父节点的引用，需要将引用更新为旋转后的新父节点。  
+```
+rotationLL(node) {
+    const tmp = node.left;
+    node.left = tmp.right;
+    if (tmp.right && tmp.right.key) {
+        tmp.right.parent = node;
+    }
+    tmp.parent = node.parent;
+    if (!node.parent) {
+        this.root = tmp;
+    }
+    else {
+        if (node === node.parent.left) {
+            node.parent.left = tmp;
+        } else {
+            node.parent.right = tmp;
+        }
+    }
+    tmp.right = node;
+    node.parent = tmp;
+}
+
+rotationRR(node) {
+    const tmp = node.right;
+    node.right = tmp.left;
+    if (tmp.left && tmp.left.key) {
+        tmp.left.parent = node;
+    }
+    tmp.parent = node.parent;
+    if (!node.parent) {
+        this.root = tmp;
+    }
+    else {
+        if (node === node.parent.left) {
+            node.parent.left = tmp;
+        } else {
+            node.parent.right = tmp;
+        }
+    }
+    tmp.left = node;
+    node.parent = tmp;
+}
+```
+
+**补充：Colors 对象**  
+> 不补充的话，原代码我理解不了: `Colors.RED` ，实际调试也会出错。  
+```
+const Colors = {
+    RED:'RED',
+    BLACK:'BLACK'
+}
+```
 
 
 
