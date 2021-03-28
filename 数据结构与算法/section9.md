@@ -145,4 +145,87 @@ class MaxHeap extends MinHeap {
 }
 ```
 
+## 堆排序算法  
+> 不是一个稳定的算法。  
+
+**框架**  
+> - 把数组转化为一个最小堆  
+> - 替换第一个位置（即最小值）和最后一个位置的值，再将堆的大小减 1  
+> - 将根节点下移。重复步骤 2 和下移直到堆的大小为 1  
+```
+function heapSort(array, compareFn = defaultCompare) {
+    let heapSize = array.length;
+    buildMinHeap(array, compareFn);  // ①
+    while (heapSize > 1) {
+        swap(array, 0, --heapSize);  // ②
+        heapify(array, 0, heapSize, compareFn);  // ③
+    }
+    return array;
+}
+```
+**构建最小堆**  
+> 如果想让数组按升序进行排序，就建造一个最大堆（tip：不是改这里代码哈）。  
+```
+function buildMinHeap(array, compareFn) {
+    for (let i = Math.floor(array.length / 2); i >= 0; i -= 1) {
+        heapify(array, i, array.length, compareFn);
+    }
+    return array;
+}
+```
+**下移操作**  
+> heapSize 参数保证了已经交换好的元素不会再被操作。  
+```
+function heapify(array, index, heapSize, compareFn) {
+        let element = index;
+        const left = getLeftIndex(index);
+        const right = getRightIndex(index);
+        const size = heapSize;
+        if (
+            left < size && 
+            compareFn(array[element], array[left]) == 2
+          ) {
+            element = left;
+        }
+        if (
+            right < size && 
+            compareFn(array[element], array[right]) == 2
+          ) {
+            element = right;
+        }
+        if (index !== element) {
+            swap(array, index, element);
+            heapify(array, element, heapSize, compareFn);
+        }  // 参数调整
+}
+```
+**需要的其他方法**   
+```
+function defaultCompare(a,b) {
+    if (a < b) {
+        return '1';
+    } else if (a > b) {
+        return '2';
+    }
+}
+
+function getLeftIndex(index) {
+    return 2 * index + 1;
+}
+function getRightIndex(index) {
+    return 2 * index + 2;
+}
+function getParentIndex(index) {
+    if (index === 0) {
+        return undefined;
+    }
+    return Math.floor((index - 1) / 2);
+}
+
+function swap(array, a, b) {
+        const temp = array[a];
+        array[a] = array[b];
+        array[b] = temp;
+}
+```
 
