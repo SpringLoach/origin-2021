@@ -229,7 +229,7 @@ const depthFirstSearch = (graph, callback) => {
     }
 };
 
-// 本次需要探索的顶点、颜色列表、（用于找邻居的）关联表
+// 本次需要探索的顶点、颜色列表、（用于找邻居的）邻接表
 const depthFirstSearchVisit = (u, color, adjList, callback) => {
     color[u] = Colors.GREY;    // 开始访问
     if (callback) {
@@ -316,6 +316,75 @@ for (let count = 1; count < z.length; count++) {  // 共进行 顶点数量- 1 �
 s += Object.keys(fTimes)[0];  // 把剩下的顶点加进去
 console.log(s);
 ```
+
+## 最短路径算法  
+> 介绍了 Dijkstra 算法和 Floyd-Warshall 算法。  
+
+## Dijkstra 算法  
+> 是一种计算从 **单个源到所有其他源的最短路径** 的贪心算法。  
+
+**声明邻接矩阵**  
+```
+var graph = [[0,2,4,0,0,0],
+             [0,0,2,4,2,0],
+             [0,0,0,0,3,0],
+             [0,0,0,0,0,2],
+             [0,0,0,3,0,2],
+             [0,0,0,0,0,0]];
+```
+
+**算法实现**  
+> 顶点的处理：尝试去能去的点，如 C→E ，然后将 **A→C→E** 和最短路径（之前已计算出：如 **A→B→E**）比较，如果它更短，取代最短路径。
+> 其中的 **A→C** 为 A 到 C 的最短距。
+```
+const INF = Number.MAX_SAFE_INTEGER;
+
+const dijkstra = (graph, src) => {
+    const dist = [];
+    const visited = [];
+    const s = {0:'0'}; 
+    const { length } = graph;    // 获取数组长度到 length 变量
+    for (let i = 0; i < length; i++) {
+        dist[i] = INF;        // 初始化（到源点的）最短距
+        visited[i] = false;   // 初始化处理状态
+    }
+    dist[src] = 0;
+    for (let i = 0; i < length - 1; i++) {
+        const u = minDistance(dist, visited);
+        visited[u] = true;
+        for (let v = 0; v < length; v++) {
+            if (!visited[v] &&         // 需要未处理的（中）点 
+                graph[u][v] !== 0 &&   // 能走通的路径
+                dist[u] !== INF &&     
+                dist[u] + graph[u][v] < dist[v]) {   // 比原最短路径更短的路径进行替代
+              dist[v] = dist[u] + graph[u][v];
+              s[v] = v + ' ' + s[u]; 
+            }
+        }
+    }
+    return {
+        s,
+        dist
+    }   
+};
+```
+
+**选出适宜顶点**  
+> 将从 **尚未处理** 的顶点中选出 **距离源点最近** 的顶点。  
+```
+const minDistance = (dist, visited) => {
+    let min = INF;
+    let minIndex = -1;
+    for (let v = 0; v < dist.length; v++) {
+        if (visited[v] === false && dist[v] <= min) {
+            min = dist[v];
+            minIndex = v;
+        }
+    }
+    return minIndex;
+};
+```
+
 
 
 
