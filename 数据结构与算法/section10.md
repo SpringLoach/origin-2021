@@ -213,3 +213,35 @@ for (i = 1; i < z.length; i++) {
 }
 ```
 
+## 深度优先探索  
+> 先深度后广度地访问顶点，它的步骤是递归的。  
+```
+const depthFirstSearch = (graph, callback) => {
+    const vertices = graph.getVertices();
+    const adjList = graph.getAdjList();
+    const color = initializeColor(vertices);
+    
+    // 实际上，在一个无向的图中，下面的方法只会被执行一次。
+    for (let i = 0; i < vertices.length; i++) {
+        if (color[vertices[i]] === Colors.WHITE) {
+            depthFirstSearchVisit(vertices[i], color, adjList, callback);
+        }
+    }
+};
+
+// 本次需要探索的顶点、颜色列表、（用于找邻居的）关联表
+const depthFirstSearchVisit = (u, color, adjList, callback) => {
+    color[u] = Colors.GREY;    // 开始访问
+    if (callback) {
+        callback(u);
+    }
+    const neighbors = adjList.get(u);
+    for (let i = 0; i < neighbors.length; i++) {  // 遍历邻居，探索（白色）邻居
+        const w = neighbors[i];
+        if (color[w] === Colors.WHITE) {
+            depthFirstSearchVisit(w, color, adjList, callback);
+        }
+    }
+    color[u] = Colors.BLACK;  // 上面完成后，自身探索完成
+};
+```
