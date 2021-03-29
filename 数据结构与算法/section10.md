@@ -46,7 +46,7 @@ addEdge(v,w) {
 **返回顶点列表**  
 ```
 getVertices() {
-    return this.getVertices;
+    return this.vertices;
 }
 ```  
 **返回邻接表**  
@@ -74,6 +74,80 @@ toString() {
 > **关于换行**
 > - `n` 适用于控制台  
 > - `<br/>` 适用于 do...write();  
+
+## 图的遍历  
+> 有两种方法可以对图进行遍历：广度优先搜索和深度优先搜索。  
+
+**算法**|**数据结构**|**描述**
+:-:|:-:|:-:
+广度优先搜索|队列|将顶点存入队列，最先入队列的顶点先被探索
+深度优先搜索|栈|将顶点存入栈，顶点是沿着路径被探索的，存在新的相邻顶点就去访问  
+
+**标记顶点**  
+> 有助于在广度优先和深度优先算法中标记顶点。  
+```
+const Colors = {  // 枚举器
+    WHITE: 0,  // 未访问
+    GREY: 1,   // 访问了，但未探索
+    BLACK: 2   // 访问且探索
+};  
+```  
+**初始化顶点标记**  
+> 将所有顶点标记为未访问（白色）。  
+```
+const initializeColor = vertices => {
+    const color = {};
+    for (let i = 0; i < vertices.length; i++) {
+        color[vertices[i]] = Colors.WHITE;
+    }
+    return color;
+};
+```
+
+## 广度优先探索  
+> 先宽后深地访问顶点，就像一次访问图的一层。  
+
+**算法思路**  
+- 创建队列，将起始顶点 v 入列。
+- 将顶点 u 出列，取邻点存入变量，顶点 u 变灰。
+- 将 *白色邻点* 变灰入列，顶点 u 变黑，(如果队列不为空)重复 ② ③。
+  
+**算法实现**  
+```
+const breadthFirstSearch = (graph, startVertex, callback) => {
+    const vertices = graph.getVertices();
+    const adjList = graph.getAdjList();
+    const color = initializeColor(vertices);
+    const queue = new Queue();
+    queue.enqueue(startVertex);
+    
+    while (!queue.isEmpty()) {
+        const u = queue.dequeue();
+        const neighbors = adjList.get(u);
+        color[u] = Colors.GREY;
+        for (let i = 0; i < neighbors.length; i++) {
+            const w = neighbors[i];
+            if (color[w] === Colors.WHITE) {
+                color[w] = Colors.GREY;
+                queue.enqueue(w);
+            }
+        }
+        color[u] = Colors.BLACK;
+        
+        if (callback) {
+            callback(u);
+        }
+    }
+};
+```  
+
+> 回调函数参考
+> （其中 z 是顶点列表）
+> ```
+> const mF = (value) => console.log('探索完成：' + value);
+> breadthFirstSearch(x, z[0], mF);
+> ```
+
 
 
 
