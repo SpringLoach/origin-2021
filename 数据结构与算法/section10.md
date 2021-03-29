@@ -122,7 +122,7 @@ const breadthFirstSearch = (graph, startVertex, callback) => {
     queue.enqueue(startVertex);
     
     while (!queue.isEmpty()) {
-        const u = queue.dequeue();
+        const u = queue.dequeue();  // 每次的出列项
         const neighbors = adjList.get(u);
         color[u] = Colors.GREY;
         for (let i = 0; i < neighbors.length; i++) {
@@ -142,12 +142,74 @@ const breadthFirstSearch = (graph, startVertex, callback) => {
 ```  
 
 > 回调函数参考
-> （其中 z 是顶点列表）
+> （其中 z 是顶点列表；结果将会输出被访问顶点的顺序）
 > ```
 > const mF = (value) => console.log('探索完成：' + value);
 > breadthFirstSearch(x, z[0], mF);
 > ```
 
+### 用 BFS 寻找最短路径。
+> 给出 **源顶点** 和 **每个顶点** 之间最短路径的距离（ 以边的数量计 ）。  
 
+**改进的广度优先方法**  
+> 在算法实现的基础上，加上了两个对象，用于记录每个点与源顶点的距离，以及每个点的前溯点。  
+```
+const BFS = (graph, startVertex) => {
+    const vertices = graph.getVertices();
+    const adjList = graph.getAdjList();
+    const color = initializeColor(vertices);
+    const queue = new Queue();
+    const distances = {};
+    const predecessors = {};
+    queue.enqueue(startVertex);
+    
+    for (let i = 0; i < vertices.length; i++) {  // 初始化
+        distances[vertices[i]] = 0;
+        predecessors[vertices[i]] = null;
+    }
+    
+    while (!queue.isEmpty()) {
+        const u = queue.dequeue();
+        const neighbors = adjList.get(u);
+        color[u] = Colors.GREY;
+        for (let i = 0; i < neighbors.length; i++) {
+            const w = neighbors[i];
+            if (color[w] === Colors.WHITE) {
+                color[w] = Colors.GREY;
+                distances[w] = distances[u] + 1;
+                predecessors[w] = u;
+                queue.enqueue(w);
+            }
+        }
+        color[u] = Colors.BLACK;
+    }
+    return {
+        distances,
+        predecessors
+    };
+};
+```  
+**构建原溯点到其它顶点的路径**  
+> 通过建立栈的方式，使最后存入的源起点最先出栈。  
+```
+const startVertex = z[0];
 
+for (i = 1; i < z.length; i++) {
+    const toVertex = z[i];
+    const path = new Stack();
+    for (
+      let v = toVertex;  // 被遍历的其中一个顶点
+      v !== startVertex;
+      v = BFS(x, z[0]).predecessors[v]  // 赋值为自身前溯点
+      ) { 
+        path.push(v);
+    }
+    path.push(startVertex);
+    let s = path.pop();
+    while (!path.isEmpty()) {
+        s += ' - ' + path.pop();
+    }
+    console.log(s);
+}
+```
 
