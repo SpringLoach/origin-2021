@@ -244,4 +244,80 @@ const depthFirstSearchVisit = (u, color, adjList, callback) => {
     }
     color[u] = Colors.BLACK;  // 上面完成后，自身探索完成
 };
+```  
+### 发现时间和完成探索时间  
+> 需要对先前的方法进行一点改进。  
 ```
+const DFS = graph => {
+    const vertices = graph.getVertices();
+    const adjList = graph.getAdjList();
+    const color = initializeColor(vertices);
+    const d = {};
+    const f = {};
+    const p = {};
+    const time = {count: 0};
+    for (let i = 0; i < vertices.length; i++) {
+        f[vertices[i]] = 0;
+        d[vertices[i]] = 0;
+        p[vertices[i]] = null;
+    }
+    for (let i = 0; i < vertices.length; i++) {
+        if (color[vertices[i]] === Colors.WHITE) {
+            DFSVisit(vertices[i], color, d, f, p, time, adjList);
+        }
+    }
+    return {
+        discovery: d,
+        finished: f,
+        predecessors: p
+    };
+};
+    
+const DFSVisit = (u, color, d, f, p, time, adjList) => {
+    color[u] = Colors.GREY;
+    d[u] = ++time.count;
+    const neighbors = adjList.get(u);
+    for (let i = 0; i < neighbors.length; i++) {
+        const w = neighbors[i];
+        if (color[w] === Colors.WHITE) {
+            p[w] = u;  // 追踪前溯点
+            DFSVisit(w, color, d, f, p, time, adjList);
+        }
+    }
+    color[u] = Colors.BLACK;
+    f[u] = ++time.count;
+    // 自身加一，且计入这次计算（表达式）
+};
+```  
+
+### 拓扑排序————使用深度优先搜索  
+> 拓扑排序只能应用于 **有向无环图**（ DAG ）。  
+> 
+> 结果将是 **众多可能性** 之一。
+```
+const x = new Graph(true);  // 创建有向图
+......
+const y = DFS(graph);   // 返回结果
+
+const fTimes = y.finished;
+s = '';
+for (let count = 1; count < z.length; count++) {  // 共进行 顶点数量- 1 次操作
+    let max = 0;
+    let maxName = null;
+    for (i = 0; i < z.length; i++) {  // 找到所需完成时间最长的顶点
+        if (fTimes[z[i]] > max) {
+            max = fTimes[z[i]];
+            maxName = z[i];
+        }
+    }
+    s += maxName + ' - ';
+    delete fTimes[maxName];
+}
+s += Object.keys(fTimes)[0];  // 把剩下的顶点加进去
+console.log(s);
+```
+
+
+
+
+
