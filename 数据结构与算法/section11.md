@@ -84,3 +84,24 @@ function selectionSort(array, compareFn = defaultCompare) {
     return array;
 };
 ```
+
+## 插入排序  
+> 与前一项比，如自己更小，换位（技术上，自己没换过去）  
+> 重复**至**自己更大，插入（自己换过去），迭代。
+
+```
+function insertionSort(array, compareFn = defaultCompare) {
+    const { length } = array;
+    let temp;
+    for (let i = 1; i < length; i++) {
+        let j = i;
+        temp = array[i];
+        while (j > 0 && compareFn(array[j - 1], temp) == 2) {
+            array[j] = array[j - 1];
+            j--;
+        }
+        array[j] = temp;
+    }
+    return array;
+};
+```
