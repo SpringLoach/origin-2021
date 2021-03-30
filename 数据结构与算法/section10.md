@@ -385,8 +385,102 @@ const minDistance = (dist, visited) => {
 };
 ```
 
+## Floyd-Warshall 算法  
+> 是一种计算图中所有最短路径的动态规划算法，可以找出从 **所有源到所有顶点的最短路径**。  
+```
+const floydWarshall = graph => {
+    const dist = [];
+    const { length } = graph;
+    for (let i = 0; i < length; i++) {
+        dist[i] = [];
+        for (let j = 0; j < length; j++) {  // ①
+            if (i === j) {
+                dist[i][j] = 0;             // 每个顶点到自身的权值为 0
+            } else if (graph[i][j] === 0) {
+                dist[i][j] = Infinity;
+            } else {
+                dist[i][j] = graph[i][j];
+            }
+        }
+    }
+    for (let k = 0; k < length; k++) {     // ②
+        for (let i = 0; i < length; i++) {
+            for (let j = 0; j < length; j++) {
+                if (dist[i][k] + dist[k][j] < dist[i][j]) {
+                    dist[i][j] = dist[i][k] + dist[k][j]
+                }
+            }
+        }
+    }
+    return dist;
+};
+```
+> ①：把 dist 数组初始化为每个顶点之间的权值。  
+> 
+> ②：将顶点 k 作为中间点，连通 ij。   
+> 在每个 i 迭代中，j 都进行了迭代。同样的，在每个 k 迭代中，i、j都进行了迭代。保证了所有可能。  
+> 三个迭代参数互换位置，也能得到一样的结果。  
 
+## 最小生成树 ( MST )  
+> 设想在 n 个岛屿之间建造桥梁，想用最低的成本实现所有岛屿相互连通。  
+> 
+> 岛屿可以表示为图中的一个顶点，边代表成本。  
 
+## Prim 算法  
+> 是一种求解 **加权无向连通图** 的 MST 问题的贪心算法。构成的树包含图中的所有顶点，且边的权值之和最小。  
+```
+const INF = Number.MAX_SAFE_INTEGER;
+
+const prim = graph => {
+    const parent = [];
+    const key = [];
+    const visited = [];
+    const { length } = graph;
+    for (let i = 0; i < length; i++) {  // 初始化
+        key[i] = INF;
+        visited[i] = false;
+    }
+    key[0] = 0;  // 根节点
+    parent[0] = -1;
+    for (let i = 0; i < length - 1; i++) {
+        const u = minKey(graph, key, visited);
+        visited[u] = true;
+        for (let v = 0; v < length; v++) {   // 保留能到 v 点中与其距离最短的一点 u
+            if (graph[u][v] && !visited[v] && graph[u][v] < key[v]) { 
+                parent[v] = u;
+                key[v] = graph[u][v];
+            }
+        }
+    }
+    return {
+        parent,
+        key
+    }
+};
+
+const minKey = (graph, key, visited) => {
+    let min = INF;
+    let minIndex = -1;
+    for (let v = 0; v < key.length; v++) {
+        if (visited[v] === false && key[v] <= min) {
+            min = key[v];
+            minIndex = v;
+        }
+    }
+    return minIndex;
+};
+```
+一个输出栗子
+```
+const y = (a,b) => {
+    let str = '';
+    for (i = 1; i < a.length; i++) {
+        str = str + '索引 ' + i + ' 连接到索引 ' + a[i] + ' => 权值为 ' + b[i] + '<br/>'
+    }
+    document.write(str);
+}
+y(x.parent, x.key);  // x 保存了算法执行后的返回值
+```
 
 
 
