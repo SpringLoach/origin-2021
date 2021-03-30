@@ -63,3 +63,24 @@ function modifiedBubbleSort(array, compareFn = defaultCompare) {
     return array;
 }
 ```
+
+## 选择排序  
+> 选择排序是一种原址比较排序算法。思路是找到最小值放置在第一位，剩下的值里继续找最小值放在第二位，以此类推。  
+```
+function selectionSort(array, compareFn = defaultCompare) {
+    const { length } = array;
+    let indexMin;
+    for (let i = 0; i < length - 1; i++) {  // 共进行 length - 1 轮，最后的位置不用
+        indexMin = i;
+        for (let j = i; j < length; j++) {  // 比较 length - i 位数
+            if (compareFn(array[indexMin], array[j]) == 2) {
+                indexMin = j;
+            }
+        }
+        if (i !== indexMin) {  // 找出最小值后交换到 i 的位置
+            swap(array, i, indexMin);
+        }
+    }
+    return array;
+};
+```
