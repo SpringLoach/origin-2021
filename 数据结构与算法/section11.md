@@ -143,6 +143,58 @@ function merge(left, right, compareFn) {
 }
 ```
 
+## 快速排序  
+> 快速排序也使用分而治之的方法，将原始数组分为较小的数组（但不是归并排序那样真正的分割，而是通过控制指针范围来控制调整范围）。
 
+主方法  
+```
+function quickSort(array, compareFn = defaultCompare) {
+    return quick(array, 0, array.length - 1, compareFn);
+};
+```
 
+**划分两半**  
+> 一半是比主元小的值，一半是比主元大的值，主元只会出现在其中的一半。  
+> 
+> 将依据划分条件（ index ），继续划分，对于被划分到 **可操作的** 长度为 1 的部分，将不进行任何操作（过不了下面两个 if 条件）。
+```
+function quick(array, left, right, compareFn) {
+    let index;
+    if (array.length > 1) {  //  第一次调用时，筛选
+        index = partition(array, left, right, compareFn);
+        if (left < index - 1) {
+            quick(array, left, index - 1, compareFn);  // 处理完，再往下
+        }
+        if (index < right) {
+            quick(array, index, right, compareFn);
+        }
+    }
+    return array;
+};
+```
+
+**划分过程**   
+> 将操作数组并返回下一次的划分依据。  
+```
+function partition(array, left, right, compareFn) {
+    const pivot = array[Math.floor((right + left) / 2)];  // 选择中间值作为主元
+    let i = left;
+    let j = right;
+    
+    while (i <= j) {
+        while (compareFn(array[i], pivot) == 1) {  // 直到大于等于主元
+            i++;
+        }
+        while (compareFn(array[j], pivot) == 2) {  // 直到小于等于主元
+            j--;
+        }
+        if (i <= j) {  // 若此时...，才交换i、j 位置的值并移动指针
+            swap(array, i, j);
+            i++;
+            j--;
+        }
+    }
+    return i;  // 将赋值到 index
+}
+```
 
