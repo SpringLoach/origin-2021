@@ -198,3 +198,69 @@ function partition(array, left, right, compareFn) {
 }
 ```
 
+# 搜索算法  
+
+## 顺序搜索  
+> **顺序** 或 **线性搜索** 是最基本的搜索算法。它的机制是，将每一个数据结构中的元素和我们要找的元素作比较。   
+```
+function sequentialSearch(array, value, equalsFn = defaultEquals) {
+    for (let i = 0; i < array.length; i++) {
+        if (equalsFn(value, array[i])) {
+            return i;  // 将返回索引，也可以返回其他的
+        }
+    }
+    return false;
+}
+
+function defaultEquals(a,b) {
+    return a === b;
+}
+```
+
+## 二分搜索  
+> 要求被搜索的数据结构已排序。
+> 
+> 选择数组的中间值，如果待搜索值比选中值要小，在左边的子数组中寻找中间值。  
+```
+function binarySearch(array, value, compareFn = defaultCompare) {
+    const sortedArray = quickSort(array);
+    let low = 0;
+    let high = sortedArray.length - 1;
+    while (lesserOrEquals(low, high, compareFn)) {
+        const mid = Math.floor((low + high) / 2);
+        const element = sortedArray[mid];
+        if (compareFn(element, value) == 1) {
+            low = mid + 1;   // 子数组的 [
+        } else if (compareFn(element, value) == 2) {
+            high = mid - 1;  // 子数组 ]
+        } else {
+            return mid;
+        }
+    }
+    return false;
+}
+```
+
+**判断是否可以继续比较**  
+> 当子数组数量大于等于 1 时，都会返回 true；  
+> 否则即 low > high，意味着最后一个值已经比较完成且不为搜索值，将返回 false
+```
+function lesserOrEquals(a, b, compareFn) {
+    const comp = compareFn(a, b);
+    return comp == 1 || comp == 3;
+}
+
+function defaultCompare(a,b) {
+    if (a < b) {
+        return '1';
+    } else if (a > b) {
+        return '2';
+    } else if (a = b) {
+        return '3';
+    }
+}
+```
+
+
+
+
