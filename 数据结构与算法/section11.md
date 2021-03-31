@@ -105,3 +105,44 @@ function insertionSort(array, compareFn = defaultCompare) {
     return array;
 };
 ```
+
+## 归并排序  
+> 归并排序是一种分而治之算法。先将原始数组切分为较小数组，直到每个小数组只有一个位置，接着将小数组归并成较大的数组。  
+
+**第一部分**  
+> 先将一个大数组分为多个小数组并调用辅助函数。  
+> 
+> 对于数组长度为 1 的数组，直接返回。  
+```
+function mergeSort(array, compareFn = defaultCompare) {
+    if (array.length > 1) {
+        const { length } = array;
+        const middle = Math.floor(length / 2);
+        const left = mergeSort(array.slice(0, middle), compareFn);
+        const right = mergeSort(array.slice(middle,length),compareFn);
+        array = merge(left, right, compareFn);
+    }
+    return array;
+}
+```   
+**第二部分**  
+> 负责合并和排序小数组来产生大数组。  
+> 
+> ① 添加的剩余部分比 result 中的元素都要大，且已经排好了序（因为是从底层排起）。
+```
+function merge(left, right, compareFn) {
+    let i = 0;
+    let j = 0;
+    const result = [];
+    while(i < left.length && j < right.length) {   // 直至 left 或 right 遍历完
+        result.push(
+            compareFn(left[i], right[i]) == 1 ? left[i++] : right[j++]
+        );
+    }
+    return result.concat(i < left.length ? left.slice(i) : right.slice(j));  // ①
+}
+```
+
+
+
+
