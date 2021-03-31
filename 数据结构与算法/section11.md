@@ -223,7 +223,7 @@ function defaultEquals(a,b) {
 > 选择数组的中间值，如果待搜索值比选中值要小，在左边的子数组中寻找中间值。  
 ```
 function binarySearch(array, value, compareFn = defaultCompare) {
-    const sortedArray = quickSort(array);
+    const sortedArray = quickSort(array);  // 需要先排序
     let low = 0;
     let high = sortedArray.length - 1;
     while (lesserOrEquals(low, high, compareFn)) {
@@ -241,7 +241,7 @@ function binarySearch(array, value, compareFn = defaultCompare) {
 }
 ```
 
-**判断是否可以继续比较**  
+**判断是否需要继续比较**  
 > 当子数组数量大于等于 1 时，都会返回 true；  
 > 否则即 low > high，意味着最后一个值已经比较完成且不为搜索值，将返回 false
 ```
@@ -260,6 +260,69 @@ function defaultCompare(a,b) {
     }
 }
 ```
+
+## 内插搜索  
+> 是改良版的二分搜索，每次进行对比的的不一定是中间值。
+> 
+> 当数组中的值均匀分布时，性能最好，否则，运算次数可能比二分搜索还多。  
+```
+function interpolationSearch(array, value, compareFn = defaultCompare, equalsFn =defaultEquals, diffFn = defaultDiff) {
+    const sortedArray = quickSort(array);  // 需要先排序
+    const { length } = array;
+    let low = 0;
+    let high = length - 1;
+    let positon = -1;
+    let delta = -1;
+    while (
+        low <= high &&
+        biggerOrEquals(value, array[low], compareFn) &&
+        lesserOrEquals(value, array[high], compareFn) 
+    ) {
+        delta = diffFn(value, array[low]) / diffFn(array[high], array[low]);
+        position = low + Math.floor((high - low) * delta);
+        if (equalsFn(array[position], value)) {
+            return position;
+        }
+        if (compareFn(array[position], value) == 1){
+            low = position + 1;
+        } else {
+            high = position - 1;
+        }
+    }
+    return false;
+}
+```  
+**判断是否继续比较**  
+```
+// 需要 value 小于等于 [high]
+function lesserOrEquals(a, b, compareFn) {
+    const comp = compareFn(a,b);
+    return comp == 1 || comp == 3;
+}
+
+function biggerOrEquals(a, b, compareFn) {
+    const comp = compareFn(a,b);
+    return comp == 2 || comp == 3;
+}
+
+// 求差值
+function defaultDiff(a,b) {
+    return a - b;
+}
+```
+
+## Fisher - Yates 随机  
+> 迭代数组，从最后一位开始并将当前位置和一个随机位置进行交换。这个随机位置小于等于当前位置。  
+```
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const randomIndex = Math.floor(Math.random() * (i + 1));  // 将会是 [0,i] 中的随机值
+        swap(array, i, randomIndex);
+    }
+    return array;
+}
+```
+
 
 
 
