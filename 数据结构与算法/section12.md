@@ -144,6 +144,29 @@ function minCoinChange(coins, amount) {
 ```
 > 虽然比起 DP 方法，它更快更简单，但它并不总是能得到最优答案，甚至可能凑不满（如用 \[2, 3, 4] 面额凑总额 5 ）  
 
+## 分数背包问题————贪心算法  
+> 每种物品至多 1 件，且可以以百分比取。  
+> 
+> 输入的物品顺序，需要性价比为降序进行排序，否则将得出错误的解。    
+```
+function knapSack(capacity, weights, values) {
+    const n = values.length;
+    let load = 0;    // 已用重量
+    let val = 0;     // 已有价值
+    for (let i = 0; i < n && load < capacity; i++) {
+        if (weights[i] + load <= capacity) {
+            val += values[i];
+            load += weights[i];
+        } else {
+            const r = (capacity - load) / weights[i];
+            val += r * values[i];
+            load += weights[i];
+        }
+    }
+    return val;
+}
+```
+
 
 
 
