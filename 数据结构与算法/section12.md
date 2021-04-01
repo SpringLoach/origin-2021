@@ -126,7 +126,7 @@ knapSack(capacity, weights, values, n);
 ## 最少硬币找零问题————贪心算法  
 > 贪心算法期盼通过每个阶段的局部最优选择，从而达到全局的最优。  
 > 
-> 从最大面额的硬币开始
+> 从最大面额的硬币开始，拿尽可能多的这种硬币找零。当无法再拿更多这种价值的硬币时，开始拿第二大价值的硬币，依次继续。  
 ```
 function minCoinChange(coins, amount) {
     const change = [];
@@ -142,5 +142,9 @@ function minCoinChange(coins, amount) {
     return change;
 }
 ```
+> 虽然比起 DP 方法，它更快更简单，但它并不总是能得到最优答案，甚至可能凑不满（如用 \[2, 3, 4] 面额凑总额 5 ）  
+
+
+
 
 
