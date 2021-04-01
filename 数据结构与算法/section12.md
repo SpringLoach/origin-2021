@@ -122,3 +122,25 @@ const values = [3,4,5],
       n = values.length;
 knapSack(capacity, weights, values, n);
 ```
+
+## 最少硬币找零问题————贪心算法  
+> 贪心算法期盼通过每个阶段的局部最优选择，从而达到全局的最优。  
+> 
+> 从最大面额的硬币开始
+```
+function minCoinChange(coins, amount) {
+    const change = [];
+    let total = 0;
+    for (let i = coins.length - 1; i >= 0; i--) {
+        const coin = coins[i];
+        while (total + coin <= amount) {
+            document.write(coin); //
+            change.push(coin);
+            total += coin;
+        }
+    }
+    return change;
+}
+```
+
+
