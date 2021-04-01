@@ -167,6 +167,82 @@ function knapSack(capacity, weights, values) {
 }
 ```
 
+## 迷宫老鼠问题————回溯算法  
+> 我们从一个可能的动作开始并试着用这个动作解决问题。如果不能解决，就回溯选择另一个动作直到问题解决。  
+>   
+> 迷宫为一个大小为 N\*N 的矩阵，1 代表通道，0 代表墙壁。  
+> 老鼠只可以向左或向下移动，需要从 \[0,0] 移动至 \[n-1]\[n-1]。  
+   
+**建立答案模板**  
+> 创建初始矩阵，将每个位置初始化为零。  
+```
+function ratInAMaze(maze) {
+    const solution = [];
+    for (let i = 0; i < maze.length; i++) {
+        solution[i] = [];
+        for (let j = 0; j < maze[i].length; j++) {
+            solution[i][j] = 0;
+        }
+    }
+    if (findPath(maze, 0, 0, solution) === true) {
+        return solution;
+    }
+    return 'NO PATH FOUND';
+}
+```  
+**找路部分**  
+> 对于 ①，由于使用了递归，哪怕在一条错误解上走出了很久，也能将 false 返回上去，使错解（分岔路部分）变回 0。  
+```
+function findPath(maze, x, y, solution) {
+    const n = maze.length;
+    
+    if (x === n - 1 && y === n - 1) {  // 终点
+         solution[x][y] = 1;
+         return true;
+    }
+    
+    if (isSafe(maze, x, y) === true) {
+        solution[x][y] = 1;
+        if (findPath(maze, x + 1, y, solution)) {
+            return true;
+        }
+        
+        if (findPath(maze, x, y + 1, solution)) {
+            return true;
+        }
+        
+        solution[x][y] = 0;  // ①
+        return false;
+    }
+    return false;
+}
+
+// 判断是否为通道
+function isSafe(maze, x, y) {
+    const n = maze.length;
+    if (x >= 0 && y >= 0 && x < n && y < n && maze[x][y] !== 0) {
+        return true;
+    }
+    return false;
+}
+```
+举个栗子
+```
+const maze = [
+    [1, 0, 0, 0],
+    [1, 1, 1, 1],
+    [0, 0, 1, 0],
+    [0, 1, 1, 1]
+];
+
+console.log(ratInAMaze(maze));
+
+    // 结果将是  
+    [1, 0, 0, 0],
+    [1, 1, 1, 0],
+    [0, 0, 1, 0],
+    [0, 0, 1, 1]
+```
 
 
 
