@@ -180,7 +180,7 @@ function ratInAMaze(maze) {
     const solution = [];
     for (let i = 0; i < maze.length; i++) {
         solution[i] = [];
-        for (let j = 0; j < maze[i].length; j++) {
+        for (let j = 0; j < maze[i].length; j++) {  
             solution[i][j] = 0;
         }
     }
@@ -243,6 +243,108 @@ console.log(ratInAMaze(maze));
     [0, 0, 1, 0],
     [0, 0, 1, 1]
 ```
+
+## 数独解题器————回溯算法  
+> 目标是用数字 1 ~ 9 填满一个 9 × 9 的矩阵，要求每行每列，以及每个 3 × 3 小矩阵中数字不重复。  
+```
+function sudokuSolver(matrix) {
+    if (solveSudoku(matrix) === true) {
+        return matrix;
+    }
+    return '问题无解！';
+}
+```  
+**填格子部分**  
+> ① 之前的部分，将在取到最近的一个空值后（如果有）退出。  
+> 
+> ② 赋值给当前控制后，检查这种填写有无正解可能，如果没有，进入 for 循环赋其他值，还是没有，则返回 false 到上一步填写。  
+```
+const UNASSIGNED = 0;
+
+function solveSudoku(matrix) {
+    let row = 0;
+    let col = 0;
+    let checkBlankSpaces = false;
+    for (row = 0; row < matrix.length; row++) {
+        for (col = 0; col < matrix[row].length; col++) {
+            if (matrix[row][col] === UNASSIGNED) {
+                checkBlankSpaces = true;
+                break;
+            }
+        }
+        if (checkBlankSpaces === true) {
+            break;
+        }
+    }
+    if (checkBlankSpaces === false) {
+        return true;
+    }    // ①
+    for (let num = 1; num <= 9; num++) {
+        if (isSafe(matrix, row, col, num)) {
+            matrix[row][col] = num;
+            if (solveSudoku(matrix)) {    // ②
+                return true;
+            }
+            matrix[row][col] = UNASSIGNED;
+        }
+    }
+    return false;
+}
+```  
+**判断填入值是否合理**  
+```
+function isSafe(matrix, row, col, num) {
+    return (
+        !usedInRow(matrix, row, num) &&
+        !usedInCol(matrix, col, num) &&
+        !usedInBox(matrix, row - (row % 3), col - (col % 3), num)  // 返回所处小矩阵的左上角。
+    );
+}
+
+function usedInRow(matrix, row, num) {
+    for (let col = 0; col < matrix.length; col++) {
+        if (matrix[row][col] === num) {      // 检查所在行有无相同数字
+            return true;
+        }
+    }
+    return false;
+}
+
+function usedInCol(matrix, col, num) {
+    for (let row = 0; row < matrix.length; row++) {
+        if (matrix[row][col] === num) {
+            return true;
+        }
+    }
+    return false;
+}        
+     
+function usedInBox(matrix, boxStartRow, boxStartCol, num) {
+    for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 3; col++) {
+            if (matrix[row + boxStartRow][col + boxStartCol] === num) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+```  
+举个栗子  
+```
+const x = [
+    [5,3,0,0,7,0,0,0,0],
+    [6,0,0,1,9,5,0,0,0],
+    [0,9,8,0,0,0,0,6,0],
+    [8,0,0,0,6,0,0,0,3],
+    [4,0,0,8,0,3,0,0,1],
+    [7,0,0,0,2,0,0,0,6],
+    [0,6,0,0,0,0,2,8,0],
+    [0,0,0,4,1,9,0,0,5],
+    [0,0,0,0,8,0,0,7,9]
+];
+```
+
 
 
 
