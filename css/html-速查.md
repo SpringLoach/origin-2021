@@ -152,9 +152,9 @@ cols="20"></textarea>
   <legend\> | 为 `<fieldset>` 定义标题 | 可选
   <input type="text"\> | 定义用于文本输入的单行输入字段 | `value` 定义默认文字
   <input type="radio"\> | 定义单选按钮输入 | 同处单选按钮的 `name` 相等，需设置 `value` 用于提交
-  <input type="checkbox"> | 定义复选框 | 同处复选框的 `name` 相等，需设置 `value` 用于提交
+  <input type="checkbox"\> | 定义复选框 | 同处复选框的 `name` 相等，需设置 `value` 用于提交
   <input type="submit"\> | 定义用于向**表单处理程序**提交表单的按钮 | `value` 定义默认文字
-  <input type="password"> | 定义密码字段 | 字段中的字符会被做掩码处理
+  <input type="password"\> | 定义密码字段 | 字段中的字符会被做掩码处理
   <select\>| 定义下拉列表 | 该处规定 `name` 属性
   <option\> | 定义下拉列表中待选择的选项 | 该处规定 `value` 属性
   <textarea\> | 定义多行输入字段 | 标签中的文本为默认文字，`rows` 和 `cols` 可以定义文本框大小
@@ -184,8 +184,7 @@ cols="20"></textarea>
  action | <form\> | 指定表单的处理程序 | /
  method | <form\> | 规定在提交表单时所用的 HTTP 方法（GET 或 POST） | /
  target | <form\> | 规定提交表单后在何处显示响应 | /
- autocomplete | <form\> | 值为 `on` 时规定根据用户之前输入的值自动填写值 | /
- novalidate | <form\> | 布尔值，规定提交时是否应验证表单数据 | /
+ novalidate | <form\> | 布尔值，规定提交时是否应验证表单数据 | HTML5 
  name |  所有表单元素 | **如果表单元素需要提交**，必须设置一个 name 属性 | /
  selected | <option\> | 布尔属性，定义预定义选项 | /
  value | <input\>等 | 规定输入字段的初始值 | /
@@ -193,8 +192,10 @@ cols="20"></textarea>
  disabled | <input\> | 布尔属性，规定输入字段是禁用的，不会被提交 | /
  size | <input\> | 规定输入字段的尺寸（以字符计） | /
  maxlength | <input\> | 规定输入字段允许的最多数量 | /
- autocomplete | <input\>、<form\> | 规定表单或输入字段是否应该自动完成 | HTML5 
-
+ autocomplete | <input\>、<form\> | 值为 `on` 时规定根据用户之前输入的值自动填写值 | HTML5 
+ autofocus | <input\> | 布尔属性，规定当页面加载时 `<input>` 应该自动获得焦点 | HTML5 
+ form | <input\> | 规定 `<input>` 所属的一或多个表单，可位于表单之外。需要 `<form>` 中有对应的 `id` | HTML5 
+ formaction | <input\> | 规定当提交表单时处理该输入控件的文件的 URL，将覆盖 `<form>` 元素的 action | HTML5 
 
 
 ----
