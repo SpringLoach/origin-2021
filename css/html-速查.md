@@ -140,22 +140,6 @@ Visible text goes here
 
 HTML5 增加了多个新的[输入类型](https://www.w3school.com.cn/html/html_form_input_types.asp)，用于图形化给用户提供选择颜色、日期等选项，可以添加属性进行输入限制并进行验证。
 
-**<datalist\>**  
-> HTML5 添加。为 `<input>` 元素规定预定义选项列表， `<input>` 的 list 属性必须引用 `<datalist>` 的 id 属性，在 `<datalist>`内部使用 `<option>`来添加预定义选项。  
-
-```
-<form action="action_page.php">
-<input list="browsers">
-<datalist id="browsers">
-   <option value="Internet Explorer">
-   <option value="Firefox">
-   <option value="Chrome">
-   <option value="Opera">
-   <option value="Safari">
-</datalist> 
-</form>
-```
-
  属性 | 使用标签 | 说明 | 版本
  :-: | :-: | :-: | :-: 
  action | <form\> | 指定表单的处理程序 | /
@@ -184,6 +168,22 @@ HTML5 增加了多个新的[输入类型](https://www.w3school.com.cn/html/html_
  placeholder | some <input\> | 规定用以描述**输入字段预期值的提示** | HTML5  
  required | some <input\> | 布尔属性，规定在提交表单之前必须填写输入字段 | HTML5   
  step | some <input\> | 规定 `<input>` 的合法数字间隔可与 `max` 以及 `min` 属性一同使用 | HTML5   
+ 
+**<datalist\>**  
+> HTML5 添加。为 `<input>` 元素规定预定义选项列表， `<input>` 的 list 属性必须引用 `<datalist>` 的 id 属性，在 `<datalist>`内部使用 `<option>`来添加预定义选项。  
+
+```
+<form action="action_page.php">
+<input list="browsers">
+<datalist id="browsers">
+   <option value="Internet Explorer">
+   <option value="Firefox">
+   <option value="Chrome">
+   <option value="Opera">
+   <option value="Safari">
+</datalist> 
+</form>
+``` 
  
 ----
 ### 字符实体  
