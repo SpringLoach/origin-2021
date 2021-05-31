@@ -225,7 +225,7 @@ x.map(isEven);
 x.filter(isEven);
 ```
 
-#### 解析reduce()的用法  
+#### 解析reduce的用法  
 > 语法  
 > ```  
 > arr.reduce(callback,[initialValue])
