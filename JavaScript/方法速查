@@ -1,0 +1,45 @@
+### 数组方法参考  
+
+方法 | 说明 | 返回值 | 改变原数组
+:-: | :-: | :-: | :-:
+toString | 将数组作为字符串返回 | 字符串 | ×
+valueOf | 返回数组自身 | 数组 | ×
+join | 以特定字符将所有数组元素连接成字符串 | 字符串 | ×
+concat | 连接两个及以上的数组 | 新数组 | ×  
+slice | 从数组中选取部分元素，组成新数组 | 新数组 | ×  
+splice | 从数组中添加或删除元素 | 被删元素的数组 | √ 
+indexOf | 返回首个与给定参数匹配的元素的索引 | 索引或-1 | ×  
+lastIndexOf | 返回最后一个与给定参数匹配的元素的索引 | 索引或-1 | × 
+reverse | 颠倒数组中元素的顺序 | 原数组 | √  
+sort | 可接函为参，默认按字母顺序对数组排序 | 原数组 | √  
+some | 接函为参。每元运函，任一元素返回 true 时，返回 true | 布尔值 | × 
+every | 接函为参。每元运函，全部元素返回 true 时，返回 true | 布尔值 | × 
+filter | 接函为参。每元运函，取得返回 true 的元素 | 新数组 | × 
+map | 接函为参。每元运函，取得每次返回的结果 | 新数组 | × 
+forEach | 接函为参。每元运函，内部处理 | 无 | × 
+[reduce](https://github.com/SpringLoach/origin-2021/blob/happy-day/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/section1.md#解析reduce的用法) | 接函为参。每元运函，每次结果作为新运的参数 | 最终处理结果 | × 
+
+### ES6的[新数组方法](https://github.com/SpringLoach/origin-2021/blob/happy-day/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/section1.md#ES6数组新功能) 
+
+
+方法 | 说明 | 返回值 | 改变原数组
+:-: | :-: | :-: | :-:
+`数组[Symbol.iterator]()` | 包含值 | @@iterator | ×
+entries | 包含键值对 | @@iterator | ×
+keys | 包含数组索引（键） | @@iterator | ×
+values | 包含值 | @@iterator | ×  
+copyWithin | 复制数组中一系列元素到自身的某处，不改长度 | 原数组 | √ 
+includes | 查询数组是否存在某元素，ES2016增 | 布尔值 | ×
+find | 接函为参。逐个运函，**直到**结果 true | 该元素/undefine | ×
+findIndex | 接函为参。逐个运函，**直到**结果 true | 该元素索引/undefine | ×
+fill | 用静态值填充数组某部分 | 原数组 | √ 
+Array.from | 根据已有数组创建新数组 | 复制数组/布尔值数组 | ×
+Array.of | 根据传入的参数创建新数组 | 新数组 | 无  
+for...of | 循环迭代数组元素 | 无  | 有可能  
+
+:palm_tree: 迭代器对象的（键）值都可以通过调用 `next().value` 获得。  
+
+
+js 类型判断  
+
+toString VS valueOf
