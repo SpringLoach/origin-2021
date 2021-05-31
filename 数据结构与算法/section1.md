@@ -22,7 +22,7 @@ console.log(x.length);
 ```
 console.log(x[N]);
 ```  
-**迭代数组**  
+#### 迭代数组  
 ```
 for(let i =0;i<x.length;i++){
   console.log(x[N]);
@@ -185,7 +185,7 @@ const y ={name:'a',age:'b'};
 const z = 3;
 let zz = x.concat(y,z);     // [1,2,{name:'a',age:'b'},3]
 ```  
-**迭代器函数**  
+#### 迭代器函数  
 > 设定一个数组，如果数组里的元素可以被 2 整除（偶数），函数就返回 true，否则返回 false。
 ```
 const isEven = a => a % 2 === 0;    // isEven是自己取的函数名; 后面的表达式会返回布尔值
@@ -225,7 +225,7 @@ x.map(isEven);
 x.filter(isEven);
 ```
 
-**解析 reduce() 的用法**  
+#### 解析reduce()的用法  
 > 语法  
 > ```  
 > arr.reduce(callback,[initialValue])
