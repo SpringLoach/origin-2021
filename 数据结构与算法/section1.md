@@ -276,7 +276,7 @@ for (const n of x){
 	console.log(n);         // 3 5 9 2
 }
 ```  
-**数组的 entries() 方法**  
+#### 数组的entries() 方法
 > 返回包含数组所有键值对的 `@@iterator`
 > 
 > `key` 是数组中的位置，`value` 是保存在数组索引的值。  
@@ -286,11 +286,13 @@ console.log(y.next().value);     // [0,3]
 console.log(y.next().value);     // [1,5]
 console.log(y.next().value);     // [2,9]
 ```  
-也可以  
+也可以使用 ES6 的结构实现在循环中拆分键值对    
 ```
-let y = x.entries();
-for (const n of y){
-		  console.log(n);
+let arr = [5,2,7]
+
+for(const [i, v] of arr.entries()) {
+  console.log(i);
+  console.log(v);
 }
 ```  
 **数组的 keys() 方法**  
