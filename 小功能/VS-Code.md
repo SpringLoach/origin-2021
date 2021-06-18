@@ -19,6 +19,7 @@ Vetur | Vue语法高亮、智能提示
 `Ctrl` + `/` | 注释选中行
 `Alt` + `Shift` + `A` | 注释选中内容
 `Shift` + `Alt` + `↓` | 快速复制选中行
+`Alt` + `Shift` + `F` | 格式化
 log + `Tab` | console.log()
 div#demo | <div id="demo"\></div\> 
 div.demo | <div class="demo"\></div\> 
