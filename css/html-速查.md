@@ -57,6 +57,8 @@ Visible text goes here
 <a href="mailto:webmaster@example.com">Send e-mail</a>A named anchor:
 ```
 
+:snowflake: 跳转网页（绝对路径）时，需要在值的最后加上 `/`。  
+
 ----
 ### 无序列表  
 ```
