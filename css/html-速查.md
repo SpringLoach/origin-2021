@@ -139,6 +139,8 @@ Visible text goes here
   <option\> | 定义下拉列表中待选择的选项 | 该处规定 `value` 属性
   <textarea\> | 定义多行输入字段 | 标签中的文本为默认文字，`rows` 和 `cols` 可以定义文本框大小
   <button type="button"\> | 定义可点击的**按钮** | 经常添加 `onclick` 属性
+  <button type="submit"\> | 定义提交表单的按钮 | 默认值
+  <button type="reset"\> | 定义表单重置 | /
 
 HTML5 增加了多个新的[输入类型](https://www.w3school.com.cn/html/html_form_input_types.asp)，用于图形化给用户提供选择颜色、日期等选项，可以添加属性进行输入限制并进行验证。
 
