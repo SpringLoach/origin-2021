@@ -1,6 +1,7 @@
 [拓展](#拓展)    
 [快捷键](#快捷键)   
 [markdown常用表情](#markdown常用表情)  
+[表格数据转换工具](#表格数据转换工具)  
 
 #### 拓展  
 
@@ -40,5 +41,10 @@ fontz + `Tab` | font-size: ;
 :herb: | `:herb:` | 疑似知识点；怀疑
 :palm_tree: | `:palm_tree:` | 翻译，解释
 :whale2: | `:whale2:` | 栗子，示例  
-:grey_question: | `:grey_question:` | 疑问 
+:grey_question: | `:grey_question:` | 疑问  
+
+#### 表格数据转化工具  
+> 可以将表格转化为数组或对象，以 JS 或 JSON 形式输出，见[网站](https://echarts.apache.org/zh/spreadsheet.html)。  
+
+
 
