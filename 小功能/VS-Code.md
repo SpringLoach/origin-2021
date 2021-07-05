@@ -43,7 +43,7 @@ fontz + `Tab` | font-size: ;
 :whale2: | `:whale2:` | 栗子，示例  
 :grey_question: | `:grey_question:` | 疑问  
 
-#### 表格数据转化工具  
+#### 表格数据转换工具  
 > 可以将表格转化为数组或对象，以 JS 或 JSON 形式输出，见[网站](https://echarts.apache.org/zh/spreadsheet.html)。  
 
 
