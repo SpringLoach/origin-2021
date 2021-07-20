@@ -332,29 +332,145 @@ function drop(ev) {
 } 
 ```
 
+#### 画布
+> canvas 元素用于在网页上绘制图形。  
+> 
+> canvas 元素本身是没有绘图能力的。所有的绘制工作必须在 **JavaScript** 内部完成。  
   
+简略步骤
   
+顺序 | 说明 | 示例
+:-: | :-: | :-
+① | 创建 Canvas 元素 | `<canvas id="myCanvas" width="200" height="100"></canvas>`
+② | JS 通过 id 获取元素 | `var c=document.getElementById("myCanvas");`
+③ | 创建 context 对象 | `var cxt=c.getContext("2d");`
   
+#### SVG  
+> 指 **可伸缩** **矢量** 图形。   
+> 
+>  使用 **XML** 格式定义图形，在放大或改变尺寸的情况下其图形质量不会有损失。  
+    
+#### 画布和SVG  
+    
+Canvas 
+:-:
+通过 JS 来绘制 
+逐像素进行渲染 
+绘制完成后不被浏览器关注。位置变化需重新绘制整个场景 
   
+SVG 
+:-:
+使用 XML 描述
+SVG DOM 中的每个元素都支持事件处理程序
+如果 SVG 对象的属性发生变化，那么浏览器能够自动重现图形
   
+Canvas
+- 依赖分辨率
+- 不支持事件处理器
+- 弱的文本渲染能力
+- 能够以 .png 或 .jpg 格式保存结果图像
+- 最适合图像密集型的游戏，其中的许多对象会被频繁重绘
+    
+SVG
+- 不依赖分辨率
+- 支持事件处理器
+- 最适合带有大型渲染区域的应用程序（比如谷歌地图）
+- 复杂度高会减慢渲染速度（任何过度使用 DOM 的应用都不快）
+- 不适合游戏应用
   
+#### 地理定位  
+> 通过 `getCurrentPosition()` 方法来获得用户的位置。
   
+#### 本地存储  
+> 能够将应用程序数据存储在本地（Local Storage），而不会被传输到服务器。  
+> 
+> 键值对始终存储为**字符串**。
+    
+对象 | 说明
+:-: | :-:
+window.localStorage | 当用户通过浏览器清理时删除
+window.sessionStorage | 关闭标签页时删除数据
   
+```
+// 存储的两种方式
+localStorage.setItem("lastname", "Gates");
+localStorage.lastname = "Gates";
+
+// 取回的两种方式
+let x = localStorage.getItem("lastname");
+let x = localStorage.lastname;
+
+// 移除
+localStorage.removeItem("lastname"); 
+```
+
+#### 应用程序缓存  
+> 可对 web 应用进行缓存，并可离线访问。  
+> 
+> 需要在 HTML 文档通过 `manifest` 属性引入文件。  
   
+    
+优势  
+    
+1. 离线浏览  
+2. 已缓存资源加载得更快  
+3. 减少服务器负载
+
+```
+<!DOCTYPE HTML>
+<html manifest="demoName.appcache">
+...
+</html> 
+    
+/* manifest 文件 */
+    
+CACHE MANIFEST
+# 2012-02-21 v1.0.0
+/theme.css
+/logo.gif
+/main.js
+
+NETWORK:
+login.asp
+
+FALLBACK:
+/html/ /offline.html
+```
+    
+要点 | 说明
+:-: | :-:
+CACHE MANIFEST | 首次下载后进行缓存的文件
+NETWORK | 不会被缓存，需要与服务器连接的文件
+FALLBACK | 页面无法访问时的回退页面  
+\* | 指示所有**其他**文件  
+`/html/` | 指向被替代目录（资源）  
+`/offline.html` | 替补文件
+\# | 注释行
+更新缓存 | 可以通过修改注释行，即更改 manifest 文件来使浏览器重新缓存
+    
+#### Web_Workers   
+> 它是运行在后台的 JS。独立于其他脚本，不会影响页面的性能。  
+
+简略步骤
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+顺序 | 说明 | 示例
+:-: | :-: | :-
+① | 创建文件 | 文件为 `.js` 类型，通过 `postMessage()` 向页面传回数据
+② | 对象是否存在 | `if (typeof(w) == "undefined") {...}`
+③ | 创建对象并调用 | `w = new Worker("demo_workers.js")`
+④ | 接收消息 | 该对象的 `onmessage` 的回调参数，即事件对象上的 `data` 接收数据
+⑤ | 终止 | `w.terminate()`  
+⑥ | 复用 | `w = undefined`  
+    
+#### Server_Sent事件 
+> Server-Sent 事件指的是网页自动从服务器获得更新。  
+    
+顺序 | 说明 | 示例
+:-: | :-: | :-
+① | 能力检测 | `if(typeof(EventSource) !== "undefined") {}`
+② | 创建对象 | `var source = new EventSource("demo_sse.php");`
+③ | 接收消息 | 该对象的 `onmessage` 的回调参数，即事件对象上的 `data` 接收数据  
+    
+    
+    
+    
