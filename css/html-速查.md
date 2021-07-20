@@ -272,7 +272,8 @@ HTML5 增加了多个新的[输入类型](https://www.w3school.com.cn/html/html_
 
 #### 语义元素  
   
-标签	描述
+标签 | 描述
+:-: | :-:
 <article\> | 定义文章。
 <aside\> | 定义**页面内容以外** 的内容（比如侧栏）。
 <details\> | 定义用户能够查看或隐藏的额外细节。
@@ -291,8 +292,46 @@ HTML5 增加了多个新的[输入类型](https://www.w3school.com.cn/html/html_
   
 #### HTML5[新元素](https://www.w3school.com.cn/html/html5_new_elements.asp)等  
   
+#### 拖放  
+
+事件 | 描述
+:-: | :-:
+dragstart | 元素被拖动时触发
+dragover | 规定被拖动的数据能够被放置到何处，默认数据/元素无法放置到其他元素
+drop | 当放开被拖数据时触发
   
+1、给需要拖放的元素添加 `draggable="true"`。  
   
+2、元素被拖动时的回调参数上有一个 `dataTransfer.setData()` 方法，参数：
+  - 被拖动数据的记录命名  
+  - 可拖动元素的 id
+
+3、在规定被拖动的数据能够被放置到何处的事件中，阻止默认行为。  
+  
+4、拖动结束时，进行放置  
+  - 阻止默认行为（链接形式打开）
+  - 通过 `dataTransfer.getData()` 方法获得被拖的数据  
+  - 将被拖元素追加到放置元素中  
+  
+```
+<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+<img id="drag1" src="img_logo.gif" draggable="true" ondragstart="drag(event)" width="336" height="69"> 
+    
+function allowDrop(ev) {
+  ev.preventDefault();
+}
+
+function drag(ev) {
+  ev.dataTransfer.setData("myText", ev.target.id);
+}
+
+function drop(ev) {
+  ev.preventDefault();
+  var data = ev.dataTransfer.getData("myText");
+  ev.target.appendChild(document.getElementById(data));
+} 
+```
+
   
   
   
