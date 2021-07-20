@@ -28,6 +28,7 @@
 - [应用程序缓存](#应用程序缓存)  
 - [Web_Workers](#Web_Workers)  
 - [Server_Sent事件](#Server_Sent事件)  
+- [表单输入类型](#表单输入类型)
 
 ----
 ### 基本文档
@@ -465,7 +466,7 @@ FALLBACK | 页面无法访问时的回退页面
 简略步骤
   
 顺序 | 说明 | 示例
-:-: | :-: | :-
+:-: | :- | :-
 ① | 创建文件 | 文件为 `.js` 类型，通过 `postMessage()` 向页面传回数据
 ② | 对象是否存在 | `if (typeof(w) == "undefined") {...}`
 ③ | 创建对象并调用 | `w = new Worker("demo_workers.js")`
@@ -482,6 +483,29 @@ FALLBACK | 页面无法访问时的回退页面
 ② | 创建对象 | `var source = new EventSource("demo_sse.php");`
 ③ | 接收消息 | 该对象的 `onmessage` 的回调参数，即事件对象上的 `data` 接收数据  
     
+#### 新增表单输入类型  
+> 通过 `<input>` 标签的 `type` 属性进行定义。    
     
-    
-    
+值 | 描述 | 功能
+:- | :- | :-
+number | 限制输入值为数字 | 验证
+tel | 限制为电话号码 | 仅 Safari 8 支持
+email | 限制为邮件地址 | 验证 
+url | 限制为网址 | 验证
+search | 搜索字段 | 历史记录、清空 
+range | 滑块控件 | /
+color | 颜色选择器 | / 
+date | 日期选择器，年月日 | /
+month | 日期选择器，年月 | /    
+week | 日期选择器，年周 | /   
+time | 时间选择器（无时区），时分 | /  
+datetime | 日期选择器（有时区），日期和时间 | IE、FF、Chrome不支持  
+datetime-local | 日期选择器（无时区），日期和时间 | IE、FF不支持  
+
+#### 新的表单元素  
+
+标签 | 描述 
+:- | :- 
+`<datalist>` | 定义输入控件的预定义选项。
+`<keygen>` | 定义键对生成器字段（用于表单）。
+`<output>` | 定义计算结果。
