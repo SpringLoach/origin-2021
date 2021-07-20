@@ -275,7 +275,7 @@ HTML5 增加了多个新的[输入类型](https://www.w3school.com.cn/html/html_
 标签 | 描述
 :-: | :-:
 <article\> | 定义文章。
-<aside\> | 定义**页面内容以外** 的内容（比如侧栏）。
+<aside\> | 定义 **页面内容以外** 的内容（比如侧栏）。
 <details\> | 定义用户能够查看或隐藏的额外细节。
 <figcaption\> | 与图像被包含在 `<figure>` 中，定义标题。
 <figure\> | 规定自包含内容，比如图示。
@@ -285,7 +285,7 @@ HTML5 增加了多个新的[输入类型](https://www.w3school.com.cn/html/html_
 <mark\> | 定义重要的或强调的文本。
 <nav\> | 定义导航链接。
 <section\> | 定义文档中的节（有主题的内容组）
-<summary\> | 定义 <details> 元素的可见标题。
+<summary\> | 定义 `<details>` 元素的可见标题。
 <time\> | 定义日期/时间。
   
 ![HTML5语义化](HTML5语义化.png)
@@ -295,7 +295,7 @@ HTML5 增加了多个新的[输入类型](https://www.w3school.com.cn/html/html_
 #### 拖放  
 
 事件 | 描述
-:-: | :-:
+:-: | :-
 dragstart | 元素被拖动时触发
 dragover | 规定被拖动的数据能够被放置到何处，默认数据/元素无法放置到其他元素
 drop | 当放开被拖数据时触发
@@ -353,13 +353,13 @@ function drop(ev) {
 #### 画布和SVG  
     
 Canvas 
-:-:
+:-
 通过 JS 来绘制 
 逐像素进行渲染 
 绘制完成后不被浏览器关注。位置变化需重新绘制整个场景 
   
 SVG 
-:-:
+:-
 使用 XML 描述
 SVG DOM 中的每个元素都支持事件处理程序
 如果 SVG 对象的属性发生变化，那么浏览器能够自动重现图形
