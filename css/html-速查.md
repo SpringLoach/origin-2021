@@ -306,7 +306,7 @@ HTML5 增加了多个新的[输入类型](https://www.w3school.com.cn/html/html_
 <summary\> | 定义 `<details>` 元素的可见标题。
 <time\> | 定义日期/时间。
   
-![HTML5语义化](HTML5语义化.png)
+![HTML5语义化](./img/HTML5语义化.png)
   
 #### HTML5[新元素](https://www.w3school.com.cn/html/html5_new_elements.asp)等  
   
