@@ -28,7 +28,13 @@
 - [应用程序缓存](#应用程序缓存)  
 - [Web_Workers](#Web_Workers)  
 - [Server_Sent事件](#Server_Sent事件)  
-- [表单输入类型](#表单输入类型)
+- [新增表单输入类型](#新增表单输入类型)  
+- [新的表单元素](#新的表单元素)
+### 部分事件属性参考  
+- [Window事件](#Window事件)
+- [表单事件](#表单事件)
+- [键盘事件](#键盘事件)
+- [鼠标事件](#鼠标事件)
 
 ----
 ### 基本文档
@@ -501,11 +507,71 @@ week | 日期选择器，年周 | /
 time | 时间选择器（无时区），时分 | /  
 datetime | 日期选择器（有时区），日期和时间 | IE、FF、Chrome不支持  
 datetime-local | 日期选择器（无时区），日期和时间 | IE、FF不支持  
-
+    
 #### 新的表单元素  
 
 标签 | 描述 
 :- | :- 
-`<datalist>` | 定义输入控件的预定义选项。
-`<keygen>` | 定义键对生成器字段（用于表单）。
-`<output>` | 定义计算结果。
+`<datalist>` | 定义输入控件的预定义选项
+`<keygen>` | 定义键对生成器字段（用于表单）
+`<output>` | 定义计算结果
+    
+----    
+    
+#### Window事件  
+> 针对 window 对象触发的事件，将应用到 `<body>` 上。  
+    
+属性 | 触发时机
+:- | :- 
+onerror | 发生错误时
+onload | 页面加载完成后
+onbeforeunload | 文档卸载前
+onresize | 浏览器窗口被调整大小时
+    
+#### 表单事件  
+> 由 HTML 表单内的动作触发的事件。  
+> 
+> 应用到几乎所有 HTML 元素，但最常用在 form 元素中。  
+    
+属性 | 触发时机 | 补充
+:- | :- | :- 
+onsubmit | 提交表单时 | /
+onfocus | 元素获得焦点时 | /
+onblur | 元素失去焦点时 | /
+onchange | 元素值被改变时 | /
+oninput | 元素获得用户输入时 | / 
+oninvalid | 元素无效时 | /   
+onreset | 点击重置按钮时 | HTML5 不支持  
+onselect | 元素中文本被选中后 | / 
+ 
+#### 键盘事件  
+    
+属性 | 触发时机
+:- | :- 
+onkeydown | 用户按下按键时
+onkeypress | 用户敲击按钮时
+**onkeyup** | 用户释放按键时
+    
+#### 鼠标事件 
+    
+属性 | 触发时机
+:- | :- 
+onclick | 鼠标点击元素时
+ondblclick | 鼠标双击元素时   
+onmousemove | 指针移动到元素上时
+onmouseover | 指针移动到元素上时
+onmousedown | 在元素上按下鼠标时
+onmouseup | 在元素上释放鼠标时
+onmouseout | 指针移出元素时
+onmousewheel | 鼠标滚轮滚动时
+onscroll | 元素滚动条被滚动时    
+ondrag | 元素被拖动时
+ondragover | 元素在有效拖放目标上拖动时
+ondragstart | 拖动操作开端
+ondrop | 被拖元素正在被拖放时
+ 
+    
+    
+    
+    
+    
