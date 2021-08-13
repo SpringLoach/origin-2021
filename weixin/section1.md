@@ -92,10 +92,11 @@ selectedIconPath | 激活图片路径。建议尺寸为 81px * 81px | / | *str*
 快捷键 | 作用
 `Alt` \+ `↑` | 选中行代码上移
 
-小程序 | 网页 | 说明  
+小程序 | Vue | 说明  
 :-: | :-: | :-
 <text\> | <span\> | 行内元素，不换行
 <view\> | <div\> | 块级元素，换行
+<block\> | <template\> | 不参与渲染，可充当循环结构的容器或条件渲染种包含多元素的**容器**等
 
 #### 模版语法  
 > 可以往花括号里添加变量、表达式。  
@@ -104,6 +105,7 @@ selectedIconPath | 激活图片路径。建议尺寸为 81px * 81px | / | *str*
 :-: | :-: | :-
 文本节点 | {{}} | {{}}
 属性值 | {{}} | 使用 v-bind
+条件渲染 | {{}} | 绑定变量
 
 #### 列表渲染  
 > 不用于 Vue，除了数组以外，也可以遍历对象。  
@@ -145,21 +147,71 @@ data: {
 },
 ```
 
+#### 条件渲染  
+> `wx:if` 是惰性的，切换条件时进行**局部渲染**或销毁。  
 
+小程序 | Vue | 说明  
+:-: | :-: | :-
+wx:if | v-if | 动态绑定
+wx:elif | v-else-if | 动态绑定
+wx:else | v-else | 不需绑定
+hidden | v-show | 动态绑定
 
+#### 认识事件  
+> 尝试通过表单输入值，改变输出值，另外提供两个按钮，也可以改变该输出值。  
 
+1. 对于单标签，不添加结束的 `/` 会报错。  
+2. `data` 选项是对象形式而非函数。  
+3. 对于绑定的事件，与 `data` 同级，而不需要加到 `methods` 中。  
+4. 要对 `data` 内的数据赋值时，不能直接赋值，要使用 `this.setData`。
+5. 获取时，需要通过 `this.data`。    
+6. 在小程序中，模版中绑定的事件处理程序不能添加括号，更无法直接传参。  
+7. 需要借助自定义属性来传参。  
 
+```
+<button bind:tap="handleTap" data-operation="{{1}}">+</button>
+<button bind:tap="handleTap" data-operation="{{-1}}">-</button>
+<input type="text" bind:input="handleInput" />
+<view>{{num}}</view>
 
+data: {
+  num: 0
+},
+handleInput(e) {
+  this.setData({
+    num: e.detail.value
+  })
+},
+handleTap(e) {
+  const operation = e.currentTarget.dataset.operation;
+  this.setData({
+    num: this.data.num + operation
+  })
+}
+```
 
+#### 事件类型  
 
+事件分类 | 说明  
+:- | :-
+冒泡事件 | 组件上的事件被触发后，会向父节点传递
+非冒泡事件 | 组件上的事件被触发后，不会向父节点传递
 
+普通事件绑定  
+> 在后续版本中，支持在 bind 后添加 `:`。  
 
+形式 | 说明  
+:- | :-  
+bindtap="handleTap" | 事件名后不能跟括号
+bindtap="{{ handlerName }}" | `this.data.handlerName` 必须是一个字符串，指定事件处理函数名
 
-
-
-
-
-
+绑定方式 | 说明  
+:- | :- 
+bind | 会继续冒泡
+capture-bind | 会继续捕获
+catch | 阻止冒泡
+capture-catch | 中断捕获阶段和取消冒泡阶段
+mut-bind | 只有一个节点的这种绑定事件会触发，不影响 `bind` 和 `catch`
 
 
 
