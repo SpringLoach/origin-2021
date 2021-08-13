@@ -407,6 +407,33 @@ type | 按钮的颜色 | "default" | 否 | "primary"、"warn"
 plain | 按钮镂空，背景色透明 | false | 否 | *boo*	
 disabled | 是否禁用 | false | 否 | *boo*	
 loading | 名称前是否带 loading 图标 | false | 否 | *boo*	
+form-type	| 点击触发 form 组件的 submit/reset 事件	| / | 否 | "submit"、"reset"	
+open-type	| 微信开放能力 | / | 否 | *str*
+  
+open-type  
+  
+值 | 说明 | 备注
+:- | :- | :- 
+contact | 打开客服会话。如果用户在会话中点击消息卡片后返回小程序，可以从 bindcontact 回调中获得具体信息 | 小程序插件中不能使用
+share | 转发当前小程序，发送到微信好友 | 不能分享到朋友圈
+getPhoneNumber | 获取用户手机号 | 需企业小程序账号的权限。从 `bindgetphonenumber` 回调获取信息，会加密
+getUserInfo | 获取用户信息 | 小程序插件中不能使用。从 `bindgetuserinfo` 回调获取信息
+launchApp | 在小程序中打开APP | 需要先从APP中跳转到小程序
+openSetting | 打开内置的授权页面 | 需要先获取权限，如 `getUserInfo`
+feedback | 打开意见反馈页面 | /
+  
+打开客服会话  
+
+1. 将 `appid` 由测试号改为自己的 `appid`。  
+2. 登录[微信小程序后台](https://mp.weixin.qq.com/)，功能- 客服 - 根据微信号添加客服。  
+3. 此时用户点击 `contact`，可打开客服会话并进行对话。  
+  
+  
+  
+  
+  
+  
+  
   
   
   
