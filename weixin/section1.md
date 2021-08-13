@@ -247,6 +247,7 @@ mut-bind | 只有一个节点的这种绑定事件会触发，不影响 `bind` �
 
 选择器 | 样例 | 样例描述
 :- | :- | :-
+\* | / | 不支持
 .class | .intro | 选择所有拥有 class="intro" 的组件
 #id | #firstname | 选择拥有 id="firstname" 的组件
 element | view | 选择所有 view 组件
@@ -268,8 +269,70 @@ element, element | view, checkbox | 选择所有文档的 view 组件和所有�
 }
 ```
 
+### 常用组件   
 
+组件 | 说明 
+:- | :-  
+<view\> | 代替原来的 <div\>
+<text\> | 代替原来的 <span\>
+<image/\> | 默认宽度320px、高度240px。可在样式设置宽高
+<swiper\> | 轮播图容器，其中只可放置 `swiper-item` 组件。默认宽度100vw、高度150px  
+<swiper-item> | 轮播图项
 
+#### text  
+> 文本标签，为行内元素，只能嵌套 `text`。  
+
+属性 | 说明 | 默认值 | 必填 | 类型
+:- | :- | :- | :- | :-
+user-select | 文本是否可选，该属性会使文本节点显示为 `inline-block` | false | 否 | *boo*
+decode | 是否解码 | false | 否 | *boo*
+
+#### image  
+> 支持 JPG、PNG、SVG、WEBP、GIF 等格式，2.3.0 起支持云文件ID。  
+
+属性 | 说明 | 默认值 | 必填 | 类型
+:- | :- | :- | :- | :-
+src | 图片资源地址 | / | 否 | *str*
+mode | 图片裁剪、缩放的模式 | "scaleToFill" | 否 | *str*
+lazy-load | 懒加载，在即将进入上下三屏时才开始加载 | false | 否 | *boo*
+binderror | 错误发生时触发 | / | 否 | *cb*
+bindload | 载入完毕时触发 | / | 否 | *cb*
+
+模式 | mode值 | 说明 
+:- | :- | :- 
+缩放 | scaleToFill | 使图片的宽高等于设置的宽高	
+缩放 | aspectFit | 保持纵横比缩放图片，使图片的长边完全显示。可以完整显示图片，可能有多余部分。轮播图常用	
+缩放 | aspectFill | 保持纵横比缩放图片，只保证图片的短边能完全显示出来。通常另一个方向将会发生截取。	
+缩放 | widthFix | 宽度不变，高度自动变化，保持原图宽高比不变。即设置的高无效。轮播图常用	
+缩放 | heightFix | 高度不变，宽度自动变化，保持原图宽高比不变	
+裁剪 | top | 不缩放图片，只显示图片的顶部区域	
+裁剪 | bottom | 不缩放图片，只显示图片的底部区域	
+裁剪 | center | 不缩放图片，只显示图片的中间区域	
+裁剪 | left | 不缩放图片，只显示图片的左边区域	
+裁剪 | right | 不缩放图片，只显示图片的右边区域	
+裁剪 | top left | 不缩放图片，只显示图片的左上边区域	
+裁剪 | top right | 不缩放图片，只显示图片的右上边区域	
+裁剪 | bottom left | 不缩放图片，只显示图片的左下边区域	
+裁剪 | bottom right | 不缩放图片，只显示图片的右下边区域	
+
+#### swiper  
+
+计算容器高度
+
+顺序 | 说明
+:- | :- 
+① | swiper高 / swiper宽 = 原图高 / 原图宽  
+② | swiper高 = swiper宽 * 原图高 / 原图宽  
+③ | height: calc(100vw * 图高 / 图宽)  
+
+属性 | 说明 | 默认值 | 必填 | 类型
+:- | :- | :- | :- | :-
+autoplay | 自动切换 | false | 否 | *boo*
+interval | 自动切换时间间隔 | 5000 | 否 | *num*
+circular | 采用衔接滑动 | false | 否 | *boo*
+indicator-dots | 显示面板指示点 | false | 否 | *boo*	
+indicator-color | 指示点颜色 | rgba(0, 0, 0, .3) | 否 | *color*
+indicator-active-color | 当前选中的指示点颜色 | #000000 | 否 | *color*
 
 
 
