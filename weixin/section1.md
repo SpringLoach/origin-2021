@@ -26,6 +26,7 @@
 文件 | 说明
 :-: | :-: 
 project.config.json | 也可以在 `详情` 的 UI 界面进行设置 
+sitemap.json | 用于配置小程序及其页面是否允许被微信索引  
 
 #### app.json  
 > 用来对微信小程序进行全局配置，决定页面文件的路径、窗口表现、设置网络超时时间、设置多 tab 等。  
@@ -54,6 +55,42 @@ navigationBarTextStyle | 导航栏标题颜色 | "black" | "white"
 backgroundTextStyle | 下拉加载，指示器颜色 | "dark" | "light"
 enablePullDownRefresh | 开启当前页面下拉刷新 | false | true
 backgroundColor | 下拉加载部分窗口颜色 | "#ffffff" | *HexColor*
+
+tabBar字段  
+> 指定 tab 栏的表现，以及 tab 切换时显示的对应页面。  
+> 
+> 将 icon 文件夹建在与全局配置同级处。  
+
+常用属性 | 说明 | 默认值 | 可选值
+:- | :- | :- | :-
+list | 标签列表，需 2-5 个 | / | *arr*
+color | 未激活文字颜色 | / | *HexColor*
+selectedColor | 激活文字颜色 | / | *HexColor*
+backgroundColor | 标签栏背景色 | / | *HexColor*
+position | 标签栏位置 | "bottom" | "top" （此时不显示 icon）
+
+list属性 | 说明 | 默认值 | 可选值
+:- | :- | :- | :-
+pagePath | 页面路径，必须在 pages 中先定义 | / | *str*
+text | tab 上按钮文字 | / | *str*
+iconPath | 图片路径。icon 大小限制为 40kb， | / | *str*
+selectedIconPath | 激活图片路径。建议尺寸为 81px * 81px | / | *str*
+
+#### 页面配置  
+> 仅对页面的窗口表现进行配置，不需要添加字段。  
+
+#### 开发技巧  
+
+1. 可以在 VSCode，安装插件 `小程序开发助手`，具备配置字段提示、标签提示等功能。  
+
+2. 在逻辑文件（js）中，输入 `page`，选择提示的第二项可以补全架构。  
+
+小程序 | 网页 | 说明  
+:-: | :-: | :-
+<text\> | <span\> | 行内元素，不换行
+<view\> | <div\> | 块级元素，换行
+
+
 
 
 
