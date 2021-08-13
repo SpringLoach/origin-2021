@@ -216,7 +216,7 @@ mut-bind | 只有一个节点的这种绑定事件会触发，不影响 `bind` �
 
 ### WXSS  
 
-尺寸单位
+#### 尺寸单位
 > rpx 可以根据屏幕宽度进行自适应，且规定屏幕宽为固定的 750rpx。
 > 
 > 如屏幕宽度为375px，则1rpx = 0.5px。
@@ -234,6 +234,42 @@ mut-bind | 只有一个节点的这种绑定事件会触发，不影响 `bind` �
 ② | 1px = 750rpx / x
 ③ | 100px = 750rpx / x * 100
 ④ | width: calc(750rpx * 100 / x)
+
+#### 导入  
+> 使用 `@import` 语句可以导入外联样式表，只支持相对路径，需要用 `;` 表示语句结束。   
+
+```
+// xx.wxss
+@import "../../styles/common.wsxx";
+```
+
+#### 支持的选择器  
+
+选择器 | 样例 | 样例描述
+:- | :- | :-
+.class | .intro | 选择所有拥有 class="intro" 的组件
+#id | #firstname | 选择拥有 id="firstname" 的组件
+element | view | 选择所有 view 组件
+element, element | view, checkbox | 选择所有文档的 view 组件和所有的 checkbox 组件
+::after | view::after | 在 view 组件后边插入内容
+::before | view::before | 在 view 组件前边插入内容
+
+#### 使用less
+
+1. 使用 VSCode。  
+2. 安装插件 `easy less`
+3. 打开设置图标 —— 设置 —— 右上角的 `json` 图标  
+4. 将下面代码粘贴到对象内部的最后。  
+5. 此时新建 `less` 并保存后，会自动生成对应的 `wxss`。   
+
+```
+"less.compile": {
+  "outExt": ".wxss"
+}
+```
+
+
+
 
 
 
