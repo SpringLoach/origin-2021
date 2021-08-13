@@ -12,7 +12,8 @@
 
 #### 目录结构
 
-小程序文件结构
+小程序文件结构  
+> 只几个文件只要相应的名字相同，就会自动产生追踪关系，不需导入。  
 
 类型 | 传统web | 微信小程序
 :-: | :-: | :-: 
@@ -185,7 +186,7 @@ handleInput(e) {
 handleTap(e) {
   const operation = e.currentTarget.dataset.operation;
   this.setData({
-    num: this.data.num + operation
+    num: +this.data.num + operation
   })
 }
 ```
@@ -213,10 +214,26 @@ catch | 阻止冒泡
 capture-catch | 中断捕获阶段和取消冒泡阶段
 mut-bind | 只有一个节点的这种绑定事件会触发，不影响 `bind` 和 `catch`
 
+### WXSS  
 
+尺寸单位
+> rpx 可以根据屏幕宽度进行自适应，且规定屏幕宽为固定的 750rpx。
+> 
+> 如屏幕宽度为375px，则1rpx = 0.5px。
+> 
+> 如屏幕宽度为750px，则1rpx = 1px。  
 
+栗子
+> 如设计稿规定屏幕宽度为 xpx，现在需要去适配宽度为 100px。
+>
+> 使用 `calc`，需要注意数值与单位不留空格。  
 
-
+步骤 | 说明 
+:-: | :-: 
+① | xpx = 750rpx
+② | 1px = 750rpx / x
+③ | 100px = 750rpx / x * 100
+④ | width: calc(750rpx * 100 / x)
 
 
 
