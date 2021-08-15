@@ -287,6 +287,7 @@ element, element | view, checkbox | 选择所有文档的 view 组件和所有�
 <radio-group> | 项变更时，对应事件中可获得**字符串**
 <checkbox> | 复选框，需搭配 `<checkbox-group>` 实现触发事件  
 <checkbox-group> | 项变更时，对应事件可获得**字符串数组** 
+<slot> | 插槽，当父组件的该组件标签内有子标签时，会将其替代
   
 #### text  
 > 文本标签，为行内元素，只能嵌套 `text`。  
@@ -663,10 +664,11 @@ properties: {
 关键点 | 文档 | 说明
 :-: | :- | :- 
 ① | 子(js) | 通过 `this.data` 找不到的数据，会在 `properties` 找该变量
-② | 子(js) | 由于数据是父提供，[先前的方法](#标题点击激活)只会将修改结果拷贝到子，父数据仍不变 
+② | 子(js) | 由于数据是父提供，[先前的方法](#标题点击激活)改变不了父数据
+③ | 子(js) | 此时的 `setData` 会将变量拷贝到 `data` 中  
 ③ | 子(js) | 所以子**只需要**发送自定义事件，并传递索引即可  
 ④ | 父(wxml) | 接收事件，执行回调
-⑤ | 父(js) | 逻辑与先前的方法一致。获取传参的属性改变  
+⑤ | 父(js) | 处理逻辑与先前的方法一致。获取传参的属性改变  
   
 ```
 /* 子的js */
@@ -684,14 +686,62 @@ handleItemChange(e) {
 }
 ```
   
+#### 插槽  
+> 注意这一步前，需要将 `tabs` 该数据转移到父组件的 `data` 中。    
   
+```
+/* 父的wxml */
+<slot></slot>  
   
+/* 父的wxml */
+<Tabs bind:itemChange="handleItemChange">
+  <block wx:if="{{tabs[0].isActive}}">首页内容</block>
+  <block wx:elif="{{tabs[1].isActive}}">原创内容</block>
+  <block wx:elif="{{tabs[2].isActive}}">分类内容</block>
+  <block wx:else>关于内容</block>
+</Tabs>
+```
   
+#### 组件常用配置  
+> 后面的一部分为组件声明周期函数。  
   
+配置项 | 类型 | 描述	
+:- | :- | :-
+properties | obj | 相当于自定义属性
+data | obj | 组件的内部数据
+observers | obj | 可监听 `properties` 和 `data` 的变化。页面无
+methods | obj | 组件的方法。页面无
+created | func | 在组件实例刚刚被创建时执行，此时不能调用 `setData`	
+attached | func | 在组件实例进入页面节点树时执行	
+ready | func | 在组件在视图层布局完成后执行	
+moved | func | 在组件实例被移动到节点树另一个位置时执行	
+detached | func | 在组件实例被从页面节点树移除时执行	
+error | func | 每当组件方法抛出错误时执行	
   
+#### 应用生命周期  
+> 不同于 Page 和 Component，根部有自己独特的生命周期，可在 `app.js` 中添加回调。  
   
+生命周期 | 触发时机	| 可添加处理
+:- | :- | :-
+onLaunch | 应用第一次启动时触发 | 可获取用户的信息，供页面渲染  
+onShow | 从后台切换到小程序 | 对应用的数据或页面效果进行重置 
+onHide | 从小程序切换到后台 | 暂停或清除定时器
+onError | 应用报错时触发 | 可将错误信息异步发送给后台
+onPageNotFound | 应用首次启动，且找不到入口页面时触发 | 通过 `wx.navigateTo` 跳转到其它页面  
   
+#### 页面生命周期  
   
-  
-  
+生命周期 | 触发时机	| 可添加处理
+:- | :- | :-
+onLoad | 监听页面加载 | 发送异步请求数据，用于初始化页面  
+onShow | 监听页面显示 | /
+onReady | 页面渲染完毕 | /
+onHide | 监听页面隐藏，切页面/后台时触发 | /
+onUnload | 页面卸载（关闭）时触发 | 通过 `wx.navigateTo` 跳转到其它页面  
+onPullDownRefresh | 监听用户下拉 | 刷新页面
+onReachBottom | 监听上拉触底 | 加载下一页数据
+onShareAppMessage | 用户点击右上角转发 | /
+onPageScroll | 监听页面滚动 | /
+onResize | 窗口调整，即横/竖屏切换时触发 | /
+onTabItemTap | 当前是 tab 页时，点击自身的 tab 时触发 | /
   
