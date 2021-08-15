@@ -131,6 +131,8 @@ wx:key
 > 1. 字符串，代表遍历项的**某个属性**，其值需唯一且不能动态改变。
 > 
 > 2. `*this`，代表项本身，需要项是唯一的字符串或者数字。
+> 
+> 3. **对象不能作键**，会被解析为字符串。找不到适用属性时可以用相应的 `index`。
 
 ```
 // mine.wxml
@@ -966,10 +968,11 @@ getSwiperList() {
 #### 分类导航  
 
 关键点 | 说明 
-:-:  :-  
+:-: | :-  
 ① | 使用 `flex` 布局和循环时，留意谁为容器标签
-② | 图片标签地址，即属性引用变量时，括号语法
-③ | 图片默认为原图宽高    
+② | 用链接包围图片标签  
+③ | 图片标签地址，即属性引用变量时，括号语法
+④ | 图片默认为原图宽高，如果不设置 `mode` 宽高不会等比例缩放    
 
 ```
 <view class="index-cate">
@@ -990,7 +993,81 @@ getSwiperList() {
 }
 ```
   
-  
+#### 楼层  
+
+关键点 | 说明 
+:-: | :-  
+① | 由于存在嵌套循环，需要自命名项和索引
+② | 通过浮动实现布局效果 
+③ | 明显每项均占容器1/3宽度，设置项宽为33%，图片继承
+④ | 小项的高度为大项的一半：`386/232=h/33.33vw` 
+⑤ | 大项的高适应于宽，小项以设置值为准  
+⑥ | 选中最后几个子元素，不能反序 `:nth-last-child(-n+4)`
+⑦ | 通过内边距或边框营造距离  
+⑧ | 由于想添加组的左右边距，需要对小项高进行微调    
+
+```
+<view class="index_floor"> 
+  <view class="floor_group" 
+  wx:for="{{floorList}}" 
+  wx:key="index1"
+  wx:for-item="item1"
+  wx:for-index="index1"
+  >
+    <!-- 标题 -->
+    <view class="floor_title">
+      <image mode="widthFix" src="{{item1.floor_title.image_src}}" />
+    </view>
+    <!-- 内容 -->
+    <view class="floor_list">
+      <navigator 
+      wx:for="{{item1.product_list}}"
+      wx:key="name"
+      wx:for-item="item2"
+      wx:for-index="index2"
+      >
+        <image mode="{{index2===0?'widthFix':'scaleToFill'}}" src="{{item2.image_src}}" />
+      </navigator> 
+    </view>
+  </view>
+</view>
+
+.index_floor {
+  .floor_group {
+    padding: 0 10rpx;
+    .floor_title {
+      margin: 10rpx 0;
+      image {
+        width: 100%;
+      }
+    }
+    .floor_list {
+      &::after {
+        content: '';
+        display: table;
+        clear: both;
+      }
+      navigator {
+      float: left;
+      width: 33.33%;
+      &:nth-last-child(-n+4) {
+        height: calc(32.5vw * 386 / 232 / 2);
+        border-left: 10rpx solid #fff;
+        // padding-left: 10rpx;
+      }
+      &:nth-child(2),
+      &:nth-child(3) {
+        border-bottom: 10rpx solid #fff;
+      }
+        image {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+}
+```
   
   
   
