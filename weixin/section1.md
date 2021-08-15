@@ -745,3 +745,44 @@ onPageScroll | 监听页面滚动 | /
 onResize | 窗口调整，即横/竖屏切换时触发 | /
 onTabItemTap | 当前是 tab 页时，点击自身的 tab 时触发 | /
   
+----
+
+#### 前期准备
+  
+目录名 | 作用  
+:-: | :-:  
+接口文档 | [跳转](www.showdoc.com.cn/128719739414963)  
+ 
+步骤 | 文件 | 说明  
+:-: | :-: | :-
+① | app.json | 将日志路径移除  
+② | log文件夹 | 删除  
+③ | app.wxss | 清空  
+④ | app.js | 清空，输入 `wx-app`，回车，删除全局数据 `globalData`。    
+⑤ | index.wxml | 清空  
+⑥ | index.wxss | 清空 
+⑦ | index.js | 清空，输入 `wx-page`，回车。  
+⑧ | index.json | 添加 `"navigationBarTitleText": "优购商城"`，即页面标题  
+⑨ | app.json | 添加需要的页面路径，如 `"pages/order/index"`
+    
+#### 搭建目录结构  
+  
+目录名 | 作用  
+:-: | :-:  
+styles | 存放公共样式  
+components | 存放组件  
+lib | 第三方库
+utils | 自己的帮助库
+request | 接口帮助库  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
