@@ -803,7 +803,7 @@ icons | 图标库
 ③ | 点击右上角的购物车图标，将图标添加到项目
 ④ | 在项目中，选择 `Font class`，查看在线链接
 ⑤ | 打开链接，将代码复制到 `styles` 文件夹的 `iconfont.wxss` 中 
-⑥ | 在 `app.wxss` 添加 `@import "./styles.iconfont.wxss"`
+⑥ | 在 `app.wxss` 添加 `@import "./styles.iconfont.wxss";`
 ⑦ | 使用时，在标签中添加对应**两个**类名
   
 #### 搭建项目的标签栏  
@@ -817,6 +817,51 @@ icons | 图标库
 ⑤ | 参考 | "color": "#999",
 ⑤ | 参考 | "selectedColor": "#ff2d4a",
 ⑤ | 参考 | "backgroundColor": "#fafafa"
+  
+#### 初始化样式  
+  
+```
+/**app.wxss**/
+
+/* 有需要时，再添加标签名 */
+page, view, text, swiper, swiper-item, image, navigator {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* 全局变量或配置 */
+page {
+  /* 主题颜色 */
+  --themeColor: #eb4450;
+  /* 定义统一字体大小， 假设设计稿大小是 375px
+  希望字体为 14px，即等于28rpx */
+  font-size: 28rpx;
+}  
+```
+
+----  
+
+### 首页  
+  
+#### 首页搜索框  
+> 由于多个页面都用到了该组件，选择将它实现为自定义组件。   
+
+步骤 | 说明  
+:-: | :-:  
+① | 本质就是块元素包围的一个[链接](#navigator)  
+② | [新建组件](#新建自定义组件) `SearchInput` 
+③ | 可以给组件的根元素添加类名，方便使用选择器   
+④ | 使用 less 前，先安装[插件](#使用less) 
+   
+   
+
+
+  
+
+  
+  
+  
   
   
   
