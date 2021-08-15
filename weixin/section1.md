@@ -562,6 +562,7 @@ Component({
   <view 
     wx:for="{{tabs}}" 
     wx:key="id" 
+    data-index="{{index}}" 
     class="title_items {{item.isActive?'active':''}}"
   >
   {{item.name}}
@@ -612,8 +613,30 @@ data: {
 }
 ```
   
+#### 标题点击激活  
   
+关键点 | 文档 | 说明
+:-: | :- | :- 
+① | wxml | 为了能够从事件回调的事参中获取点击项信息，`data-index="{{index}}"`
+② | js | 小程序不推荐直接改变 data 中的数据，先拷贝  
+③ | js | 遍历数组，通过排他思想赋值
+④ | js | 重新赋值
   
+```
+<view wx:for="{{tabs}}" data-index="{{index}}" bind:tap="handleItemTap">
+  {{item.name}}
+</view>  
   
+methods: {
+  handleItemTap(e) {
+    let {index} = e.currentTarget.dataset;
+    let tabs = JSON.parse(JSON.stringify(this.data.tabs));
+    tabs.forEach((item, i) => {index === i?item.isActive=true:item.isActive=false})
+    this.setData({
+      tabs
+    })
+  }
+}
+```  
   
 
