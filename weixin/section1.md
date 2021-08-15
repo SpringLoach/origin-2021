@@ -854,7 +854,43 @@ page {
 ③ | 可以给组件的根元素添加类名，方便使用选择器   
 ④ | 使用 less 前，先安装[插件](#使用less) 
    
-   
+#### 获取轮播图数据&[网络请求](https://developers.weixin.qq.com/miniprogram/dev/api/network/request/wx.request.html)  
+
+步骤 | 其它 | 说明 
+:-: | :-: | :-  
+① |  | 在 VSCode 输入 `wx-request`，有补全功能
+② |  | 在微信开发工具勾选不校验合法域名 
+③ | 后期 | 后期上项目线时，需域名合法：①https ②将域名添加到后台白名单 
+③ | 后期 | 具体位置为开发管理 - 开发设置 - 服务器域名
+④ | 帮助 | 在微信开发工具的 `AppData` 可查看变量值
+  
+配置项 | 说明 | 默认值 | 类型	
+:- | :- | :- | :- 
+url | 接口地址 | / | *str* 
+data | 请求的参数 | / | *str/obj/ArrayBuffer* 
+header | 请求头 | / | *obj*
+method | HTTP请求方法 | GET | *str*
+dataType | 期望返回的数据格式 | json | *str*
+responseType | 响应的数据类型 | text | *str*
+success | 成功回调 | / | *cb*
+fail | 失败回调 | / | *cb*
+complete | 调用后回调，一定执行 | / | *cb*
+    
+```
+data: {
+  swiperList: []  
+},
+onLoad: function(options) {
+  var reqTask = wx.request({
+    url: 'https://api-hmugo-web.itheima.net/api/public/v1/home/swiperdata',
+    success: (result) => {
+      this.setData({
+        swiperList: result.data.message
+      })
+    }
+  })
+}
+```
 
 
   
