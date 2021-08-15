@@ -774,13 +774,49 @@ components | 存放组件
 lib | 第三方库
 utils | 自己的帮助库
 request | 接口帮助库  
+icons | 图标库  
   
+#### 搭建项目的页面  
   
+页面名称 | 名词  
+:-: | :-:  
+首页 | index 
+分类页面 | category 
+商品列表页面 | goods_list 
+商品详情页面 | goods_detial 
+购物车页面 | cart 
+收藏页面 | collect 
+订单页面 | order 
+搜索页面 | search 
+个人中心页面 | user 
+意见反馈页面 | feedback 
+登录页面 | login 
+授权页面 | auth 
+结算页面 | pay 
   
+#### 引入阿里图标   
   
+步骤 | 说明  
+:-: | :-:  
+① | 在[官网](https://www.iconfont.cn/)通过单词或拼音搜索 
+② | 将喜欢的图标添加入库 
+③ | 点击右上角的购物车图标，将图标添加到项目
+④ | 在项目中，选择 `Font class`，查看在线链接
+⑤ | 打开链接，将代码复制到 `styles` 文件夹的 `iconfont.wxss` 中 
+⑥ | 在 `app.wxss` 添加 `@import "./styles.iconfont.wxss"`
+⑦ | 使用时，在标签中添加对应**两个**类名
   
+#### 搭建项目的标签栏  
   
-  
+步骤 | 其它 | 说明  
+:-: | :-: | :-:   
+① | | 在[官网](https://www.iconfont.cn/)下载适合的图标
+② | | 格式为PNG，小程序不支持SVG 
+③ | | 图标包括激活和未激活两种
+④ | | 在 `app.json` 中，通过 `"tabBar"` 配置  
+⑤ | 参考 | "color": "#999",
+⑤ | 参考 | "selectedColor": "#ff2d4a",
+⑤ | 参考 | "backgroundColor": "#fafafa"
   
   
   
