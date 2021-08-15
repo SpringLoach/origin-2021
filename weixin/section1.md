@@ -245,6 +245,7 @@ mut-bind | 只有一个节点的这种绑定事件会触发，不影响 `bind` �
 ```
 
 #### 支持的选择器  
+> 其中，自定义组件不能使用 `id选择器`、`属性选择器` 和 `标签名选择器`，需改用 `class选择器`。  
 
 选择器 | 样例 | 样例描述
 :- | :- | :-
@@ -278,16 +279,16 @@ element, element | view, checkbox | 选择所有文档的 view 组件和所有�
 <text\> | 代替原来的 <span\>
 <image/\> | 默认宽度320px、高度240px。可在样式设置宽高
 <swiper\> | 轮播图容器，其中只可放置 `swiper-item` 组件。默认宽度100vw、高度150px  
-<swiper-item> | 轮播图项，内部嵌套 `<image>`
-<navigator> | 导航标签。块级元素    
-<rich-text> | 富文本标签
-<button> | 按钮
-<icon> | 图标  
-<radio> | 单选框，需搭配 `<radio-group>` 实现触发事件  
-<radio-group> | 项变更时，对应事件中可获得**字符串**
-<checkbox> | 复选框，需搭配 `<checkbox-group>` 实现触发事件  
-<checkbox-group> | 项变更时，对应事件可获得**字符串数组** 
-<slot> | 插槽，当父组件的该组件标签内有子标签时，会将其替代
+<swiper-item\> | 轮播图项，内部嵌套 `<image>`
+<navigator\> | 导航标签。块级元素    
+<rich-text\> | 富文本标签
+<button\> | 按钮
+<icon\> | 图标  
+<radio\> | 单选框，需搭配 `<radio-group>` 实现触发事件  
+<radio-group\> | 项变更时，对应事件中可获得**字符串**
+<checkbox\> | 复选框，需搭配 `<checkbox-group>` 实现触发事件  
+<checkbox-group\> | 项变更时，对应事件可获得**字符串数组** 
+<slot\> | 插槽，当父组件的该组件标签内有子标签时，会将其替代
   
 #### text  
 > 文本标签，为行内元素，只能嵌套 `text`。  
@@ -313,7 +314,7 @@ bindload | 载入完毕时触发 | / | 否 | *cb*
 缩放 | scaleToFill | 使图片的宽高等于设置的宽高	
 缩放 | aspectFit | 保持纵横比缩放图片，使图片的长边完全显示。可以完整显示图片，可能有多余部分。轮播图常用	
 缩放 | aspectFill | 保持纵横比缩放图片，只保证图片的短边能完全显示出来。通常另一个方向将会发生截取。	
-缩放 | widthFix | 宽度不变，高度自动变化，保持原图宽高比不变。即设置的高无效。轮播图常用	
+缩放 | widthFix | 宽度不变，高度自动变化，保持原图宽高比不变。即设置的高无效。**轮播图常用**	
 缩放 | heightFix | 高度不变，宽度自动变化，保持原图宽高比不变	
 裁剪 | top | 不缩放图片，只显示图片的顶部区域	
 裁剪 | bottom | 不缩放图片，只显示图片的底部区域	
@@ -326,6 +327,21 @@ bindload | 载入完毕时触发 | / | 否 | *cb*
 裁剪 | bottom right | 不缩放图片，只显示图片的右下边区域	
 
 #### swiper  
+> 使用轮播图时，通常需要重新计算并设置容器 `swiper` 的高度。  
+
+```
+<swiper autoplay indicator-dots circular>
+  <swiper-item wx:for="{{}}" wx:key="">
+    <navigator>
+      <image mode="widthFix" src="{{}}"></image>
+    </navigator>
+  </swiper-item>
+</swiper>
+
+image {
+  width: 100%;
+}
+```
 
 计算容器高度
 
@@ -334,6 +350,7 @@ bindload | 载入完毕时触发 | / | 否 | *cb*
 ① | swiper高 / swiper宽 = 原图高 / 原图宽  
 ② | swiper高 = swiper宽 * 原图高 / 原图宽  
 ③ | height: calc(100vw * 图高 / 图宽)  
+④ | 如 height: calc(100vw * 352 / 1125)  
 
 属性 | 说明 | 默认值 | 必填 | 类型
 :- | :- | :- | :- | :-
@@ -863,6 +880,7 @@ page {
 ③ | 后期 | 后期上项目线时，需域名合法：①https ②将域名添加到后台白名单 
 ③ | 后期 | 具体位置为开发管理 - 开发设置 - 服务器域名
 ④ | 帮助 | 在微信开发工具的 `AppData` 可查看变量值
+⑤ | | 使用该请求数据[构建轮播图](#swiper)  
   
 配置项 | 说明 | 默认值 | 类型	
 :- | :- | :- | :- 
