@@ -333,7 +333,7 @@ bindload | 载入完毕时触发 | / | 否 | *cb*
 <swiper autoplay indicator-dots circular>
   <swiper-item wx:for="{{}}" wx:key="">
     <navigator>
-      <image mode="widthFix" src="{{}}"></image>
+      <image mode="widthFix" src="{{}}" />
     </navigator>
   </swiper-item>
 </swiper>
@@ -910,9 +910,85 @@ onLoad: function(options) {
 }
 ```
 
+#### 封装请求   
 
+关键点 | 说明 
+:-:  :-  
+① | 返回期约，以避免回调地狱  
+② | 将请求路径拆分出 `baseURL`  
+③ | 由于配置项为键值对，可以解构对象参数获得  
+
+- request  
+  + request.js  
+  + index.js  
+  + ...   
+
+```
+/* request.js */
+export const request = (resurl, obj) => {
+  const baseURL = 'https://api-hmugo-web.itheima.net/api/public';
+  return new Promise((res, rej) => {
+    var reqTask = wx.request({
+      url: baseURL + resurl,
+      ...obj,
+      success: (result) => {
+        res(result)
+      },
+      fail: (err) => {
+        rej(err);
+      }
+    });     
+  })
+}
+
+/* index.js */
+import {request} from "./request.js"
+
+export const getSwiperList = () => {
+  return request('/v1/home/swiperdata')
+}
+
+/* index.js */
+import {getSwiperList} from "../../request/index.js"  
+
+onLoad: function (options) {
+  this.getSwiperList();
+},
+getSwiperList() {
+  getSwiperList().then(result => {
+    this.setData({
+      swiperList: result.data.message
+    })
+  })
+}
+```
   
+#### 分类导航  
 
+关键点 | 说明 
+:-:  :-  
+① | 使用 `flex` 布局和循环时，留意谁为容器标签
+② | 图片标签地址，即属性引用变量时，括号语法
+③ | 图片默认为原图宽高    
+
+```
+<view class="index-cate">
+  <navigator wx:for="{{cateList}}" wx:key="name">
+    <image mode="widthFix" src="{{item.image_src}}" />
+  </navigator>
+</view>
+
+.index-cate {
+  display: flex;
+  navigator {
+    flex: 1;
+    padding: 20rpx;
+    image {
+      width: 100%;
+    }
+  }
+}
+```
   
   
   
