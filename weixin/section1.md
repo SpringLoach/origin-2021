@@ -618,9 +618,11 @@ data: {
 关键点 | 文档 | 说明
 :-: | :- | :- 
 ① | wxml | 为了能够从事件回调的事参中获取点击项信息，`data-index="{{index}}"`
-② | js | 小程序不推荐直接改变 data 中的数据，先拷贝  
-③ | js | 遍历数组，通过排他思想赋值
+② | js | 不同于页面，自定义组件的方法需放在 `methods` 选项中  
+③ | js | 小程序不推荐直接改变 data 中的数据，先拷贝  
+④ | js | 遍历数组，通过排他思想赋值
 ④ | js | 重新赋值
+⑤ | js | 重新赋值
   
 ```
 <view wx:for="{{tabs}}" data-index="{{index}}" bind:tap="handleItemTap">
@@ -639,4 +641,57 @@ methods: {
 }
 ```  
   
+#### 父传子  
+> 与 Vue 类似，只是不需要 `:`，以及默认值表示不同。  
+  
+```
+/* 父的wxml */
+<Tabs tabs="{{tabs}}"></Tabs>  
+  
+/* 子的js */
+properties: {
+  tabs: {
+    type: Array,
+    // 默认值  
+    value: []
+  }  
+} 
+```
 
+#### 子传父  
+  
+关键点 | 文档 | 说明
+:-: | :- | :- 
+① | 子(js) | 通过 `this.data` 找不到的数据，会在 `properties` 找该变量
+② | 子(js) | 由于数据是父提供，[先前的方法](#标题点击激活)只会将修改结果拷贝到子，父数据仍不变 
+③ | 子(js) | 所以子**只需要**发送自定义事件，并传递索引即可  
+④ | 父(wxml) | 接收事件，执行回调
+⑤ | 父(js) | 逻辑与先前的方法一致。获取传参的属性改变  
+  
+```
+/* 子的js */
+handleItemTap(e) {
+  let {index} = e.currentTarget.dataset;
+  this.triggerEvent("itemChange", {index})
+}
+  
+/* 父的wxml */
+<Tabs bind:itemChange="handleItemChange"></Tabs>
+  
+/* 父的js */
+handleItemChange(e) {
+  console.log(e.detail.index);
+}
+```
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
