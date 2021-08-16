@@ -45,7 +45,7 @@ pages字段
 
 3. 首个数组元素对应的路径将展示为首页。  
 
-window字段  
+#### window字段  
 > 定义小程序所有页面的顶部背景颜色，文字颜色等。  
 
 常用属性 | 说明 | 默认值 | 可选值
@@ -291,6 +291,7 @@ element, element | view, checkbox | 选择所有文档的 view 组件和所有�
 <checkbox\> | 复选框，需搭配 `<checkbox-group>` 实现触发事件  
 <checkbox-group\> | 项变更时，对应事件可获得**字符串数组** 
 <slot\> | 插槽，当父组件的该组件标签内有子标签时，会将其替代
+[<scroll-view\>](https://developers.weixin.qq.com/miniprogram/dev/component/scroll-view.html) | 可滚动视图区域，竖向滚动时，需要一个固定高度并具备充足内容  
   
 #### text  
 > 文本标签，为行内元素，只能嵌套 `text`。  
@@ -637,7 +638,7 @@ data: {
   
 关键点 | 文档 | 说明
 :-: | :- | :- 
-① | wxml | 为了能够从事件回调的事参中获取点击项信息，`data-index="{{index}}"`
+① | wxml | 为了能够从事件回调的事参中获取点击项信息，**需要属性传递** `data-index="{{index}}"`
 ② | js | 不同于页面，自定义组件的方法需放在 `methods` 选项中  
 ③ | js | 小程序不推荐直接改变 data 中的数据，先拷贝  
 ④ | js | 遍历数组，通过排他思想赋值
@@ -857,6 +858,10 @@ page {
   希望字体为 14px，即等于28rpx */
   font-size: 28rpx;
 }  
+
+image {
+  width: 100%;
+}
 ```
 
 ----  
@@ -881,6 +886,7 @@ page {
 ② |  | 在微信开发工具勾选不校验合法域名 
 ③ | 后期 | 后期上项目线时，需域名合法：①https ②将域名添加到后台白名单 
 ③ | 后期 | 具体位置为开发管理 - 开发设置 - 服务器域名
+③ | 后期 | 手机模拟不请求，尝试从最近入口打开、清缓存
 ④ | 帮助 | 在微信开发工具的 `AppData` 可查看变量值
 ⑤ | | 使用该请求数据[构建轮播图](#swiper)  
   
@@ -915,7 +921,7 @@ onLoad: function(options) {
 #### 封装请求   
 
 关键点 | 说明 
-:-:  :-  
+:-: | :-  
 ① | 返回期约，以避免回调地狱  
 ② | 将请求路径拆分出 `baseURL`  
 ③ | 由于配置项为键值对，可以解构对象参数获得  
@@ -1069,8 +1075,238 @@ getSwiperList() {
 }
 ```
   
+----
+
+### 分类  
   
+#### 接收分类数据  
+
+关键点 | 说明 
+:-: | :-  
+① | 添加编译模式，可以修改编译名称和启动页面，方便构建
+② | 需要从一次响应数据中获得多维度结果，以多变量接收 
+③ | 注意与 `data` 同级的变量，可以直接赋值 
+④ | 这里先获取第一个模块的商品数据  
+
+```
+data: {
+  // 请求的左侧菜单数据
+  leftMenuList: [],
+  // 请求的右侧商品数据
+  rightGoodsList: [],
+  // 目前激活的菜单项索引  
+  currentIndex: 0
+},
+Cates: [],
+onLoad: function (options) {
+  this.getCateData();
+},
+getCateData() {
+  getCateData().then(res => {
+    this.Cates = res.data.message;
+    let leftMenuList = this.Cates.map(item => item.cat_name);
+    let rightGoodsList = this.Cates[this.data.currentIndex].children;
+    this.setData({
+      leftMenuList,
+      rightGoodsList
+    })
+  })
+}
+```
   
-  
+#### 初构页面&两栏可滚动布局  
+
+关键点 | 步骤 | 说明 
+:-: | :- | :-  
+① | 初始化 | [添加页面标题](#window字段)
+① | 初始化 | 引入并使用自定义组件
+② | 滚动布局 | 需要给滚动标签加上固定高度
+③ | 计算高度 | 不能用 `%` 设置具体高度   
+③ | 计算高度 | 底部标签栏的高度忽略
+④ | 两栏布局 | 通过 `flex` 布局，让项按比例占宽
+② | 滚动布局 | `flex` 布局的项会占据全部高度（100%）  
+⑤ | 关于less | 低版本的 less 需要用 `~calc()` 表示不先计算值
+⑤ | 设置激活类 | 位于同一级选择器下 
+⑤ | 设置激活类 | 通过 `currentIndex`，动态添加类  
+
+```
+<view class="cate_content">
+  <scroll-view class="left_menu" scroll-y>
+    大量内容     
+  </scroll-view>
+  <scroll-view class="right_goods" scroll-y>
+    大量内容
+  </scroll-view>
+</view>
+
+.category{
+  .cate_content {
+    height: calc(100vh - 90rpx);
+    display: flex; 
+    .left_menu {
+      flex: 2;
+    }
+    .right_goods {
+      flex: 5;
+    }
+  } 
+}
+```
+
+#### 渲染滚动区域  
+
+关键点 | 步骤 | 说明 
+:-: | :- | :-  
+① | 侧栏标题居中 | 使用flex布局及两个属性，可快速居中
+① | 三列化 | 对其容器使用flex布局，开启换行
+② | 三列化 | 将没项宽设为 `33.33%`
+③ | 三列化 | 适当调整项中的图片比例   
+③ | 三列化 | 水平居中
+⑤ | 设置激活类 | 位于同一级选择器下添加类 
+⑤ | 设置激活类 | 通过 `currentIndex`，动态添加类  
+⑤ | 设置激活类 | 激活时，通过创建属性传索引
+⑤ | 设置激活类 | 由于所有数据都请求了，将数据列表替换即可
+⑤ | 设置激活类 | 其它情况是传不同参请求不同数据的  
+
+```
+<view class="menu_title {{currentIndex===index?'active':''}}"
+wx:for="{{leftMenuList}}"
+wx:key="*this"
+bind:tap="handleTitleTap"
+data-index="{{index}}"
+>
+  {{item}}
+</view>   
+
+.cate_content {
+  height: calc(100vh - 90rpx);
+  display: flex; 
+  .left_menu {
+    flex: 2;
+    .menu_title {
+      height: 80rpx;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 30rpx;
+    }
+    .active {
+      color: var(--themeColor);
+      border-left: 5rpx solid currentColor;
+    }
+  }
+  .right_goods {
+    flex: 5;
+    .goods_group {
+      .goods_title {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 80rpx;
+        .delimiter {
+          color: #ccc;
+          padding: 0 10rpx;
+        }
+      }
+      .goods_list {
+        display: flex;
+        flex-wrap: wrap;
+        navigator {
+          width: 33.33%;
+          text-align: center;
+          image {
+            width: 50%;
+          }
+        }
+      }
+    }
+  }
+} 
+
+handleTitleTap(e) {
+  let currentIndex = e.currentTarget.dataset.index;
+  // 将渲染数据替换
+  let rightGoodsList = this.Cates[currentIndex].children;
+  this.setData({
+    currentIndex,
+    rightGoodsList
+  })
+}
+```
+
+#### 使用缓存技术  
+> 对于本地无缓存、或是有缓存但过期的情况，去重新请求数据。否则，将使用本地存储。  
+> 
+> 当用户在短时间内连续访问小程序，进入该页面时能提升用户体验。  
+
+步骤 | 说明 
+:-: | :-  
+① | 页面加载后，获取本地存储中的该数据
+② | 如果该数据未定义，发送请求获取数据
+③ | 并在成功请求数据的回调中，将数据存入本地存储
+④ | 同时还会存入当前时间，方便后续判断是否过期 
+⑤ | 否则，判断如果数据过期，重新请求 
+⑥ | 否则，将旧数据赋值给变量  
+
+缓存技术对比 | 小程序 | web 
+:-: | :- | :-  
+设置缓存 | wx.setStorageSync("key", "value") | localStorage.setItem("key", "value")
+获取缓存 | wx.getStorageSync("key") | localStorage.getItem("key")
+缓存前类型转化 | 不会做任何转化，直接缓存  | 会将数据转化为字符串再缓存 
+
+```
+onLoad: function (options) {
+  let Cates = wx.getStorageSync('cates');
+  // 如果不存在缓存数据，发起请求
+  if(!Cates) {
+    this.getCateData();
+  } else {
+    // 如果缓存数据过期，发起请求
+    if(Date.now() - Cates.getTime > 1000*10) {
+      this.getCateData();
+    } else {
+      this.Cates = Cates.data;
+      // 进行赋值，以渲染页面
+      let leftMenuList = this.Cates.map(item => item.cat_name);
+      let rightGoodsList = this.Cates[this.data.currentIndex].children;
+      this.setData({
+        leftMenuList,
+        rightGoodsList
+      })
+    }
+  }   
+},
+getCateData() {
+  getCateData().then(res => {
+    this.Cates = res.data.message;
+    // 缓存到本地  
+    wx.setStorageSync('cates', {getTime: Date.now(), data: this.Cates });
+    ...
+  })
+}
+```
+
+检查是否缓存
+
+步骤 | 说明 
+:-: | :-  
+① | 点击清缓存
+② | 打开 Network
+③ | 编译，观察对应文件（这里是体积最大的一个）
+④ | 过期时间内，编译，观察是否出现对应文件
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   
   
