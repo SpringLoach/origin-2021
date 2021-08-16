@@ -1295,9 +1295,46 @@ getCateData() {
 ③ | 编译，观察对应文件（这里是体积最大的一个）
 ④ | 过期时间内，编译，观察是否出现对应文件
 
+#### 右侧列表置顶  
 
+步骤 | 说明 
+:-: | :-  
+① | 该标签有一个 `scroll-top` 属性用于控制相对顶部距离
+② | 动态设置该属性值  
 
+```
+<scroll-view class="right_goods" scroll-y scroll-top="{{scrollTop}}">
 
+data: {
+  // 控制右侧滚动页面相对顶部的距离  
+  scrollTop: 0
+},
+// 当点击左侧标题时
+handleTitleTap(e) {
+  ...
+  this.setData({
+    // 重新设置
+    scrollTop: 0
+  })
+}
+```
+
+#### 优化接口  
+
+```
+/* request.js */
+
+res(result)
+    ||
+    \/
+res(result.data.message)
+
+/* 使用了网络请求的 js */
+result.data.message
+    ||
+    \/
+result
+```
 
 
 
