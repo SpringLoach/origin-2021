@@ -1303,7 +1303,7 @@ getCateData() {
 ② | 动态设置该属性值  
 
 ```
-<scroll-view class="right_goods" scroll-y scroll-top="{{scrollTop}}">
+<scroll-view class="right_goods" scroll-y scroll-top="{{scrollTop}}"></scroll-view>
 
 data: {
   // 控制右侧滚动页面相对顶部的距离  
@@ -1336,9 +1336,56 @@ result.data.message
 result
 ```
 
+----
+
+### 商品分类
+
+#### 携带循环项参数跳转页面  
+> 通过 `url` 的方式携带参数。  
+
+步骤 | 说明 
+:-: | :-  
+① | 可以携带循环项的某些属性作为 `url` 参数的一部分
+② | 在链接标签中进行跳转  
+③ | 可以在将出现页面的 `onLoad` 中获取该传参  
+④ | 编译模式中可以添加启动参数 `cid=5`，方便后续开发
+
+```
+/* category 的 wxml */
+<navigator
+wx:for-item="item2"
+...
+url="/pages/goods_list/index?cid={{item2.cat_id}}"
+>
+</navigator>
+
+/* goods_list 的 js */
+onLoad: function (options) {
+  console.log(options);  // cid=*
+}
+```
+
+#### 实现tabs组件   
+
+步骤 | 说明 
+:-: | :-  
+① | 可以借助index实现激活判断，不一定需要项的id
+② | 新建组件，引入配置文件并添加到文档
+③ | 父传子，使子获得数据
+④ | 子组件组织页面结构、将样式文件修改为 `less`
+⑤ | 使用自定义属性 `data-*`，可以在 `tap` 回调 `e.currentTarget.dataset.*` 获取
+⑥ | 对于自定义属性，不能在子组件直接修改  
+⑦ | 实际上父组件不提供 `isActive` 属性也没关系  
+⑧ | 在子组件中使用插槽，当点击不同标题时，父组件向插槽传入（渲染）不同标签
+⑨ | 故需在点击事件中发起自定义事件，并让父组件用变量记录子组件激活了哪个项  
+
+  
 
 
 
+
+
+  
 
 
 
