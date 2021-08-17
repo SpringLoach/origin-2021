@@ -1443,7 +1443,7 @@ wx.showToast({ title: '没有下一页' })
 ② | 在 `wx.request` 的配置项 `complete` 添加响应后的处理逻辑  
 ③ | 即关闭窗口
 ④ | 由于有的页面在创建时会发送多个请求，必须都响应后再关闭窗口
-⑤ | 通过闭包控制
+⑤ | 通过闭包实现  
 
 [基本使用](https://developers.weixin.qq.com/miniprogram/dev/api/ui/interaction/wx.showLoading.html)
 ```
@@ -1463,7 +1463,12 @@ wx.hideLoading()
 /* request.js */ 
 let ajaxTimes = 0;
 export const request = (resurl, obj) => {
-  ajaxTimes++
+  // 记录请求次数，弹出等待窗口
+  ajaxTimes++;
+  wx.showLoading({
+    title: '加载中',
+    maske: true
+  })
   ...
   return new Promise((res, rej) => {
     var reqTask = wx.request({     
@@ -1480,5 +1485,20 @@ export const request = (resurl, obj) => {
   })
 }
 ```
+
+----
+
+### 商品详情
+
+#### 获取数据 
+
+步骤 | 说明 
+:-: | :-  
+① | 在商品列表点击商品时，[携带参数](#携带循环项参数跳转页面)跳转 
+② | 在 `onLoad` 中接收该参数，并发送请求  
+③ | 将返回数据保存到本地
+
+
+  
   
   
