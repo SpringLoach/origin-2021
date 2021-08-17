@@ -1424,12 +1424,61 @@ onLoad: function (options) {
 wx.showToast({ title: '没有下一页' })
 ```
 
-  
+#### 下拉刷新  
+> 在事件中将数据变量重置，并重新发起请求，之后手动结束下拉刷新的窗口。  
 
+步骤 | 说明 
+:-: | :-  
+① | 通过页面[配置项](#window字段)开启全局下拉刷新  
+② | 在页面[下拉刷新](#页面生命周期)  `onPullDownRefresh` 的回调中添加处理逻辑  
+③ | 页码重置，数据清空，重新发送请求
+④ | 请求成功后，手动关闭下拉刷新的窗口 `wx.stopPullDownRefresh()`
+⑤ | 关闭方法在下拉刷新时有效，无效也不会报错  
 
+#### 全局配置请求的加载图标效果  
 
+步骤 | 说明 
+:-: | :-  
+① | 在请求的根文件中配置，每次发起请求将调用弹窗  
+② | 在 `wx.request` 的配置项 `complete` 添加响应后的处理逻辑  
+③ | 即关闭窗口
+④ | 由于有的页面在创建时会发送多个请求，必须都响应后再关闭窗口
+⑤ | 通过闭包控制
 
+[基本使用](https://developers.weixin.qq.com/miniprogram/dev/api/ui/interaction/wx.showLoading.html)
+```
+// 弹出窗口
+wx.showLoading({
+  title: '加载中',
+  // 显示透明蒙层，防止触摸穿透
+  maske: true
+})
 
+// 关闭窗口
+wx.hideLoading()
+```
 
+实际使用  
+```
+/* request.js */ 
+let ajaxTimes = 0;
+export const request = (resurl, obj) => {
+  ajaxTimes++
+  ...
+  return new Promise((res, rej) => {
+    var reqTask = wx.request({     
+      ...
+      // 成功与否都会执行
+      complete: () => {
+        ajaxTimes--;   
+        if(ajaxTimes===0) {
+          // 关闭正在等待的图标 
+          wx.hideLoading();
+        }
+      }
+    });     
+  })
+}
+```
   
   
