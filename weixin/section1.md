@@ -1680,7 +1680,7 @@ address.fullAddress = address.provinceName + address.cityName + address.countyNa
 
 关键 | 说明 
 :-: | :-   
-① | 使用复选框
+① | 主要使用 `flex` 布局完成样式，可以使用原生[复选框](#checkbox)  
 
 
 
