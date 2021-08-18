@@ -331,6 +331,8 @@ bindload | 载入完毕时触发 | / | 否 | *cb*
 
 #### swiper  
 > 使用轮播图时，通常需要重新计算并设置容器 `swiper` 的高度。  
+> 
+> 可以将 `swiper` 的高度调小，这样指示器会处在图片下方。  
 
 ```
 <swiper autoplay indicator-dots circular>
@@ -365,6 +367,7 @@ indicator-color | 指示点颜色 | rgba(0, 0, 0, .3) | 否 | *color*
 indicator-active-color | 当前选中的指示点颜色 | #000000 | 否 | *color*
 
 #### navigator  
+> 跳转到标签页时，需要额外设置属性。  
   
 ```
 <navigator url="/page/index/index"> 回到首页 </navigator>
@@ -1490,14 +1493,14 @@ export const request = (resurl, obj) => {
 
 ### 商品详情
 
-#### 获取数据 
+#### 商品详情_获取数据 
 
 步骤 | 说明 
 :-: | :-  
 ① | 在商品列表页面点击商品时，[携带参数](#携带循环项参数跳转页面)跳转 
 ② | 在 `onLoad` 中接收该参数，并发送请求
 ③ | 注意请求参数通常为对象，不要直接赋值给 `data`
-④ | 将返回数据保存到本地
+④ | 将返回数据保存到本地  
 
 ```
 onLoad: function (options) {
@@ -1508,8 +1511,124 @@ onLoad: function (options) {
 ``` 
 > 也可以将参数保存到本地，在请求包装方法内部加上该参数。  
 
+#### 商品详情_渲染[轮播图](#swiper)  
+> 要求图片不占据全部宽度且居中，指示器会于图片下方。  
 
+```
+.detial_swiper {
+  height: 70vw;
+  text-align: center;
+  image {  
+    width: 60%;
+  }
+}
+```
 
+#### 商品详情_页面渲染  
+
+步骤 | 说明 
+:-: | :-  
+① | 页面一行有多种内容十，可以以 `_row` 起类名 
+② | 水平垂直居中纵向版，用 `flex-direction: column` 实现
+③ | 默认情况给块级元素设置 `padding` 的单值，效果**像是**作用于上下左
+④ | `p10rpx-0` 回车效果等于 `padding: 10rpx 0`  
+⑤ | 由于图文详情格式不确定，接口以[富文本标签](#rich-text)形式返回该数据
   
+#### 商品详情_获取数据优化    
+
+步骤 | 说明 
+:-: | :-  
+① | 在请求到数据后，只保存需要的部分，可以优化性能  
+② | `iphone` 不支持 `.webp` 格式
+③ | 正常情况需要沟通后端切换提供的图片类型
+④ | 临时处理，可以替换字符串，但需要服务器有相应资源  
+
+```
+// 请求回调中
+this.setData({
+  goodData: {
+    pics: result.pics,
+    goods_price: result.goods_price,
+    goods_name: result.goods_name,
+    goods_introduce: result.goods_introduce.replace(/\.webp/g, '.jpg'),
+  }
+})
+```
+
+#### 商品详情_预览图片  
+> 在新页面中[全屏预览图片](https://developers.weixin.qq.com/miniprogram/dev/api/media/image/wx.previewImage.html)。预览的过程中用户可以进行保存图片、发送给朋友等操作。  
+
+步骤 | 说明 
+:-: | :-  
+① | 给轮播图项添加点触回调 
+② | 通过属性传入该项的显示图片链接
+③ | 在回调中使用 `wx.previewImage` 配置预览图片  
+
+```
+<swiper-item
+bind:tap="handlePreviewImage"
+data-url="{{item.pics_mid}}"
+>..</swiper-item>
+
+handlePreviewImage(e) {
+  const pics = JSON.parse(JSON.stringify(this.data.goodData.pics))
+  const urls = pics.map(item => item.pics_mid);
+  const current = e.currentTarget.dataset.url;
+  wx.previewImage({
+    // 当前预览图片的链接
+    current,
+    // 需要预览的图片链接列表(数组)
+    urls
+  });
+}
+```
+
+#### 底部工具栏  
+
+步骤 | 说明 
+:-: | :-  
+① | 跳转到的页面为标签页时，需额外[配置属性](#navigator)
+② | 由于按钮默认样式较多，可以使用障眼法按钮
+③ | 由于工具栏占据了固定高度，可以配置page的底边距
+④ | 对于不同标签的相同样式，以类实现  
+
+```
+.page {
+  padding-bottom: 90rpx;
+}
+
+// 障眼法按钮  
+.tool_item {
+  position: relative;
+  button {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   
   
