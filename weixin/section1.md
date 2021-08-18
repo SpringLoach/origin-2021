@@ -1611,7 +1611,76 @@ handlePreviewImage(e) {
 }
 ```
 
+#### 加入购物车  
 
+步骤 | 说明 
+:-: | :-  
+① | 由于请求数据后续可能还用得到，将它另外保存了下来
+② | 由于接口原因，不能在后台记录购买商品数量
+③ | 采用[本地缓存技术](#使用缓存技术)，操作完成后，记得提交缓存 
+④ | 主要是给该商品的对象数据添加一个num属性，并记录该商品对象  
+⑤ | 最后[弹出提示](https://developers.weixin.qq.com/miniprogram/dev/api/ui/interaction/wx.showToast.html)，开启遮罩有 1.5s 的 “节流效果”  
+
+```
+handleAddCart() {
+  // 获取缓存
+  let cart = wx.getStorageSync('cart') || [];
+  let index = cart.findIndex(item => item.goods_id === this.goodInfo.goods_id);
+  if (index === -1) {
+    this.goodInfo.num = 1;
+    cart.push(this.goodInfo);
+  } else {
+    cart[index].num++;
+  }
+  // 更新缓存  
+  wx.setStorageSync('cart', cart);
+  // 弹出消息  
+  wx.showToast({
+    title: '添加到购物车成功~',
+    icon: 'success',
+    mask: true
+  });  
+}
+```
+ 
+---- 
+  
+### 购物车  
+
+#### 购物车_获取地址  
+
+步骤 | 说明 
+:-: | :-   
+① | 在点触回调中，调用[接口](https://developers.weixin.qq.com/miniprogram/dev/api/location/wx.chooseLocation.html) `wx.chooseAddress` 获取用户的位置信息
+② | 使用缓存技术记录，以便其它页面使用
+
+```
+handleAddressTap() {
+  wx.chooseAddress({
+    success: (result) => {
+      wx.setStorageSync('address', result);
+    }
+  });   
+}
+```
+
+#### 购物车_获取地址和具体地址的切换渲染  
+
+步骤 | 说明 
+:-: | :-   
+① | 在 `onShow` （切换该页面的次数会很频繁）中，将缓存数据保存到本地
+② | 根据缓存数据是否存在，动态渲染按钮/地址
+③ | 由于地址需要用到请求数据对象的多个属性，可以在接受该数据时，拼接为新属性  
+
+```
+address.fullAddress = address.provinceName + address.cityName + address.countyName + address.detailInfo;
+```
+  
+#### 购物车_样式  
+
+关键 | 说明 
+:-: | :-   
+① | 使用复选框
 
 
 
