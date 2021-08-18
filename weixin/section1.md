@@ -1583,7 +1583,7 @@ handlePreviewImage(e) {
 }
 ```
 
-#### 底部工具栏  
+#### 商品详情_底部工具栏  
 
 步骤 | 说明 
 :-: | :-  
@@ -1626,12 +1626,13 @@ handleAddCart() {
   // 获取缓存
   let cart = wx.getStorageSync('cart') || [];
   let index = cart.findIndex(item => item.goods_id === this.goodInfo.goods_id);
-  if (index === -1) {
+  if (index === -1) { 
+    // 在这里进行后续的增强对象，添加属性，如选中状态 
     this.goodInfo.num = 1;
     cart.push(this.goodInfo);
   } else {
     cart[index].num++;
-  }
+  } 
   // 更新缓存  
   wx.setStorageSync('cart', cart);
   // 弹出消息  
@@ -1676,11 +1677,90 @@ handleAddressTap() {
 address.fullAddress = address.provinceName + address.cityName + address.countyName + address.detailInfo;
 ```
   
-#### 购物车_样式  
+#### 购物车_布局及样式  
 
 关键 | 说明 
 :-: | :-   
-① | 主要使用 `flex` 布局完成样式，可以使用原生[复选框](#checkbox)  
+① | 主要使用 `flex` 布局完成样式，可以使用原生[复选框](#checkbox) 
+
+```
+// 实现弹性项整体水平垂直居中，项高度由项内容决定
+.father {
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  .son1 {}
+  .son2 {}
+  .son3 {}
+}
+
+// 实现所有弹性项高度相同，水平垂直居中
+.father {
+  display: flex;
+  .son1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .son2 {...}
+  .son3 {...}
+}
+
+/*
+实现上下两端对齐效果
+space-around 在上下两端留半距
+*/
+.any {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+// 部分弹性项目右对齐
+.son1 {...}
+.son2 {
+  flex: 5;
+  text-align: right;
+}
+.son3 {...}
+```
+
+#### 购物车_数据动态渲染  
+
+步骤 | 说明 
+:-: | :-   
+① | 在 `onShow` 中，将缓存的加购数据保存到本地
+② | 给加购商品添加一个额外属性，用于记录选择状态 （在[加购的逻辑](#加入购物车)中添加）
+③ | 复选框的 `checked` 属性，可以控制自身的选中状态
+
+步骤 | 类型 | 说明 
+:-: | :-: | :-   
+全选状态 | 初始赋值 | 在获取加购数据后进行初始赋值
+全选状态 | 防止报错 | 获取缓存可能为空，而后面的逻辑存在一些数组操作，所以赋值时 `|| []`
+全选状态 | 细节处理 | 注意对空数组调用 `every` 会返回 true
+
+```
+const cart = wx.getStorageSync('cart') || [];
+// 判断全选状态  
+const isSelectAll = cart.length && cart.every(item => item.isSelect)
+// 计算总价
+let totalPrice = cart.length?cart.filter(item => item.isSelect).reduce((pre, cur) => pre + cur.goods_price*cur.num, 0):0
+// 计算总数  
+
+/*
+一次循环中计算出总价和总数，优化性能
+*/
+let totalPrice = 0;
+let totalCount = 0;
+cart.forEach(item => {
+  if(item.isSelect) {
+    totalPrice += item.goods_price*item.num;
+    totalCount += item.num;
+  }
+})
+```
+ 
+
 
 
 
