@@ -1816,7 +1816,20 @@ cart.forEach(item => {
 进行跳转 | [手动跳转](https://developers.weixin.qq.com/miniprogram/dev/api/route/wx.navigateTo.html)到支付页面  
 
 ```
-
+// 判断地址  
+// 判断总数
+if(!this.data.totalCount) {
+  wx.showToast({
+    title: '还没有选中商品',
+    icon: 'none',
+    mask: true
+  });
+  return    
+}
+// 跳转页面
+wx.navigateTo({
+  url: '/pages/order/index'
+}); 
 ```
 
 
