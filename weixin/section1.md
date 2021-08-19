@@ -1783,7 +1783,8 @@ space-around 在上下两端留半距
 编辑商品数量 | 触发事件 | 可以绑定同一个事件，提供不同的参数  
 编辑商品数量 | 正常处理 | 更改商品数量后将购物车信息保存到本地和缓存中
 编辑商品数量 | 删除商品 | 当减去最后的数量时，调用[对话框](https://developers.weixin.qq.com/miniprogram/dev/api/ui/interaction/wx.showModal.html) `wx.showModal` 确认操作
-购物车为空 | 条件渲染 | 当缓存的购物车数据为空数组时渲染，**临时**找网上图片地址  
+购物车为空 | 条件渲染 | 当缓存的购物车数据为空数组时渲染，**临时**找网上图片，复制图片地址  
+购物车为空 | 条件渲染 | 可以将条件渲染的两部分用 `<block>` 包围  
 
 ```
 const cart = wx.getStorageSync('cart') || [];
@@ -1806,7 +1807,17 @@ cart.forEach(item => {
 })
 ```
  
+#### 购物车_结算判断  
 
+步骤 | 说明 
+ :-: | :-   
+判断地址 | 如果没有地址，[弹窗](https://developers.weixin.qq.com/miniprogram/dev/api/ui/interaction/wx.showToast.html)，跳出
+判断总数 | 如果商品总数为零，弹窗，跳出
+进行跳转 | [手动跳转](https://developers.weixin.qq.com/miniprogram/dev/api/route/wx.navigateTo.html)到支付页面  
+
+```
+
+```
 
 
 
