@@ -76,17 +76,25 @@ this.setData({
 > 注意 `<input>` 的 `value` 属性，本身只能决定初始值而没有绑定值。  
 
 步骤 | 说明 | 解释
-:-: | :-: | :-   
+:-: | :- | :-   
 ① | 搜索实现 | 本质是将关键词发送给后端，取得相应数据进行渲染
 ② | 搜索实现 | 验证输入值后，即有无实际内容。通过后发起请求
 ③ | 清空功能 | 需要将输入值保存到本地
 ④ | 清空功能 | 再将输入值通过赋值到 `value` 属性上
 ⑤ | 清空功能 | 清除数据，重置初始值
 ⑤ | 防抖功能 | 微实现很简单  
+⑥ | 跳转功能 | 使用 `<navigator>` 标签，添加相应路径  
+⑦ | 手动清空输入框 | 此时要清空列表数据和计时器，验证时操作即可  
 
 ```
 <input placeholder=".." bind:input="handleInput" value="{{inputValue}}"></input>
 <button size="mini" bind:tap="clickClean">清空</button>
+<view class="search_content"> 
+  <navigator 
+  wx:for="{{searchData}}" ...
+  url="/pages/goods_detial/index?goods_id={{item.goods_id}}"
+  >...</navigator>
+</view>
 
 data: {
   inputValue: '',
@@ -106,6 +114,10 @@ handleInput(e) {
   })
   // 验证有效性  
   if(!inputValue.trim()) {
+    clearTimeout(this.timer);
+    this.setData({
+      searchData: []
+    })  
     return
   }
   // 防抖版请求数据 
