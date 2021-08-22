@@ -189,6 +189,79 @@ wx.chooseImage({
 })
 ```
 
+#### 意见反馈_删除图片  
+> 子组件传递事件，页面作出反应并传递相应索引到内部操作。  
+
+```
+/* 子组件 */
+<icon bind:tap="handleDelImg"></icon>
+
+methods: {
+  handleDelImg() {
+    this.triggerEvent("handleDelImg")
+  }
+}
+
+/* 页面 */
+
+<view wx:for="{{}}">
+  <UpImg bind:handleDelImg="handleDelImg" data-index="{{index}}"></UpImg>
+</view>
+
+handleDelImg(e) {
+  let {index} = e.currentTarget.dataset;
+  ...
+}
+```
+
+#### 意见反馈_提交功能  
+
+说明 | 解释
+:- | :-   
+输入事件 | 获取文本域的内容并保存  
+点击提交 | 验证文本域的合法性（空文本）  
+点击提交 | （如果有）将用户选择的图片（遍历）用接口 `wx.uploadFile` 上传到专门服务器，接收新的链接
+提交到服务器 | 将文本域和新的图片路径上传到服务器  
+收尾 | 提示成功、清空页面、返回上一页
+
+```
+ upImgData.forEach(v => {
+  wx.uploadFile({
+    // 图片上传路径，已失效
+    url: 'https://images.ac.cn/Home/Index/UploadAction/',
+    // 上传的文件路径
+    filePath: v,
+    // 上传的文件名称
+    name: 'file',
+    // 顺带的文本信息
+    formData: {},
+    success: (result) => {
+      let url = JSON.parse(result.data).url;
+      this.upLoadingImg.push(url);
+    }
+  });
+})
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
