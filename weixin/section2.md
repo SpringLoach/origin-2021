@@ -65,6 +65,22 @@ this.setData({
 #### 收藏页  
 > 缝合怪。  
 
+#### 首页_导航跳转  
+> 通过正则表达式更换路径不正确的地方。  
+> 
+> 对于可能提供多种可选参数的请求，均要考虑。  
+
+```
+// 通过 `url` 传参
+onLoad: function (options) {
+  this.queryParams.cid = options.cid || '';
+  this.queryParams.query = options.query || '';
+  发起请求
+},
+```
+
+----
+
 ### 搜索页  
 
 #### 搜索页_基础布局  
