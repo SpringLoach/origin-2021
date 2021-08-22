@@ -135,6 +135,60 @@ getSearchData(query) {
 }
 ```
 
+----  
+
+### 意见反馈  
+
+#### 意见反馈_静态布局  
+> 通过伸缩布局，设置项宽度为比例、margin 完成规律切行效果。  
+
+#### 意见反馈_自定义图片组件  
+> 小小的缩略图，右上角有关闭按钮。  
+> 
+> 其他需要的样式，可以在父组件用一个标签包围它，在标签上设置。  
+
+```
+.up_img_wrap {
+  position: relative;  
+  width: 90rpx;
+  height: 90rpx;
+  .up_img {
+    background-color: #fff;
+    border: 1px solid red;
+    width: 100%;
+    height: 100%;  
+    border-radius: 12rpx;
+  }  
+  icon {
+    position: absolute;
+    top: -12rpx;
+    right: -12rpx;  
+  }
+}
+```
+
+#### 意见反馈_上传图片  
+
+步骤 | 说明 | 解释
+:-: | :- | :-   
+① | 触发时机 | 当点击默认渲染的按钮时，执行回调
+② | 搜索实现 | 调用从本地选择或拍照的[接口](https://developers.weixin.qq.com/miniprogram/dev/api/media/image/wx.chooseImage.html)，保存图片地址数据
+③ | 搜索实现 | 合并新旧数组，并注意 `this` 指向
+④ | 父传子 | 由于 `src` 属性在子组件中，需要传递  
+
+```
+wx.chooseImage({
+  count: 9,
+  sizeType: ['original', 'compressed'],
+  sourceType: ['album', 'camera'],
+  success: res => {
+    this.setData({
+      upImgData: [...this.data.upImgData, ...res.tempFilePaths]
+    })
+  }
+})
+```
+
 
 
 
