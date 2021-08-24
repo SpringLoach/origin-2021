@@ -1,35 +1,3 @@
-#### basic 
-
-正常逻辑处理 将请求数据保存到函数变量/将本地数据深拷贝保存到函数变量（官方不推荐直接用本地数据作处理），逻辑处理，保存到本地数据  
-如果是 `data` 中的数据，用 `this.setData({})`；如果与 `data` 同级，直接保存  
-
-样式选择器不写最外层，反正设置的样式只作用于当前页面  
-
-data 中的数据：  `this.data.*` 获取数据  `this.setData({})` 写入数据  
-data 的同级数据：  `this.*` 获取数据  `this.*` 写入数据  
-
-在页面间跳转时，可以通过 `url` 添加尾缀 `?*={{*}}` 传参，在其它页面的 `onLoad` 钩子中作为首参拿到  
-
-在页面间跳转时，如果目标是标签页，需要额外设置属性  
-
-更改页面名称 json
-添加需要使用的自定义组件 json
-给文档最外围 `<view>` 添加类名  
-将组件添加到文档 wxml  
-布局文档，添加类名
-将样式文件改后缀 `less`
-样式选择器不写最外层，反正设置的样式只作用于当前页面  
-`page` 选择器是最大的容器，通过 `padding-bottom` 给工具栏留出空间  
-打开样式文件，通过组合 `Ctrl + B` `Ctrl + \`，关闭左侧文件管理器，双栏写样式    
-
-注意一些高阶数组方法对于空数组的返回值  
-想要通过事件传值（如循环项的某个属性），需要借助 `data-*="{{item.**}}"` 属性传递和 `e.currentTarget.dataset.*` 获取    
-想要通过事件，处理相同的逻辑（如给本地变量增加某个值），可以绑定相同的方法，通过自定义属性 `data-*="**"` 传计算参数即可  
-
-`wx-`
-
-
-
 #### 起步
 
 1. 申请[账号](https://developers.weixin.qq.com/miniprogram/dev/framework/quickstart/getstart.html#申请帐号) ，需要提供邮箱、管理员用微信扫码。  
@@ -324,6 +292,12 @@ element, element | view, checkbox | 选择所有文档的 view 组件和所有�
 <checkbox-group\> | 项变更时，对应事件可获得**字符串数组** 
 <slot\> | 插槽，当父组件的该组件标签内有子标签时，会将其替代
 [<scroll-view\>](https://developers.weixin.qq.com/miniprogram/dev/component/scroll-view.html) | 可滚动视图区域，竖向滚动时，需要一个固定高度并具备充足内容  
+<[open-data](#open_data)\> | 可以显示用户昵称、头像、城市等
+<picker\> | 从底部弹起的滚动选择器，支持单列、多列选择、时间、省市 
+<picker-view\> | 嵌入页面的滚动选择器
+<slider/\> | 滑块
+<switch/\> | 开关选择器  
+<textarea/\> | 多行输入框  
   
 #### text  
 > 文本标签，为行内元素，只能嵌套 `text`。  
@@ -538,7 +512,21 @@ disabled | 是否禁用 | false | | *boo*
 bindchange | 容器内选中项发生改变时触发 | / |  | cb
   
 #### checkbox  
-> 可配置属性与单选框完全一致。区别在于值变更时，容器获得的数据类型不一样。  
+> 可配置属性与单选框完全一致。区别在于值变更时，容器获得的数据类型不一样。    
+
+#### open_data  
+> 需要更改头像样式时，得添加容器包裹标签，在容器上进行配置。  
+> 
+> 如果需要直接获取这些信息另外渲染，调用接口 `wx.getUserProfile`。  
+> 
+> 考虑到版本兼容性，参考[兼容代码](https://github.com/SpringLoach/origin-2021/blob/happy-day/weixin/section2.md#项目发布)。  
+
+```
+// 显示用户头像
+<open-data type="userAvatarUrl"></open-data>
+// 显示用户昵称
+<open-data type="userNickName"></open-data>
+```
   
 ### 自定义组件  
 > 自定义组件与页面类似，都是由4个文件组成。       
