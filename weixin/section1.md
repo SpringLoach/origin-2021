@@ -279,7 +279,7 @@ element, element | view, checkbox | 选择所有文档的 view 组件和所有�
 :- | :-  
 <view\> | 代替原来的 <div\>
 <text\> | 代替原来的 <span\>
-<image/\> | 默认宽度320px、高度240px。可在样式设置宽高
+<image/\> | 默认宽度320px、高度240px，可在样式设置宽高。默认模式与 Web 不同  
 <swiper\> | 轮播图容器，其中只可放置 `swiper-item` 组件。默认宽度100vw、高度150px  
 <swiper-item\> | 轮播图项，内部嵌套 `<image>`
 <navigator\> | 导航标签。块级元素    
@@ -291,6 +291,7 @@ element, element | view, checkbox | 选择所有文档的 view 组件和所有�
 <checkbox\> | 复选框，需搭配 `<checkbox-group>` 实现触发事件  
 <checkbox-group\> | 项变更时，对应事件可获得**字符串数组** 
 <slot\> | 插槽，当父组件的该组件标签内有子标签时，会将其替代
+<input/\> | 原生输入框，双向绑定需[自己实现](https://github.com/SpringLoach/origin-2021/blob/happy-day/weixin/工作流.md#文档知识)
 [<scroll-view\>](https://developers.weixin.qq.com/miniprogram/dev/component/scroll-view.html) | 可滚动视图区域，竖向滚动时，需要一个固定高度并具备充足内容  
 <[open-data](#open_data)\> | 可以显示用户昵称、头像、城市等
 <picker\> | 从底部弹起的滚动选择器，支持单列、多列选择、时间、省市 
@@ -310,6 +311,10 @@ decode | 是否解码 | false | 否 | *boo*
 #### image  
 > 支持 JPG、PNG、SVG、WEBP、GIF 等格式，2.3.0 起支持云文件ID。  
 
+```
+<image src="{{item.good_src}}" mode="widthFix" />
+```
+
 属性 | 说明 | 默认值 | 必填 | 类型
 :- | :- | :- | :- | :-
 src | 图片资源地址 | / | 否 | *str*
@@ -323,7 +328,7 @@ bindload | 载入完毕时触发 | / | 否 | *cb*
 缩放 | scaleToFill | 使图片的宽高等于设置的宽高	
 缩放 | aspectFit | 保持纵横比缩放图片，使图片的长边完全显示。可以完整显示图片，可能有多余部分。轮播图常用	
 缩放 | aspectFill | 保持纵横比缩放图片，只保证图片的短边能完全显示出来。通常另一个方向将会发生截取。	
-缩放 | widthFix | 宽度不变，高度自动变化，保持原图宽高比不变。即设置的高无效。**轮播图常用**	
+缩放 | widthFix | 宽度不变，高度自动变化，保持原图宽高比不变。即设置的高无效。**轮播图和很多情况常用**	
 缩放 | heightFix | 高度不变，宽度自动变化，保持原图宽高比不变	
 裁剪 | top | 不缩放图片，只显示图片的顶部区域	
 裁剪 | bottom | 不缩放图片，只显示图片的底部区域	
