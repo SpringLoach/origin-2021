@@ -1,3 +1,52 @@
+- [起步](#起步)
+- [目录结构](#目录结构)
+  + [全局配置](#app.json)
+    - [pages字段](#pages字段)
+    - [window字段](#window字段)
+    - [tabBar字段](#tabBar字段)
+  + [页面配置](#页面配置)
+- [开发技巧](#开发技巧)
+- 基础  
+  + [模版语法](#模版语法)
+  + [列表渲染](#列表渲染)
+  + [条件渲染](#条件渲染)
+  + [认识事件](#认识事件)
+    - [事件类型](#事件类型)
+  + [WXSS](#WXSS)
+    - [尺寸单位](#尺寸单位)
+    - [导入](#导入)
+    - [支持的选择器](#支持的选择器)
+    - [使用less](#使用less)
+- [常用组件](#常用组件)
+  + [text](#text)
+  + [image](#image)
+  + [swiper](#swiper)
+  + [navigator](#navigator)
+  + [rich-text](#rich-text)
+  + [button](#button)
+  + [icon](#icon)
+  + [radio](#radio)
+  + [radio-group](#radio-group)
+  + [checkbox](#checkbox)
+  + [open_data](#open_data)
+- [自定义组件](#自定义组件)
+  + [自定义组件_新建使用](#自定义组件_新建使用)
+  + [自定义组件_json文件](#自定义组件_json文件)
+  + [自定义组件_js文件](#自定义组件_js文件)
+- [简单实现标签页组件](#简单实现标签页组件)
+  + [标题点击激活](#标题点击激活)
+  + [父传子](#父传子)
+  + [子传父](#子传父)
+  + [插槽](#插槽)
+- 基础2
+  + [组件常用配置](#组件常用配置)
+  + [应用生命周期](#应用生命周期)
+  + [页面生命周期](#页面生命周期)
+
+
+
+
+
 #### 起步
 
 1. 申请[账号](https://developers.weixin.qq.com/miniprogram/dev/framework/quickstart/getstart.html#申请帐号) ，需要提供邮箱、管理员用微信扫码。  
@@ -36,7 +85,7 @@ sitemap.json | 用于配置小程序及其页面是否允许被微信索引
 >
 > 使用开发者工具进行配置时，会有相应字段的提示和补全功能。  
 
-pages字段    
+#### pages字段    
 > 决定页面文件的路径。  
 
 1. 每个数组元素都对应着一个页面的路径，最后项不需要后缀名。  
@@ -57,7 +106,7 @@ backgroundTextStyle | 下拉加载，指示器颜色 | "dark" | "light"
 enablePullDownRefresh | 开启当前页面下拉刷新 | false | true
 backgroundColor | 下拉加载部分窗口颜色 | "#ffffff" | *HexColor*
 
-tabBar字段  
+#### tabBar字段  
 > 指定 tab 栏的表现，以及 tab 切换时显示的对应页面。  
 > 
 > 将 icon 文件夹建在与全局配置同级处。  
@@ -538,7 +587,7 @@ bindchange | 容器内选中项发生改变时触发 | / |  | cb
 >  
 > 自定义组件的标签名也只能是小写字母、中划线和下划线的组合。不能以"wx-"为前缀。
   
-#### 新建自定义组件  
+#### 自定义组件_新建使用  
   
 1. 新增组件  
 > 在 `Tabs` 处右键 - 新增Component - Tabs - `回车`    
@@ -567,7 +616,7 @@ bindchange | 容器内选中项发生改变时触发 | / |  | cb
 <Tabs></Tabs>  
 ```
   
-#### json文件
+#### 自定义组件_json文件
   
 ```
 {
@@ -578,7 +627,7 @@ bindchange | 容器内选中项发生改变时触发 | / |  | cb
 }  
 ```
   
-#### js文件  
+#### 自定义组件_js文件  
   
 ```
 // 区别于页面的 Page
