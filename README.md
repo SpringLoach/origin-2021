@@ -187,6 +187,40 @@
 参考站点：[基于Markdown的中文文档排版规范](https://blog.csdn.net/weixin_39787089/article/details/110478337)
 
 ----
+
+##  收起功能及目录结构
+
+<details open=“open”>
+  <summary>展开/收起</summary> 
+  <br/>
+
+```shell
+     ┌── frontend            前端代码
+     ├── nginx               nginx的配置
+     ├── node                后端代码
+     ├── ssl                 https证书
+src──├── webhooks            自动化部署设置
+     ├── docker-compose.yml  docker配置
+     ├── Dockerfile-next     前端next容器
+     ├── Dockerfile-node     后端node容器
+     ├── volumes             使用docker后的数据存放，里面会自动同步后端的日志，数据库数据，上传图片等
+     └── html                一般未使用，如果使用next静态导出export后，可以放于此处
+```
+</details> 
+
+```
+## 标题  
+
+<details open=“open”>
+  <summary>展开/收起</summary> 
+  <br/>
+
+模块内容
+</details> 
+```
+
+----
+
 ## git-笔记
 
 - [第一节](https://github.com/SpringLoach/origin-2021/blob/happy-day/git/Git%E5%AD%A6%E4%B9%A0.md)
