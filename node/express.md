@@ -162,6 +162,26 @@ router.put() |
 ③ | next | 下一个中间件功能
 ④ | ... | ...
 
+----
+
+#### [body-parser](https://www.jianshu.com/p/0de80549c520)  
+> 在 Node.js 原生的http模块中，请求体是要基于流的方式来接受和解析。  
+> 
+> body-parser 是一个HTTP请求体解析的中间件，使用这个模块可以解析JSON、Raw、文本、URL-encoded格式的请求体。   
+>
+> Express框架默认使用body-parser作为请求体解析中间件，配置其以获得解析的能力。  
+
+#### [express-session](https://www.cnblogs.com/loaderman/p/11506682.html)  
+> session 是另一种记录客户状态的机制，不同的是 Cookie 保存在客户端浏览器中，而 session 保存在服务器上。
+>
+> session 运行在服务器端，当客户端第一次访问服务器时，可以将客户的登录信息保存。当客户访问其他页面时，可以判断客户的登录状态，做出提示，相当于登录拦截。  
+> 
+> 可与数据库等结合做持久化操作，当服务器挂掉时也不会导致某些客户信息(购物车)丢失。  
+
+#### connect-mongo  
+> 可以将 express 在进行会话管理的时候将会话数据保存在外部mongo数据库中
+
+
 
 
 
