@@ -128,6 +128,8 @@ $ git config --global user.email "email@example.com"
   
 #### 协同处理_获取已有远程库某分支处理  
   
+顺序 | 步骤 | 命令
+:-: | :- | :-  
 ① | 从远程库克隆，默认只拉取主分支 `main` | git clone <url.git\>
 ② | 拉取远程的某分支到本地 | git checkout -b <branch\> origin/<branch\>
 ③ | 查看分支、正常操作 | ..  
@@ -142,6 +144,8 @@ fatal: unable to access 'https://github.com/SpringLoach/test.git/': OpenSSL SSL_
     
 #### 协同处理_他人在当前分支已有提交  
   
+顺序 | 步骤 | 命令
+:-: | :- | :-    
 ① | 修改后，尝试正常推送 | git push
 ② | 提示错误，建议使用 | git pull
 ③ | 会将冲突文件的冲突代码部分标出 | /
