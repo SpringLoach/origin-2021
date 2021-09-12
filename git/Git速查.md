@@ -30,7 +30,7 @@
 将当前分支推送（更新）到远程 | git push | 还需要当前分支只有一个远程分支   
 从远程库克隆 | git clone <url.git\> | /
 查看远程库信息 | git remote -v | /
-建立远程的某分支到本地 | git checkout -b <branch\> origin/<branch\> | 应该不需要下一步
+拉取远程的某分支到本地 | git checkout -b <branch\> origin/<branch\> | 应该不需要下一步
 关联本地、远程分支 | git branch --set-upstream-to <branch\> origin/<branch\> | /
 从远程获取最新版本到本地并合并 | git pull | 远程分支比本地更新时使用。需要先关联
 从远程获取最新版本到本地 | git fetch | /
@@ -38,13 +38,16 @@
   
 </details> 
 
-[添加修改——本地仓库](#添加修改——本地仓库)  
-[添加修改——远程仓库](#添加修改——远程仓库)  
-[更改远程仓库](#更改远程仓库)  
-[将本地仓库关联并推送到远程库](#将本地仓库关联并推送到远程库)    
-[提交操作者信息](#提交操作者信息)
+- [添加修改到本地仓库](#添加修改到本地仓库)  
+- [添加修改到远程仓库](#添加修改到远程仓库)  
+- [更改关联的远程库](#更改关联的远程库)  
+- [将本地仓库关联并推送到远程库](#将本地仓库关联并推送到远程库)    
+- [提交操作者信息](#提交操作者信息)
+- [协同处理_获取已有远程库某分支处理](#协同处理_获取已有远程库某分支处理)  
+  + [远程库克隆报错](#远程库克隆报错)  
+- [协同处理_他人在当前分支已有提交](#协同处理_他人在当前分支已有提交)  
 
-#### 添加修改——本地仓库
+#### 添加修改到本地仓库
 
 1\. 查看状态
 ```
@@ -68,7 +71,7 @@ git status
 
 ----
 
-#### 添加修改——远程仓库
+#### 添加修改到远程仓库
 
 ```
 git push
@@ -76,7 +79,7 @@ git push
 
 ----
 
-#### 更改远程仓库  
+#### 更改关联的远程库  
 > 针对报错 `fatal: remote origin already exists.`。  
 
 1\. 删除远程 Git 仓库
@@ -120,6 +123,31 @@ git push -u origin main
 $ git config --global user.name "Your Name"
 $ git config --global user.email "email@example.com"  
 ```
+
+----
+  
+#### 协同处理_获取已有远程库某分支处理  
+  
+① | 从远程库克隆，默认只拉取主分支 `main` | git clone <url.git\>
+② | 拉取远程的某分支到本地 | git checkout -b <branch\> origin/<branch\>
+③ | 查看分支、正常操作 | ..  
+  
+#### 远程库克隆报错  
+> 由于网络不稳定，连接超时导致，可再次尝试克隆命令。    
+```  
+fatal: unable to access 'https://github.com/SpringLoach/test.git/': OpenSSL SSL_read: Connection was reset, errno 10054
+```
+
+----  
+    
+#### 协同处理_他人在当前分支已有提交  
+  
+① | 修改后，尝试正常推送 | git push
+② | 提示错误，建议使用 | git pull
+③ | 会将冲突文件的冲突代码部分标出 | /
+④ | 手动修改，解决冲突 | /
+⑤ | 正常操作、再次推送 | /
+  
   
   
   
