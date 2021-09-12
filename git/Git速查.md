@@ -36,11 +36,7 @@
 从远程获取最新版本到本地 | git fetch | /
 合并分支 | git merge | /
   
-  
 </details> 
-
-
-
 
 [添加修改——本地仓库](#添加修改——本地仓库)  
 [添加修改——远程仓库](#添加修改——远程仓库)  
@@ -102,9 +98,16 @@ git remote add origin https://github.com/SpringLoach/manager-copy.git
 2\. 在项目文件下执行如下命令
 > 其中 `manager-copy` 为远程库名称，`main` 为分支名，`SpringLoach` 为 GitHub 账号。  
 ```
+/* 初始化仓库（如果没有） */  
+git init  
+  
+/* 关联远程库 */  
 git remote add origin https://github.com/SpringLoach/manager-copy.git
+  
 /* 强制重命名分支 */  
 git branch -M main
+  
+/* 推送当前分支到远程并关联 */  
 git push -u origin main
 ```
   
