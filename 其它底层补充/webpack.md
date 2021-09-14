@@ -94,6 +94,48 @@ module.exports = {
 支持所有符合 ES5 标准 的浏览器 | 不支持 IE8 及以下版本
 `import()` 和 `require.ensure()` 需要 `Promise` | 想支持旧浏览器，使用前，还需要提前加载 [polyfill](https://webpack.docschina.org/guides/shimming/)
 
+----
+
+#### 常见的loader  
+
+loader | 说明 | webpack4
+:- | :- | :-:
+raw-loader | 导出资源的源代码 | √ 
+file-loader | 把文件输出到一个文件夹中，在代码中通过相对 URL 去引用输出的文件 | √
+url-loader | 和 file-loader 类似，但是能在文件很小的情况下以 base64 的方式把文件内容注入到代码中去 | √ 
+image-loader | 加载并且压缩图片文件 | 
+babel-loader | 把 ES6 转换成 ES5 | 
+postcss-loader | 可以自动补全浏览器前缀、[将px转换为rem](http://www.baidu.com/link?url=fkrwinKCUrxqE6O8rM_MQBsCRdJ3Dq82liD5HHEXbgDwJ_OLFD4NVFFQBNStwQI8BSQNaQXtNZxVvLVXu_fy-6m5dFDXxlT8J4-pYABjYwm) | 
+less-loader | 将 Less 编译为 CSS | 
+sass-loader | 将 Sass 编译为 CSS | 
+css-loader | 识别导入的 CSS 模块，将其转换后导出 |  
+style-loader | 将模块导出的内容作为样式并添加到 DOM 中 | 
+vue-loader | 允许以单文件组件的格式编写 Vue 组件 | 
+eslint-loader | 通过 ESLint 检查 JavaScript 代码 | 
+source-map-loader | 加载额外的 Source Map 文件，以方便断点调试 | 
+
+> 在 webpack 5 中，使用[资源模块](https://webpack.docschina.org/guides/asset-modules/)类型，允许使用资源文件（字体，图标等）而无需配置额外 loader
+
+#### 常见的plugin
+
+define-plugin：定义环境变量
+
+terser-webpack-plugin：通过TerserPlugin压缩ES6代码
+
+html-webpack-plugin 为html文件中引入的外部资源，可以生成创建html入口文件
+
+mini-css-extract-plugin：分离css文件
+
+clean-webpack-plugin：删除打包文件
+
+happypack：实现多线程加速编译
+
+
+
+
+
+
+
 
 
 
