@@ -298,8 +298,6 @@ module.exports = {
 
 ConsoleLogOnBuildWebpackPlugin.js
 ```
-/* ConsoleLogOnBuildWebpackPlugin.js */
-
 const pluginName = 'ConsoleLogOnBuildWebpackPlugin';
 
 class ConsoleLogOnBuildWebpackPlugin {
@@ -333,6 +331,158 @@ module.exports = {
 
 ----
 
+#### 配置
+
+#### 配置_基本配置  
+
+webpack.config.js
+```
+const path = require('path');
+
+module.exports = {
+  mode: 'development',
+  entry: './foo.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'foo.bundle.js',
+  },
+};
+```
+
+----
+
+#### 模块  
+> 在模块化编程中，开发者将程序分解为功能离散的模块，即 chunk。  
+>
+> 这使得验证、调试及测试变得轻而易举。   
+
+#### 模块_webpack模块  
+
+所属 | 语句
+:- | :-
+ES2015 | import
+CommomJS | require()
+css/sass/less | @import
+stylesheet | url(...)
+HTML | <img src=...\> 
+
+#### 依赖图  
+> 当文件依赖另一个文件时，webpack 会将文件视为直接存在依赖关系。这使得 webpack 可以获取非代码资源，如 images 或 web 字体等。并会把它们作为**依赖**提供给应用程序。  
+> 
+> 根据入口递归构建**依赖关系图**，包含应用程序所需的所有模块，然后将其打包为通常只有一个的 `bundle`，由浏览器加载。  
+
+#### target  
+> 由于 JavaScript 既可以编写服务端代码也可以编写浏览器代码，所以 webpack 提供了多种部署。 
+> 
+> 使用相应值，webpack 将在类似环境编译代码。  
+
+#### 多target  
+
+webpack.config.js
+```
+const path = require('path');
+const serverConfig = {
+  target: 'node',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'lib.node.js',
+  },
+  //…
+};
+
+const clientConfig = {
+  target: 'web', // <=== 默认为 'web'，可省略
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'lib.js',
+  },
+  //…
+};
+
+module.exports = [serverConfig, clientConfig];
+```
+> 将会在 `dist` 文件夹下创建 lib.js 和 lib.node.js 文件。  
+
+#### manifest   
+> webpack 的 runtime 和 manifest，管理所有模块的交互。  
+
+1. 当编译开始执行、解析和映射应用程序时，它会保留所有模块的详细要点。这个数据集合称为 `manifest`。  
+
+2. 当完成打包并发送到浏览器时，runtime 会通过 manifest 来解析和加载模块。  
+
+3. import 或 require 模块语句会被转换为 `__webpack_require__` 方法，指向标识符。
+
+4. 通过使用 `manifest` 中的数据，runtime 将能够检索这些标识符，找出每个标识符背后对应的模块。
+
+----
+
+#### 起步  
+
+#### 起步_普通项目  
+> 即不使用 webpack 管理脚本，比如在头部引入了外部库，其后脚本的执行依赖其中的属性。    
+
+索引 | 说明
+:- | :-
+① | 无法直接体现，脚本的执行依赖于外部库
+② | 如果依赖不存在，或者引入顺序错误，应用程序将无法正常运行
+③ | 如果依赖被引入但是并没有使用，浏览器将被迫下载无用代码
+
+#### 起步_使用webpack  
+> 将引入外部库改为安装依赖后通过模块导入。  
+>
+> webpack 原生支持 `import`、`export` 操作模块。  
+
+文件路径 | 文件类型 | 说明  
+:- | :- | :-
+src/index.js | 入口起点 | 默认路径。需要引入第三方库后再使用。项目中是 `main.js`？
+dist/main.js | 输出 | 默认路径。打包生成的文件
+dist/index.html | 页面 | 需要手动创建，引入输出
+
++ 项目文件
+  - dist
+    + index.html  
+
+```
+<body>
+  <script src="main.js"></script>
+</body>
+```
+
+#### 起步_添加配置文件  
+
++ 项目文件
+  - webpack.config.js  
+
+```
+const path = require('path');
+
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+  },
+};
+```
+
+#### 管理资源  
+> 可以通过 loader 或内置的 [Asset模块](https://webpack.docschina.org/guides/asset-modules/) 引入其它类型的文件。  
+> 
+> 根据依赖图将资源动态打包，避免打包未使用的模块。   
+
+使用 Asset Modules 可以接收并加载任何文件，然后将其输出到构建目录。
+
+操作 | 需要  
+:- | :-  
+加载CSS | [安装loader](https://webpack.docschina.org/guides/asset-management/)
+加载图像 | Asset Modules
+加载字体文件 | Asset Modules
+加载JSON | /
+加载XML | 安装loader
+
+
+----
+
 #### 常见的loader  
 
 loader | 说明 | webpack4
@@ -352,6 +502,7 @@ eslint-loader | 通过 ESLint 检查 JavaScript 代码 |
 source-map-loader | 加载额外的 Source Map 文件，以方便断点调试 | 
 
 > 在 webpack 5 中，使用[资源模块](https://webpack.docschina.org/guides/asset-modules/)类型，允许使用资源文件（字体，图标等）而无需配置额外 loader
+
 
 #### 常见的plugin
 
