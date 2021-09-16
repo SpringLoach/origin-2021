@@ -480,6 +480,70 @@ module.exports = {
 加载JSON | /
 加载XML | 安装loader
 
+#### 管理输出  
+
+#### 管理输出_正常输出   
+> 当输出多个文件，或更改入口起点名称/新增入口时，需要将 `index.html` 中的引用进行增加或修改，不太方便。  
+
+#### 管理输出_HtmlWebpackPlugin  
+> 通过该插件，可以自动在 `dist/` 下生成一个引入了所有打包文件（js）的 `index.html`。  
+
+```
+const path = require('path');
+
+module.exports = {
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Development',
+    }),
+  ]
+};
+```
+
+#### 管理输出_清理dist文件夹  
+> 打包生成的文件会输出到 `dist/`，但在该文件夹下之前的一些文件并不会删除，可以使用 `output.clean` 在每次构建前清理该文件夹。  
+
+```
+const path = require('path');
+
+module.exports = {
+  output: {
+    filename: '[name].bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    clean: true,
+  },
+};
+```
+
+#### 开发环境  
+
+#### 开发环境_准备  
+
+```
+module.exports = {
+  mode: 'development',
+};
+```
+
+#### [开发环境_追踪错误](https://webpack.docschina.org/guides/development/#using-source-maps)  
+> 在打包源码时，若将多个源文件打包到一个 `bundle.js` 中，会难以追踪到错误的具体信息。
+> 
+> 可以开启 source map 将编译后的代码映射到源代码，以在控制台获得具体的报错信息。记得不要用于生产环境。  
+
+#### 开发环境_开发工具  
+> 通常使用的是 webpack-dev-server，它会用 `output.path` 这个目录为服务器提供 bundle 文件，并保存在内存中。  
+> 
+> 若更改任何源文件并保存它们，web server 将在编译代码后自动重新加载。  
+
+```
+module.exports = {
+  devServer: {
+    static: './dist',
+  },
+};
+```
+> 表示将 `dist` 下的资源作为 server 的可访问属性，到 `localhost:8080`。  
+
 
 ----
 
@@ -510,7 +574,7 @@ define-plugin：定义环境变量
 
 terser-webpack-plugin：通过TerserPlugin压缩ES6代码
 
-html-webpack-plugin 为html文件中引入的外部资源，可以生成创建html入口文件
+html-webpack-plugin：会在 `dist` 文件夹下创建文件 `index.html`，其中引入了所有的输出文件（js）
 
 mini-css-extract-plugin：分离css文件
 
