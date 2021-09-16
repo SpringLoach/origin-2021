@@ -96,6 +96,243 @@ module.exports = {
 
 ----
 
+#### 入口  
+
+#### 入口_单入口语法  
+
+```
+module.exports = {
+  entry: './src/main.js',
+};
+```
+
+> 单入口语法  
+```
+module.exports = {
+  entry: {
+    main: './path/to/my/entry/file.js',
+  },
+};
+```
+
+> 可以将一个文件路径数组传递给 entry 属性。可以一次注入多个依赖文件，并且将它们的依赖关系绘制在一个 `chunk` 中。  
+> 
+> 可以通过一个入口（例如一个库）为应用程序快速设置 webpack 配置，但扩展或调整配置的灵活性不大。  
+```
+module.exports = {
+  entry: ['./src/file_1.js', './src/file_2.js'],
+  output: {
+    filename: 'bundle.js',
+  },
+};
+```
+
+#### 入口_对象语法  
+
+> 这是应用程序中定义入口的最可扩展的方式。  
+```
+module.exports = {
+  entry: {
+    app: './src/app.js',
+    adminApp: './src/adminApp.js',
+  },
+};
+```
+
+配置对象 | 说明 | 补充
+:- | :- | :-
+import | 需加载的模块 | 
+dependOn | 前置入口，需先加载 | 不能循环引用
+runtime | 运行时 `chunk` 的名字 | 与dependOn冲突，同一入口不能同时用
+
+#### 入口_常见场景  
+
+#### 分离应用程序和第三方库入口
+> 指 app 和 vendor。  
+> 
+> 即配置两个单独的入口点。在 `vendor.js` 中存入很少修改的文件（如jQuery、图片），`contenthash` 保持不变，能让浏览器独立缓存，减少加载时间。  
+
+webpack.config.js
+```
+module.exports = {
+  entry: {
+    main: './src/app.js',
+    vendor: './src/vendor.js',
+  },
+};
+```
+
+webpack.prod.js
+```
+module.exports = {
+  output: {
+    filename: '[name].[contenthash].bundle.js',
+  },
+};
+```
+
+webpack.dev.js
+```
+module.exports = {
+  output: {
+    filename: '[name].bundle.js',
+  },
+};
+```
+
+#### 多页面应用程序  
+> 在多页面应用程序中，服务器会取新的文档，页面根据文档重新加载，资源重新加载。
+> 
+> 此时可以使用 [optimization.splitChunks](https://webpack.docschina.org/configuration/optimization/#optimizationsplitchunks) 为页面间共享的应用程序代码创建 bundle等。复用多个入口起点之间的大量代码/模块。    
+
+```
+module.exports = {
+  entry: {
+    pageOne: './src/pageOne/index.js',
+    pageTwo: './src/pageTwo/index.js',
+    pageThree: './src/pageThree/index.js',
+  },
+};
+```
+
+----
+
+####  输出  
+> 不同于入口，输出只能指定一个。  
+
+#### 输出_示例
+> 将一个单独的 `bundle.js` 文件输出到 `dist` 目录中。  
+```
+module.exports = {
+  output: {
+    filename: 'bundle.js',
+  },
+};
+```
+
+#### 多个入口起点  
+```
+module.exports = {
+  entry: {
+    app: './src/app.js',
+    search: './src/search.js',
+  },
+  output: {
+    filename: '[name].js',
+    path: __dirname + '/dist',
+  },
+};
+
+// 写入到硬盘：./dist/app.js, ./dist/search.js
+高级进阶
+
+```
+> 使用占位符来确保每个文件具有唯一的名称。
+
+----
+
+#### loader  
+> 用于对模块的源代码进行转换。可以在导出或加载模块时预处理模块。  
+
+#### loader_示例  
+```
+npm install --save-dev css-loader ts-loader
+```
+
+```
+module.exports = {
+  module: {
+    rules: [
+      { test: /\.css$/, use: 'css-loader' },
+      { test: /\.ts$/, use: 'ts-loader' },
+    ],
+  },
+};
+```
+
+#### loader_使用方式  
+> 支持配置方式和内联方式，后者在 `import` 导入语句中指定 loader，不太推荐。  
+
+```
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          { loader: 'style-loader' },
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true
+            }
+          },
+          { loader: 'sass-loader' }
+        ]
+      }
+    ]
+  }
+};
+```
+
+#### loader_特性  
+
+顺序 | 说明
+:- | :-
+① | 支持链式调用，从后往前执行，将结果传递给下一个 loader
+② | 运行在 Node.js 中
+③ | 可以通过 `options` 进行配置 
+
+----
+
+#### plugin  
+> 插件能做到 loader 无法实现的事情，拓展能力。  
+
+#### plugin_剖析  
+
+> 插件是一个具有 apply 方法的对象。
+> 
+> 该方法会被 webpack compiler 调用，并且在**整个**编译生命周期都可以访问 compiler 对象。
+> 
+> 其中 compiler.hooks 的 tap 方法的首参为插件名称，建议用驼峰大小写保存为常量。  
+
+ConsoleLogOnBuildWebpackPlugin.js
+```
+/* ConsoleLogOnBuildWebpackPlugin.js */
+
+const pluginName = 'ConsoleLogOnBuildWebpackPlugin';
+
+class ConsoleLogOnBuildWebpackPlugin {
+  apply(compiler) {
+    compiler.hooks.run.tap(pluginName, (compilation) => {
+      console.log('webpack 构建正在启动！');
+    });
+  }
+}
+
+module.exports = ConsoleLogOnBuildWebpackPlugin;
+```
+
+#### plugin_用法_配置方式  
+
+webpack.config.js
+```
+const HtmlWebpackPlugin = require('html-webpack-plugin'); // 通过 npm 安装
+const webpack = require('webpack'); // 访问内置的插件
+
+module.exports = {
+  plugins: [
+    new webpack.ProgressPlugin(),
+    new HtmlWebpackPlugin({ template: './src/index.html' }),
+  ],
+};
+```
+> ProgressPlugin 用于自定义编译过程中的进度报告。
+> 
+> HtmlWebpackPlugin 将生成一个 HTML 文件，并在其中使用 `script` 引入出口文件（js）  
+
+----
+
 #### 常见的loader  
 
 loader | 说明 | webpack4
