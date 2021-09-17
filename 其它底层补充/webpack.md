@@ -210,7 +210,7 @@ module.exports = {
 };
 ```
 
-#### 多个入口起点  
+#### 输出_多个入口起点  
 ```
 module.exports = {
   entry: {
@@ -224,8 +224,6 @@ module.exports = {
 };
 
 // 写入到硬盘：./dist/app.js, ./dist/search.js
-高级进阶
-
 ```
 > 使用占位符来确保每个文件具有唯一的名称。
 
@@ -544,6 +542,183 @@ module.exports = {
 ```
 > 表示将 `dist` 下的资源作为 server 的可访问属性，到 `localhost:8080`。  
 
+#### 代码分离  
+> 将代码分离到不同的 bundle 中，然后按需加载或并行加载这些文件。合理使用能极大影响加载时间。  
+>
+> 方法可以分为三种：入口起点、防止重复、动态导入。  
+
+#### 代码分离_入口起点  
+> 即通过 `entry` 配置多个入口，注意不是用数组形式在一个入口导入多个依赖文件。  
+
+```
+const path = require('path');
+
+ module.exports = {
+  mode: 'development',
+  entry: {
+    index: './src/index.js',
+    another: './src/another-module.js',
+  },
+   output: {
+    filename: '[name].bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+  },
+};
+```
+> 如果入口 chunk 之间包含相同的模块，其会被重复引入到各个 bundle 中。   
+
+#### 代码分离_防止重复_入口依赖  
+> 配置入口的 `dependOn`，能在多个 chunk 间共享模块。  
+>  
+> 若要在一个 HTML 页面使用多个入口，还需要设置 `optimization.runtimeChunk: 'single'`。  
+
+```
+ module.exports = {
+  entry: {
+    index: {
+      import: './src/index.js',
+      dependOn: 'shared',
+    },
+    another: {
+      import: './src/another-module.js',
+      dependOn: 'shared',
+    },
+    shared: 'lodash',
+  },
+  optimization: {
+    runtimeChunk: 'single',
+  },
+};
+```
+> 避免使用多依赖的入口，这样在使用 `async` 脚本标签时，会有更好的优化。  
+
+#### 代码分离_防止重复_SplitChunksPlugin  
+> 使用该插件[可以](https://webpack.docschina.org/guides/code-splitting/#splitchunksplugin)将公共的依赖模块提取到已有的入口chunk/新生成的chunk中。  
+
+```
+module.exports = {
+  mode: 'development',
+  entry: {
+    index: './src/index.js',
+    another: './src/another-module.js',
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
+  },
+};
+```
+
+#### 代码分离_动态导入  
+> `import()` 调用会在内部用到 promises，返回也是期约。被它动态导入的模块会被分离为一个 chunk。  
+> 
+> 在代码中用到对应模块前导入，然后用期约或异步函数写逻辑[即可](https://webpack.docschina.org/guides/code-splitting/#dynamic-imports)，不需在顶部导入。  
+
+#### 预获取/预加载模块  
+> 使用 `import()` 时，加上特定内置指令，即可将资源设置为预获取或预加载。  
+> 
+> 当页面需要用到体积很大的模块，如图表库时，就可以采用预加载的方案。页面模块很快加载好并显示进度条，待图表库请求好后消失。  
+
+指令 | prefetch | preload 
+:- | :- | :- 
+说明 | 预获取 | 预加载  
+在父chunk | 加载结束后开始加载 | 加载时，以并行方式开始加载
+**优先级** | 浏览器闲置时下载 | 立即下载  
+
+#### bundle分析  
+> 打包完成后，`asset` 字段示意打包资源及大小。也可以通过[各自工具](https://webpack.docschina.org/guides/code-splitting/#bundle-analysis)查看模块占用空间等。  
+
+#### 缓存  
+> 通过必要的配置，以确保 webpack 编译生成的文件能够被客户端缓存，而在文件内容变化后，能够请求到新的文件。  
+
+步骤 | 操作 | 说明
+:- | :- | :-
+① | 设置出口文件名 | 仅资源变化，文件名变化
+② | 提取引导模板 | 抽离变化部分
+③ | 提取第三方库 | 利于长效缓存  
+④ | 模块标识符算法 | 保证其它代码改变时，三方库文件名不变  
+
+#### 缓存_输出文件名   
+> `contenthash` 会根据资源内容创建出唯一 hash，内容不变则值不变。  
+
+```
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  entry: './src/index.js',
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Caching',
+    }),
+  ],
+  output: {
+    filename: '[name].[contenthash].js',
+    path: path.resolve(__dirname, 'dist'),
+    clean: true,
+  },
+};
+```
+> 但此时每次的打包结果文件名都会不一样，因为入口模块中，包含了引导模板。  
+
+#### 缓存_提取引导模板  
+> 将所有 chunk 中的 runtime 代码拆分为一个单独的 chunk。  
+
+```
+module.exports = {
+  ...
+  optimization: {
+    runtimeChunk: 'single',
+  },
+};
+```
+
+#### 缓存_将三方库单独提取  
+> 对于第三方库（如loadsh、react），由于其很少修改，可以将其提取到 `vender` 的模块中，利于长效缓存。  
+
+```
+module.exports = {
+  ...
+  optimization: {
+    runtimeChunk: 'single',
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+      },
+    },
+  },
+};
+```
+
+#### 缓存_模块标识符  
+> 上述步骤后，若修改代码文件，`vender` 由于随自身的 `module.id` 变化，名称也会变化。  
+> 
+> 可以设置 `optimization.moduleIds: 'deterministic'` 解决问题。  
+
+```
+module.exports = {
+  optimization: {
+    moduleIds: 'deterministic',
+    runtimeChunk: 'single',
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+      },
+    },
+  },
+};
+```
+
+
 
 ----
 
@@ -574,7 +749,7 @@ define-plugin：定义环境变量
 
 terser-webpack-plugin：通过TerserPlugin压缩ES6代码
 
-html-webpack-plugin：会在 `dist` 文件夹下创建文件 `index.html`，其中引入了所有的输出文件（js）
+html-webpack-plugin：会在 `dist` 文件夹下创建文件 `index.html`，其中引入了所有的输出文件（bundle.js）
 
 mini-css-extract-plugin：分离css文件
 
