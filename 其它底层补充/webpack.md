@@ -730,6 +730,44 @@ module.exports = {
 ⑤ | 外部化lodash | 通过设置 `externals`，意味对使用者来说，该库依赖 `lodash`
 ⑥ | 定义引用依赖时的文件地址 | 在 `package.json` 中设置 `main`
 
+#### 环境变量  
+> 适当设置环境变量可以消除配置文件在开发环境和生产环境间的差异。  
+>
+> 在webpack命令行中的 `--env`，可以传入环境变量，在配置文件中能访问到。  
+
+```
+npx webpack --env goal=local --env production --progress
+```
+
+webpack.config.js  
+> 要想访问 `env` 变量，需将导出模块转换为函数。  
+> 
+> 在上面，设置了环境变量却未赋值，默认赋值为true。  
+```
+const path = require('path');
+
+module.exports = (env) => {
+  console.log('Goal: ', env.goal); // 'local'
+  console.log('Production: ', env.production); // true
+
+  return {
+    entry: './src/index.js',
+    output: {
+      filename: 'bundle.js',
+      path: path.resolve(__dirname, 'dist'),
+    },
+  };
+};
+```
+
+#### 环境变量_[node环境](https://webpack.docschina.org/api/cli/#node-env)
+> 可以使用 `--node-env` 选项来设置 `process.env.NODE_ENV`  
+> 
+> 此时，配置文件中如果没有明确的 `mode`，会被该设置覆盖。  
+
+```
+npx webpack --node-env production   # process.env.NODE_ENV = 'production'
+```
 
 
 ----
