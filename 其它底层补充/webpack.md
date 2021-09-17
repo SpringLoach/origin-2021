@@ -718,6 +718,18 @@ module.exports = {
 };
 ```
 
+#### 创建library  
+> 除了打包应用程序，webpack 还能打包 JavaScript library。
+
+步骤 | 操作 | 说明
+:- | :- | :-
+① | 创建示例library | 在入口文件导入了 `lodash`，导出两个方法
+② | Webpack配置 | 更改了打包文件的名称
+③ | 暴露库 | 通过设置 `output.library` 暴露导出内容，此时只能被脚本标签引用  
+④ | 兼容更多环境 | 通过设置 `output.library.type:'umd'` 使其能在CommonJS、Node.js等环境  
+⑤ | 外部化lodash | 通过设置 `externals`，意味对使用者来说，该库依赖 `lodash`
+⑥ | 定义引用依赖时的文件地址 | 在 `package.json` 中设置 `main`
+
 
 
 ----
