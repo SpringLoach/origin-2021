@@ -769,6 +769,172 @@ module.exports = (env) => {
 npx webpack --node-env production   # process.env.NODE_ENV = 'production'
 ```
 
+#### 构建性能  
+
+#### 构建性能_通用环境  
+> 包含了开发环境和生产环境。   
+
+索引 | 操作 | 说明
+:- | :- | :-
+① | 更新到最新版本 | 包含npm、webpack、node.js，新版本在性能方面做的更好
+② | [loader](#构建性能_通用环境_loader) | 将 loader 应用于最少数量的必要模块
+③ | 减少 loader/plugin | 均有启动时间  
+④ | 解析 | [跳转](https://webpack.docschina.org/guides/build-performance/#resolving)到详情
+⑤ | 保持 chunk 体积小 | 使用更少，更小的库、
+⑤ | 保持 chunk 体积小 | 在多页面应用程序中使用 SplitChunksPlugin ，并开启 async 模式
+⑥ | 将非常消耗资源的loader分流到 worker pool | 谨慎使用，启动和通讯消耗资源  
+
+#### 构建性能_通用环境_loader 
+> 可以通过使用 `include` 字段，将 loader 仅作用于需要的地方。  
+
+```
+const path = require('path');
+
+module.exports = {
+  //...
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        include: path.resolve(__dirname, 'src'),
+        loader: 'babel-loader',
+      },
+    ],
+  },
+};
+```
+
+#### 构建性能_开发环境    
+
+索引 | 操作 | 说明
+:- | :- | :-
+① | 在内存中编译 | 如 `webpack-dev-server`
+② | 排除仅生产环境用到的工具 | 如压缩  
+③ | 剥离 runtimeChunk | `optimization.runtimeChunk: true`
+④ | 输出结果不携带路径信息 | `output.pathinfo: false`，降低对大项目的垃圾回收性能压力
+⑤ | 缓存性能开销较大的loader | 使用 `cache-loader`，保存和读取有时间开销，谨慎使用  
+
+#### 依赖管理  
+
+#### require.context  
+> 可以创建一个导入上下文，其中包括满足条件的所有文件  
+
+参数 | 说明
+:- | :- 
+① | 要搜索的目录
+② | 是否还搜索其子目录
+③ | 匹配文件的正则表达式  
+
+```
+require.context('../', true, /\.stories\.js$/);
+// （创建出）一个 context，其中所有文件都来自父文件夹及其所有子级文件夹，request 以 `.stories.js` 结尾。
+```
+
+> 上下文有一个 keys 属性，是一个包含导入文件的数组，可以将其保存到一个对象中。    
+```
+const cache = {};
+
+function importAll(r) {
+  r.keys().forEach((key) => (cache[key] = r(key)));
+}
+
+importAll(require.context('../components/', true, /\.js$/));
+// 在构建时(build-time)，所有被 require 的模块都会被填充到 cache 对象中。
+```
+
+#### 生产环境  
+> 在开发环境，需要强大的 source map 和有着实时重新加载或热模块替换能力的本地服务器。  
+> 
+> 在生产环境，注重压缩 bundle、更轻量的 source map、资源优化等。  
+
+#### 生产环境_分别配置  
+> 由于两个环境的构建目标不同，往往将它们不同的部分拆分，并保留一份通用配置。   
+
+- 项目   
+  + webpack.common.js  
+  + webpack.dev.js  
+  + webpack.prod.js  
+
+webpack.common.js
+```
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  entry: {
+    app: './src/index.js',
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Production',
+    }),
+  ],
+  output: {
+    filename: '[name].bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    clean: true,
+  }, 
+};
+```
+
+webpack.dev.js  
+```
+ const { merge } = require('webpack-merge');
+ const common = require('./webpack.common.js');
+
+ module.exports = merge(common, {
+   mode: 'development',
+   // 拥有更强大的调试源码功能
+   devtool: 'inline-source-map',
+   devServer: {
+     static: './dist',
+   },
+ });
+```
+
+webpack.prod.js  
+```
+ const { merge } = require('webpack-merge');
+ const common = require('./webpack.common.js');
+
+ module.exports = merge(common, {
+   mode: 'production',
+   // 生产模式推荐，避免使用 inline- 及 eval- 值，降低性能  
+   // devtool: 'source-map',
+ });
+```
+
+#### 生产环境_配置说明  
+> 对于开发模式，可以使用 style-loader 将 CSS 插入到 DOM。
+> 
+> 对于生产模式，使用 `mini-css-extract-plugin` 以压缩代码，其与 style-loader 冲突。  
+
+操作 | 名称 | 配置方式 | 说明
+:- | :- | :- | :-
+剔除死代码 | TerserPlugin | 默认使用 | 利于压缩，可选择其它压缩方式。与 tree shaking 相关  
+压缩CSS | CssMinimizerPlugin | 手动配置 | [跳转](https://webpack.docschina.org/plugins/mini-css-extract-plugin/#minimizing-for-production) 
+提取CSS到一个文件 | CssMinimizerPlugin | 手动配置 | [跳转](https://webpack.docschina.org/plugins/mini-css-extract-plugin/#extracting-all-css-in-a-single-file)
+长期缓存 | CssMinimizerPlugin | 手动配置 | [跳转](https://webpack.docschina.org/plugins/mini-css-extract-plugin/#long-term-caching)
+
+#### 生产环境_脚本设置  
+
+package.json
+```
+{
+  "scripts": {
+    "serve": "webpack serve --open --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js"
+  },
+}
+```
+
+
+
+
+
+
+
+
 
 ----
 
