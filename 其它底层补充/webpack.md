@@ -928,14 +928,6 @@ package.json
 }
 ```
 
-
-
-
-
-
-
-
-
 ----
 
 #### 常见的loader  
@@ -967,7 +959,7 @@ terser-webpack-plugin：通过TerserPlugin压缩ES6代码
 
 html-webpack-plugin：会在 `dist` 文件夹下创建文件 `index.html`，其中引入了所有的输出文件（bundle.js）
 
-mini-css-extract-plugin：分离css文件
+mini-css-extract-plugin：可以分离css文件、压缩等  
 
 clean-webpack-plugin：删除打包文件
 
