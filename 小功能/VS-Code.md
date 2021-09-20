@@ -1,7 +1,12 @@
-[拓展](#拓展)    
-[快捷键](#快捷键)   
-[markdown常用表情](#markdown常用表情)  
-[表格数据转换工具](#表格数据转换工具)  
+- vscode
+  + [拓展](#拓展)    
+  + [快捷键](#快捷键)   
+  + [更改缩进](#更改缩进更改缩进)  
+- 其它  
+  + [markdown常用表情](#markdown常用表情)  
+  + [表格数据转换工具](#表格数据转换工具)  
+  + [表单构建结合elemnt生成Vue](#表单构建结合elemnt生成Vue)
+  + [截图提色工具](#截图提色工具)
 
 #### 拓展  
 
@@ -33,6 +38,9 @@ ul>li{text}\*100 | ul带100个默认文本的li
 bgc + `↓` + `Tab` | backgroundcolor: ;
 fontz + `Tab` | font-size: ;
 
+#### 更改缩进 
+> 点击编辑器右下角的 `空格：*` -> 使用空格缩进 -> 对应数字。  
+
 #### markdown常用表情  
 
 类型 | 符号 | 说明
@@ -47,6 +55,35 @@ fontz + `Tab` | font-size: ;
 
 #### 表格数据转换工具  
 > 可以将表格转化为数组或对象，以 JS 或 JSON 形式输出，见[网站](https://echarts.apache.org/zh/spreadsheet.html)。  
+
+#### 表单构建结合elemnt生成Vue   
+> 可以[自定义表单](https://demo.django-vue-admin.com/tool/build)，转换为使用element构建的 Vue 文档，可选择弹窗或页面类型。    
+> 
+> 系统构建 -> 表单构建  
+
+#### 截图提色工具  
+> [Snipaste](https://www.snipaste.com/)  
+
+下载后，解压，点击Snipaste图标，即可出现在后台并可使用。  
+
+输入/操作 | 说明
+:-: | :-: 
+F1 \+ 回车 | 截图
+F1 \+ c | 获取颜色值
+F1 \+ Shift | 切换颜色值类型
+F3 | 贴图
+Esc | 关闭贴图
+
+
+
+
+
+
+
+
+
+
+
 
 
 
