@@ -18,6 +18,8 @@ Live Server | 提供本地服务器，实时检测代码效果
 Vetur | Vue语法高亮、智能提示 
 Easy LESS | 将 `.less` 自动编译为同名 `.css` 或其它
 微信小程序开发助手 | 标签、接口提示、模板等
+Markdown All in One | Markdown相关
+Markdown Preview Github Styling | Markdown相关
 / | 开启自动保存
 
 #### 快捷键  
