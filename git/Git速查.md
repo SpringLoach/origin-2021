@@ -123,7 +123,13 @@ git push -u origin main
 $ git config --global user.name "Your Name"
 $ git config --global user.email "email@example.com"  
 ```
+  
+验证操作者信息  
 
+```  
+$ git config user.name 
+$ git config user.email 
+```
 ----
   
 #### 协同处理_获取已有远程库某分支处理  
