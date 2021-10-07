@@ -13,6 +13,13 @@ $ git config --global user.email "email@example.com"
 ```  
 注意 `--global` 参数，表示该机器的所有 Git 仓库都会使用这个配置，当然也可以对某个仓库指定不同的用户名和Email地址。
 
+验证
+```
+$ git config user.name 
+
+$ git config user.email 
+```
+
 ## 创建版本库  
 > 版本库又名仓库，英文名 repository，可以简单理解成一个目录。Git 可以管理目录里面的所有文件，甚至任何时刻都可以追踪历史，或者在将来某个时刻可以“还原”。
 
